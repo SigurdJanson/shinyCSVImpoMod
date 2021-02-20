@@ -1,7 +1,7 @@
 library(shiny)
 
 
-#' 
+#' @export
 ModuleImportUI <- function(id) {
   ns <- NS(id)
   tagList(
@@ -51,27 +51,28 @@ ModuleImportUI <- function(id) {
 }
 
 
+#' @export
 ModuleImportServer <- function(id, stringsAsFactors = TRUE) {
   moduleServer(
     id,
 
     function(input, output, session) {
       ColumnMapping <- list()
-      
+
       # The selected file, if any
       UserFile <- reactive({
         # If no file is selected, don't do anything
         validate(need(input$inpImportData, message = FALSE))
         input$inpImportData
       })
-      
+
       # The user's data, parsed into a data frame
       DataFrame <- reactive({
         req(UserFile())
-        
+
         setClass("date")
         setAs("character", "date", function(from) as.POSIXct(from, format = input$inpDateFormat) )
-        
+
         read.csv(UserFile()$datapath,
                  header = input$inpHeader,
                  quote  = input$inpQuote,
@@ -82,13 +83,13 @@ ModuleImportServer <- function(id, stringsAsFactors = TRUE) {
         # TODO: "inpThousandsSep"
         # TODO: "inpDecimalsSep"
       })
-      
-      
+
+
       output$outImportDataPreview <- renderTable({
         need(DataFrame(), "No data has been loaded")
         return(head(DataFrame()))
       })
-      
+
       # Return the reactive that yields the data frame
       return(DataFrame)
     }
@@ -103,7 +104,7 @@ ui <- fluidPage(
 
 server <- function(input, output, session) {
   DataFile <- ModuleImportServer("ProjectDataFile")
-  
+
   output$AppOutputTest <- renderTable({
     need(DataFile(), "Keine Daten vorhanden")
     return(DataFile())
