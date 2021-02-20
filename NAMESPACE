@@ -3,3 +3,8 @@
 export(ImportCSVDemo)
 export(ModuleImportServer)
 export(ModuleImportUI)
+import(shiny)
+importFrom(methods,setAs)
+importFrom(methods,setClass)
+importFrom(utils,head)
+importFrom(utils,read.csv)

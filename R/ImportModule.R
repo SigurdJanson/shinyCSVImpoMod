@@ -1,70 +1,134 @@
 library(shiny)
 
-#' @title `ModuleImportUI` is the UI function of the CSV import module
-#' @param id Module namespace to be set by by caller
+.DefaultOptions <- list(
+  Header = TRUE,
+  ColSep = ";",
+  ThousandsSep = ",",
+  DecimalsSep = ".",
+  DateFormat = "%Y-%m-%d",
+  Quote = "",
+  StringsAsFactors = FALSE
+)
+
+#' @title The UI function of the CSV import module
+#' @param Id Module namespace to be set by by caller
 #'
 #' @export
-ModuleImportUI <- function(id) {
-  ns <- NS(id)
+#' @import shiny
+ModuleImportUI <- function(Id) {
+  ns <- NS(Id)
   tagList(
-    fluidRow(
-      column(
-        h3("Import"), width = 12L
-      ),
-      column(
-        fileInput(ns("inpImportData"), "Neue Daten importieren", accept = c("text/csv", ".csv"),
-                  buttonLabel = "Durchsuchen...", placeholder = "Keine Datei gewählt", width = "100%"),
-        width = 6L
-      )),
-    fluidRow(
-      column(
-        checkboxInput(ns("inpHeader"), "Hat Überschriften", value = TRUE),
-        width = 6L
-      )),
-    fluidRow(
-      column(
-        textInput(ns("inpColSeparator"), "Spaltentrennzeichen", ";"),
-        width = 3L
-      ),
-      column(
-        textInput(ns("inpThousandsSep"), "Tausender-Trennzeichen", "."),
-        width = 3L
-      ),
-      column(
-        textInput(ns("inpDecimalsSep"),  "Dezimaltrennzeichen", ","),
-        width = 3L
-      ),
-      column(
-        textInput(ns("inpDateFormat"),  "Datumsformat", "%d.%m.%Y"),
-        width = 3L
-      ),
-      column(
-        selectInput(ns("inpQuote"), "Texterkennungszeichen", c("None" = "", "Double quote" = "\"", "Single quote" = "'")),
-        width = 3L
-      ),
-      column(
-        hr(),
-        h3("Vorschau"),
-        tableOutput(ns("outImportDataPreview")),
-        width = 12L
-      )
-    )
+    uiOutput(ns("uiFileInput")),
+    uiOutput(ns("uiGlobalSettings")),
+    uiOutput(ns("uiPreview"))
   )
 }
 
 
-#' @title ModuleImportServer - the server function of the CSV import module
-#' @param id Module namespace
-#' @param stringsAsFactors Shall strings be converted to factors (unless specified otherwise) (`TRUE`/`FALSE`).
-#'
+#' @title The server function of the CSV import module
+#' @param Id Module namespace
+#' @param Options is a list with the basic settings to load the CSV file (see details).
+#' @details `Options` has these fields:
+#' \describe{
+#'   \item{Header}{Does the CSV file have a header? (`TRUE`/`FALSE`;
+#'         see [utils::read.csv()] argument `header`)}
+#'   \item{ColSep}{A character separating columns (
+#'         see [utils::read.csv()] argument `sep`)}
+#'   \item{ThousandsSep}{The character that separates thousands in numbers.}
+#'   \item{DecimalsSep}{The character used decimal points in the file
+#'         (see [utils::read.csv()] argument `dec`)}
+#'   \item{DateFormat}{Format used for dates in the file
+#'         (format specification by [base::strptime()]).}
+#'   \item{Quote}{Character to identify text
+#'         see [utils::read.csv()] argument `quote`}
+#'   \item{StringsAsFactors}{Shall strings be converted to factors (unless
+#'         specified otherwise) (`TRUE`/`FALSE`;
+#'         see [utils::read.csv()] argument `stringsAsFactors`).}
+#' }
+#' @return a data frame containing the uploaded CSV file
 #' @export
-ModuleImportServer <- function(id, stringsAsFactors = TRUE) {
+#' @import shiny
+#' @importFrom methods setAs setClass
+#' @importFrom utils head read.csv
+ModuleImportServer <- function(Id, Options = NULL) {
   moduleServer(
-    id,
+    Id,
 
     function(input, output, session) {
-      ColumnMapping <- list()
+      ColumnMapping <- list() # TODO: not used do far
 
+      ns <- NS(Id)
+
+      if (is.null(Options)) {
+        Options <- .DefaultOptions
+      }
+
+
+      # UI -----------------
+      output$uiFileInput <- renderUI({
+        tagList(
+          fluidRow(
+            column(
+              h3("Import"), width = 12L
+            ),
+            column(
+              fileInput(ns("inpImportData"), "Neue Daten importieren", accept = c("text/csv", ".csv"),
+                        buttonLabel = "Durchsuchen...", placeholder = "Keine Datei gewählt", width = "100%"),
+              width = 6L
+            ))
+        )
+      })
+
+      output$uiGlobalSettings <- renderUI({
+        tagList(
+          fluidRow(
+            column(
+              checkboxInput(ns("inpHeader"), "Hat Überschriften", value = Options$Header),
+              width = 6L
+            )),
+          fluidRow(
+            column(
+              textInput(ns("inpColSep"), "Spaltentrennzeichen", Options$ColSep),
+              width = 3L
+            ),
+            column(
+              textInput(ns("inpThousandsSep"), "Tausender-Trennzeichen", Options$ThousandsSep),
+              width = 3L
+            ),
+            column(
+              textInput(ns("inpDecimalsSep"),  "Dezimaltrennzeichen", Options$DecimalsSep),
+              width = 3L
+            ),
+            column(
+              textInput(ns("inpDateFormat"),  "Datumsformat", Options$DateFormat),
+              width = 3L
+            ),
+            column(
+              selectInput(ns("inpQuote"), "Texterkennungszeichen",
+                          choices = c("None" = "", "Double quote" = "\"", "Single quote" = "'"),
+                          selected = Options$Quote),
+              width = 3L
+            )
+          )
+        )
+      })
+
+
+      output$uiPreview <- renderUI({
+        tagList(
+          fluidRow(
+            column(
+              hr(),
+              h3("Vorschau"),
+              tableOutput(ns("outImportDataPreview")),
+              width = 12L
+            )
+          )
+        )
+      })
+
+
+      # SERVER -------------
       # The selected file, if any
       UserFile <- reactive({
         # If no file is selected, don't do anything
@@ -82,8 +146,8 @@ ModuleImportServer <- function(id, stringsAsFactors = TRUE) {
         read.csv(UserFile()$datapath,
                  header = input$inpHeader,
                  quote  = input$inpQuote,
-                 sep    = input$inpColSeparator,
-                 stringsAsFactors = stringsAsFactors,
+                 sep    = input$inpColSep,
+                 stringsAsFactors = Options$StringsAsFactors,
                  colClasses = c("character", "character", "numeric", "date")) #CHANGE
         # TODO: convert dates
         # TODO: "inpThousandsSep"

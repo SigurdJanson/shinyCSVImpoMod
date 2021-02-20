@@ -2,15 +2,37 @@
 % Please edit documentation in R/ImportModule.R
 \name{ModuleImportServer}
 \alias{ModuleImportServer}
-\title{ModuleImportServer - the server function of the CSV import module}
+\title{The server function of the CSV import module}
 \usage{
-ModuleImportServer(id, stringsAsFactors = TRUE)
+ModuleImportServer(Id, Options = NULL)
 }
 \arguments{
-\item{id}{Module namespace}
+\item{Id}{Module namespace}
 
-\item{stringsAsFactors}{Shall strings be converted to factors (unless specified otherwise) (\code{TRUE}/\code{FALSE}).}
+\item{Options}{is a list with the basic settings to load the CSV file (see details).}
+}
+\value{
+a data frame containing the uploaded CSV file
 }
 \description{
-ModuleImportServer - the server function of the CSV import module
+The server function of the CSV import module
+}
+\details{
+\code{Options} has these fields:
+\describe{
+\item{Header}{Does the CSV file have a header? (\code{TRUE}/\code{FALSE};
+see \code{\link[utils:read.table]{utils::read.csv()}} argument \code{header})}
+\item{ColSep}{A character separating columns (
+see \code{\link[utils:read.table]{utils::read.csv()}} argument \code{sep})}
+\item{ThousandsSep}{The character that separates thousands in numbers.}
+\item{DecimalsSep}{The character used decimal points in the file
+(see \code{\link[utils:read.table]{utils::read.csv()}} argument \code{dec})}
+\item{DateFormat}{Format used for dates in the file
+(format specification by \code{\link[base:strptime]{base::strptime()}}).}
+\item{Quote}{Character to identify text
+see \code{\link[utils:read.table]{utils::read.csv()}} argument \code{quote}}
+\item{StringsAsFactors}{Shall strings be converted to factors (unless
+specified otherwise) (\code{TRUE}/\code{FALSE};
+see \code{\link[utils:read.table]{utils::read.csv()}} argument \code{stringsAsFactors}).}
+}
 }

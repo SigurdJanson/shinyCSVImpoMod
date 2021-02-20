@@ -2,13 +2,13 @@
 % Please edit documentation in R/ImportModule.R
 \name{ModuleImportUI}
 \alias{ModuleImportUI}
-\title{\code{ModuleImportUI} is the UI function of the CSV import module}
+\title{The UI function of the CSV import module}
 \usage{
-ModuleImportUI(id)
+ModuleImportUI(Id)
 }
 \arguments{
-\item{id}{Module namespace to be set by by caller}
+\item{Id}{Module namespace to be set by by caller}
 }
 \description{
-\code{ModuleImportUI} is the UI function of the CSV import module
+The UI function of the CSV import module
 }
