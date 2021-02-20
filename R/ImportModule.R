@@ -102,19 +102,19 @@ ModuleImportServer <- function(id, stringsAsFactors = TRUE) {
   )
 }
 
-## MAIN APP == ## == ## =============
-ui <- fluidPage(
-  ModuleImportUI("ProjectDataFile"),
-  tableOutput("AppOutputTest")
-)
-
-server <- function(input, output, session) {
-  DataFile <- ModuleImportServer("ProjectDataFile")
-
-  output$AppOutputTest <- renderTable({
-    need(DataFile(), "Keine Daten vorhanden")
-    return(DataFile())
-  })
-}
-
-shinyApp(ui, server)
+# ## MAIN APP == ## == ## =============
+# ui <- fluidPage(
+#   ModuleImportUI("ProjectDataFile"),
+#   tableOutput("AppOutputTest")
+# )
+#
+# server <- function(input, output, session) {
+#   DataFile <- ModuleImportServer("ProjectDataFile")
+#
+#   output$AppOutputTest <- renderTable({
+#     need(DataFile(), "Keine Daten vorhanden")
+#     return(DataFile())
+#   })
+# }
+#
+# shinyApp(ui, server)
