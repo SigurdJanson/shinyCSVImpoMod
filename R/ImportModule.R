@@ -1,6 +1,8 @@
 library(shiny)
 
-
+#' @title `ModuleImportUI` is the UI function of the CSV import module
+#' @param id Module namespace to be set by by caller
+#'
 #' @export
 ModuleImportUI <- function(id) {
   ns <- NS(id)
@@ -51,6 +53,10 @@ ModuleImportUI <- function(id) {
 }
 
 
+#' @title ModuleImportServer - the server function of the CSV import module
+#' @param id Module namespace
+#' @param stringsAsFactors Shall strings be converted to factors (unless specified otherwise) (`TRUE`/`FALSE`).
+#'
 #' @export
 ModuleImportServer <- function(id, stringsAsFactors = TRUE) {
   moduleServer(
