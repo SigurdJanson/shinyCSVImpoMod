@@ -1,16 +1,29 @@
 Package: shiny.CSVImport
-Title: What the Package Does (One Line, Title Case)
+Title: Package with CSV Import Module
 Version: 0.0.0.9000
 Authors@R: 
-    person(given = "First",
-           family = "Last",
+    person(given = "Jan",
+           family = "Seifert",
            role = c("aut", "cre"),
            email = "first.last@example.com",
            comment = c(ORCID = "YOUR-ORCID-ID"))
-Description: What the package does (one paragraph).
-License: `use_mit_license()`, `use_gpl3_license()` or friends to
-    pick a license
+Description: A package providing a module with all functionality needed to import CSV files to a Shiny app. The module allows the user to make the required settings (like decimal and column separator character). The module returns a data frame.
+URL: https://github.com/SigurdJanson/shinyCSVImpoMod
+BugReports: https://github.com/SigurdJanson/shinyCSVImpoMod/issues
+License: GPL (>= 3)
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.1.1
+Depends:
+Imports:
+   Shiny (>= 1.6.0)
+Suggests:
+    covr,
+    knitr,
+    rmarkdown,
+    spelling,
+    testthat
+VignetteBuilder:
+    knitr
+Language: en-GB
