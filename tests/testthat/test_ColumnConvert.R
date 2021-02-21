@@ -139,3 +139,34 @@ test_that("Success Case: Mixed", {
   }
 })
 
+
+
+test_that("Success Case: Skip Columns", {
+  # SETUP
+  df <- GetDataFromFile()
+  Converter <- list("character", NULL, "integer", "date", "double", NULL)
+  Formats   <- list(NA, NA, NA, "%d.%m.%Y", NA, NA)
+  Locale    <- locale(date_names = "de",
+                      date_format   = c("%d.%m.%Y"),
+                      time_format   = c("%T"),
+                      decimal_mark  = ",",
+                      grouping_mark = ".",
+                      encoding = "UTF-8",
+                      asciify = FALSE)
+  Expected <- c("character", "integer", "Date", "double")
+
+  # TEST
+  expect_silent( df <- ColumnConvert(df, Converter, Formats) )
+  NCol <- ncol(df) # NCol has changed after operation
+  expect_type(df, "list")
+  expect_s3_class(df, "data.frame")
+
+  expect_identical(ncol(df), length(unlist(Converter))) # `unlist` drops NULL values
+
+  for (i in 1:NCol) {
+    if (Expected[i] == "Date")
+      expect_s3_class(df[[i]], Expected[i])
+    else
+      expect_type(df[[i]], Expected[i])
+  }
+})
