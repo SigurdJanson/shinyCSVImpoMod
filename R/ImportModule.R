@@ -73,7 +73,7 @@ ModuleImportServer <- function(Id, Options = NULL) {
             ),
             column(
               fileInput(ns("inpImportData"), "Neue Daten importieren", accept = c("text/csv", ".csv"),
-                        buttonLabel = "Durchsuchen...", placeholder = "Keine Datei gewählt", width = "100%"),
+                        buttonLabel = "Durchsuchen...", placeholder = "Keine Datei", width = "100%"),
               width = 6L
             ))
         )
@@ -83,7 +83,7 @@ ModuleImportServer <- function(Id, Options = NULL) {
         tagList(
           fluidRow(
             column(
-              checkboxInput(ns("inpHeader"), "Hat Überschriften", value = Options$Header),
+              checkboxInput(ns("inpHeader"), "Hat Tabellenkopf", value = Options$Header),
               width = 6L
             )),
           fluidRow(
@@ -136,7 +136,9 @@ ModuleImportServer <- function(Id, Options = NULL) {
         input$inpImportData
       })
 
-      # The user's data, parsed into a data frame
+      # The user's data, parsed into a data frame.
+      # The raw data frame has only columns of type `character` and must
+      # be converted later.
       RawDataFrame <- reactive({
         req(UserFile())
 
@@ -151,13 +153,14 @@ ModuleImportServer <- function(Id, Options = NULL) {
 
       # The data frame returned by the module to the calling app.
       # Does all the required data type conversions.
-      DataFrame <- reactive({
+      DataFrame <- debounce(reactive({
         # Options$StringsAsFactors
         # c("character", "character", "numeric", "date")) #CHANGE
         # TODO: convert dates
         # TODO: "inpThousandsSep"
         # TODO: "inpDecimalsSep"
-      }) %>% debounce(2000)
+        return(RawDataFrame())
+      }), 2000L)
 
 
       output$outImportDataPreview <- renderTable({
