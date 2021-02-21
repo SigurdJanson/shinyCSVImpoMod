@@ -40,7 +40,7 @@ FindLocale <- function(LangCode) {
   }
   if (length(Found) == 0) {
     Info <- Sys.localeconv()
-    FoundLocale <- default_locale()
+    FoundLocale <- readr::default_locale()
     # replace numeric separators because R usually formats numbers in the C locale
     FoundLocale[["decimal_mark"]]  <- unname(Info["mon_decimal_point"])
     FoundLocale[["grouping_mark"]] <- unname(Info["mon_thousands_sep"])
