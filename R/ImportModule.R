@@ -137,27 +137,35 @@ ModuleImportServer <- function(Id, Options = NULL) {
       })
 
       # The user's data, parsed into a data frame
-      DataFrame <- reactive({
+      RawDataFrame <- reactive({
         req(UserFile())
-
-        setClass("date")
-        setAs("character", "date", function(from) as.POSIXct(from, format = input$inpDateFormat) )
 
         read.csv(UserFile()$datapath,
                  header = input$inpHeader,
                  quote  = input$inpQuote,
                  sep    = input$inpColSep,
-                 stringsAsFactors = Options$StringsAsFactors,
-                 colClasses = c("character", "character", "numeric", "date")) #CHANGE
-        # TODO: convert dates
-        # TODO: "inpThousandsSep"
-        # TODO: "inpDecimalsSep"
+                 stringsAsFactors = FALSE,
+                 colClasses = "character")
       })
 
 
+      # The data frame returned by the module to the calling app.
+      # Does all the required data type conversions.
+      DataFrame <- reactive({
+        # Options$StringsAsFactors
+        # c("character", "character", "numeric", "date")) #CHANGE
+        # TODO: convert dates
+        # TODO: "inpThousandsSep"
+        # TODO: "inpDecimalsSep"
+      }) %>% debounce(2000)
+
+
       output$outImportDataPreview <- renderTable({
-        need(DataFrame(), "No data has been loaded")
-        return(head(DataFrame()))
+        need(RawDataFrame(), "No data available for preview")
+        df <- head(RawDataFrame())
+        ColTypes <- sprintf("<%s>", GuessColumnTypes(df))
+        df <- rbind(Types = ColTypes, df)
+        return(df)
       })
 
       # Return the reactive that yields the data frame
