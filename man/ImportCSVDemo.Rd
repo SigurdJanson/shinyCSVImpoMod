@@ -9,3 +9,6 @@ ImportCSVDemo()
 \description{
 ImportCSVDemo - sample app to show how the package works.
 }
+\examples{
+\dontrun{ImportCSVDemo()}
+}
