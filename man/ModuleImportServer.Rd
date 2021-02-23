@@ -4,10 +4,12 @@
 \alias{ModuleImportServer}
 \title{The server function of the CSV import module}
 \usage{
-ModuleImportServer(Id, Options = NULL)
+ModuleImportServer(Id, ColSpec = NULL, Options = NULL)
 }
 \arguments{
-\item{Id}{Module namespace}
+\item{Id}{Module name space}
+
+\item{ColSpec}{A list specifying the columns to import}
 
 \item{Options}{is a list with the basic settings to load the CSV file (see details).}
 }
@@ -18,7 +20,18 @@ a data frame containing the uploaded CSV file
 The server function of the CSV import module
 }
 \details{
-\code{Options} has these fields:
+\code{ColSpec} must be a named list with the vectors:
+\describe{
+\item{Name}{A list of variable (i.e. column) names that shall replace the
+column heads in the file (character).}
+\item{NameInFile}{A list of column heads in the CSV file (character).}
+\item{Type}{The data types of each variable (character). If no value
+is given, it will be guessed.}
+\item{Format}{An additional format specification (character). That
+is supported by "datetime", "date", and "time". If none is given
+the \code{Options$DateFormat} is used. "find" and "regexfind" types demand a format.}
+}
+\code{Options} can have these fields:
 \describe{
 \item{Header}{Does the CSV file have a header? (\code{TRUE}/\code{FALSE};
 see \code{\link[utils:read.table]{utils::read.csv()}} argument \code{header})}
@@ -28,6 +41,8 @@ see \code{\link[utils:read.table]{utils::read.csv()}} argument \code{sep})}
 \item{DecimalsSep}{The character used decimal points in the file
 (see \code{\link[utils:read.table]{utils::read.csv()}} argument \code{dec})}
 \item{DateFormat}{Format used for dates in the file
+(format specification by \code{\link[base:strptime]{base::strptime()}}).}
+\item{TimeFormat}{Format used for temporal data in the file
 (format specification by \code{\link[base:strptime]{base::strptime()}}).}
 \item{Quote}{Character to identify text
 see \code{\link[utils:read.table]{utils::read.csv()}} argument \code{quote}}

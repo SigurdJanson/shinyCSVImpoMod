@@ -1,4 +1,5 @@
 library(shiny)
+library(readr)
 
 .DefaultOptions <- list(
   Header = TRUE,
@@ -18,6 +19,10 @@ library(shiny)
 ModuleImportUI <- function(Id) {
   ns <- NS(Id)
   tagList(
+    tags$script(
+      HTML("var language =  window.navigator.userLanguage || window.navigator.language;
+           Shiny.onInputChange('input$LangSetting', language);")
+    ),
     uiOutput(ns("uiFileInput")),
     uiOutput(ns("uiGlobalSettings")),
     uiOutput(ns("uiPreview"))
@@ -26,9 +31,22 @@ ModuleImportUI <- function(Id) {
 
 
 #' @title The server function of the CSV import module
-#' @param Id Module namespace
+#' @param Id Module name space
+#' @param ColSpec A list specifying the columns to import
 #' @param Options is a list with the basic settings to load the CSV file (see details).
-#' @details `Options` has these fields:
+#' @details
+#' `ColSpec` must be a named list with the vectors:
+#' \describe{
+#'   \item{Name}{A list of variable (i.e. column) names that shall replace the
+#'   column heads in the file (character).}
+#'   \item{NameInFile}{A list of column heads in the CSV file (character).}
+#'   \item{Type}{The data types of each variable (character). If no value
+#'   is given, it will be guessed.}
+#'   \item{Format}{An additional format specification (character). That
+#'   is supported by "datetime", "date", and "time". If none is given
+#'   the `Options$DateFormat` is used. "find" and "regexfind" types demand a format.}
+#' }
+#' `Options` can have these fields:
 #' \describe{
 #'   \item{Header}{Does the CSV file have a header? (`TRUE`/`FALSE`;
 #'         see [utils::read.csv()] argument `header`)}
@@ -39,6 +57,8 @@ ModuleImportUI <- function(Id) {
 #'         (see [utils::read.csv()] argument `dec`)}
 #'   \item{DateFormat}{Format used for dates in the file
 #'         (format specification by [base::strptime()]).}
+#'   \item{TimeFormat}{Format used for temporal data in the file
+#'         (format specification by [base::strptime()]).}
 #'   \item{Quote}{Character to identify text
 #'         see [utils::read.csv()] argument `quote`}
 #'   \item{StringsAsFactors}{Shall strings be converted to factors (unless
@@ -48,9 +68,9 @@ ModuleImportUI <- function(Id) {
 #' @return a data frame containing the uploaded CSV file
 #' @export
 #' @import shiny
-#' @importFrom methods setAs setClass
 #' @importFrom utils head read.csv
-ModuleImportServer <- function(Id, Options = NULL) {
+#' @importFrom readr default_locale locale
+ModuleImportServer <- function(Id, ColSpec = NULL, Options = NULL) {
   moduleServer(
     Id,
 
@@ -59,8 +79,15 @@ ModuleImportServer <- function(Id, Options = NULL) {
 
       ns <- NS(Id)
 
+      Locale <- default_locale()
       if (is.null(Options)) {
         Options <- .DefaultOptions
+        Locale  <- locale(date_names = input$LangSetting, ##TODO##############!!!!!!!!!!!!!!!
+                          date_format = ifelse(is.null(Options$DateFormat), "%AD", Options$DateFormat),
+                          time_format = ifelse(is.null(Options$TimeFormat), "%AT", Options$TimeFormat),
+                          decimal_mark = ifelse(is.null(Options$DecimalsSep), ".", Options$DecimalsSep),
+                          grouping_mark = ifelse(is.null(Options$ThousandsSep), ",", Options$ThousandsSep),
+                          tz = "UTC", encoding = "UTF-8", asciify = FALSE)
       }
 
 
@@ -166,7 +193,24 @@ ModuleImportServer <- function(Id, Options = NULL) {
       output$outImportDataPreview <- renderTable({
         need(RawDataFrame(), "No data available for preview")
         df <- head(RawDataFrame())
-        ColTypes <- sprintf("<%s>", GuessColumnTypes(df))
+
+        # Match names to `ColSpec$NameInFile`, drop all missings, and
+        # ... replace with desired names
+        if (!is.null(ColSpec$NameInFile) && length(ColSpec$NameInFile) >0) {
+          ColNames <- names(df)
+          #WantedNotFound <- setdiff(ColSpec$NameInFile, ColNames) # TODO: HANDLE!!!
+          #-UnWanted       <- setdiff(ColNames, ColSpec$NameInFile) # TODO: NOT USED
+          # get logical vector identifying relevant positions
+          WantedNFound   <- intersect(ColSpec$NameInFile, ColNames)
+          df <- df[, ColNames %in% WantedNFound]
+          names(df) <- ColSpec$Name[match(WantedNFound, ColNames)]
+        }
+
+        # Create locale() from `Options`
+        Locale <- Options ##############################!!!!!!!!!!!!!!!!!!!!
+
+        ColTypes <- GuessColumnTypes(df, Locale)
+        ColTypesStr <- sprintf("<%s>", ColTypes)
         df <- rbind(Types = ColTypes, df)
         return(df)
       })
@@ -177,19 +221,3 @@ ModuleImportServer <- function(Id, Options = NULL) {
   )
 }
 
-# ## MAIN APP == ## == ## =============
-# ui <- fluidPage(
-#   ModuleImportUI("ProjectDataFile"),
-#   tableOutput("AppOutputTest")
-# )
-#
-# server <- function(input, output, session) {
-#   DataFile <- ModuleImportServer("ProjectDataFile")
-#
-#   output$AppOutputTest <- renderTable({
-#     need(DataFile(), "Keine Daten vorhanden")
-#     return(DataFile())
-#   })
-# }
-#
-# shinyApp(ui, server)
