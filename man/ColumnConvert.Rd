@@ -13,9 +13,19 @@ ColumnConvert(Columns, Converter, Format)
 
 \item{Format}{A list of formats (see details)}
 }
+\value{
+a data frame with changed column data types
+}
 \description{
 Convert columns of a data frame from character to their desired type
 }
 \details{
-Valid converters: character, logical, numeric, double, integer, factor, datetime, find,
+Valid converters: date, time, datetime, character, factor, logical, number,
+double, integer, find, regexfind. \code{NULL} drops a column. Everything else will be
+guessed by \code{\link[readr:parse_guess]{readr::parse_guess()}}.
+
+The types date, time, and datetime \strong{support} a \code{Format} specification. If none is available
+the \code{Locale} is used.
+
+The types find and regexfind \strong{require} a \code{Format} specification.
 }
