@@ -170,3 +170,17 @@ test_that("Success Case: Skip Columns", {
       expect_type(df[[i]], Expected[i])
   }
 })
+
+
+
+
+test_that("Preconditions", {
+  # SETUP
+  VecA <- 1:3
+  VecB <- seq(from = 1, to = 2, by = 0.5)
+  df <- data.frame(A = as.character(VecA), B = as.character(VecB))
+
+  expect_error(df <- ColumnConvert(1:3, list("integer", "double")))
+  expect_error(df <- ColumnConvert(df, c("integer", "double")))
+  expect_error(df <- ColumnConvert(df, list("integer", "double"), 1:3))
+})
