@@ -6,7 +6,8 @@ library(readr)
   ColSep = ";",
   ThousandsSep = ",",
   DecimalsSep = ".",
-  DateFormat = "%Y-%m-%d",
+  DateFormat = "%Y-%m-%d", # strptime() default
+  TimeFormat = "%H:%M:%S", # strptime() default
   Quote = "",
   StringsAsFactors = FALSE
 )
@@ -19,10 +20,6 @@ library(readr)
 ModuleImportUI <- function(Id) {
   ns <- NS(Id)
   tagList(
-    tags$script(
-      HTML("var language =  window.navigator.userLanguage || window.navigator.language;
-           Shiny.onInputChange('input$LangSetting', language);")
-    ),
     uiOutput(ns("uiFileInput")),
     uiOutput(ns("uiGlobalSettings")),
     uiOutput(ns("uiPreview"))
@@ -48,6 +45,7 @@ ModuleImportUI <- function(Id) {
 #' }
 #' `Options` can have these fields:
 #' \describe{
+#'   \item{LangCode}{Language code (e.g. "de" or "en)}
 #'   \item{Header}{Does the CSV file have a header? (`TRUE`/`FALSE`;
 #'         see [utils::read.csv()] argument `header`)}
 #'   \item{ColSep}{A character separating columns (
@@ -79,15 +77,14 @@ ModuleImportServer <- function(Id, ColSpec = NULL, Options = NULL) {
 
       ns <- NS(Id)
 
-      Locale <- default_locale()
+      GlobalLocale  <- locale(date_names = ifelse(is.null(Options$LangCode), "en", Options$LangCode),
+                              date_format = ifelse(is.null(Options$DateFormat), "%AD", Options$DateFormat),
+                              time_format = ifelse(is.null(Options$TimeFormat), "%AT", Options$TimeFormat),
+                              decimal_mark = ifelse(is.null(Options$DecimalsSep), ".", Options$DecimalsSep),
+                              grouping_mark = ifelse(is.null(Options$ThousandsSep), ",", Options$ThousandsSep),
+                              tz = "UTC", encoding = "UTF-8", asciify = FALSE)
       if (is.null(Options)) {
         Options <- .DefaultOptions
-        Locale  <- locale(date_names = input$LangSetting, ##TODO##############!!!!!!!!!!!!!!!
-                          date_format = ifelse(is.null(Options$DateFormat), "%AD", Options$DateFormat),
-                          time_format = ifelse(is.null(Options$TimeFormat), "%AT", Options$TimeFormat),
-                          decimal_mark = ifelse(is.null(Options$DecimalsSep), ".", Options$DecimalsSep),
-                          grouping_mark = ifelse(is.null(Options$ThousandsSep), ",", Options$ThousandsSep),
-                          tz = "UTC", encoding = "UTF-8", asciify = FALSE)
       }
 
 
@@ -128,6 +125,10 @@ ModuleImportServer <- function(Id, ColSpec = NULL, Options = NULL) {
             ),
             column(
               textInput(ns("inpDateFormat"),  "Datumsformat", Options$DateFormat),
+              width = 3L
+            ),
+            column(
+              textInput(ns("inpTimeFormat"),  "Zeitformat", Options$TimeFormat),
               width = 3L
             ),
             column(
@@ -206,12 +207,17 @@ ModuleImportServer <- function(Id, ColSpec = NULL, Options = NULL) {
           names(df) <- ColSpec$Name[match(WantedNFound, ColNames)]
         }
 
-        # Create locale() from `Options`
-        Locale <- Options ##############################!!!!!!!!!!!!!!!!!!!!
+        Locale <- locale(date_names = ifelse(is.null(Options$LangCode), "de", Options$LangCode),
+                         date_format = ifelse(isTruthy(input$inpDateFormat), input$inpDateFormat, Options$DateFormat),
+                         time_format = ifelse(isTruthy(input$inpTimeFormat), input$inpTimeFormat, Options$TimeFormat),
+                         decimal_mark = ifelse(isTruthy(input$inpDecimalsSep), input$inpDecimalsSep, Options$DecimalsSep),
+                         grouping_mark = ifelse(isTruthy(input$inpThousandsSep), input$inpThousandsSep, Options$ThousandsSep),
+                         tz = "UTC", encoding = "UTF-8", asciify = FALSE)
+
 
         ColTypes <- GuessColumnTypes(df, Locale)
         ColTypesStr <- sprintf("<%s>", ColTypes)
-        df <- rbind(Types = ColTypes, df)
+        df <- rbind(Types = ColTypesStr, df)
         return(df)
       })
 
