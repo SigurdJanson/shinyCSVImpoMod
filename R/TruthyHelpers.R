@@ -1,5 +1,4 @@
 
-
 #' @title isTruthyInside tests the truthiness of positions of a vector (while `isTruthy`
 #' tests the vector as a whole)
 #' @param x A vector or list
@@ -12,7 +11,7 @@
 #' isTruthyInside(list(1, NA, NULL, integer(0), 2))
 #' #> [1]  TRUE FALSE FALSE FALSE  TRUE
 isTruthyInside <- function(x) {
-  Result <- sapply(x, isTruthy)
+  Result <- sapply(x, isTruthy, USE.NAMES = FALSE)
   if (!isTruthy(Result) || length(Result) == 0) return(NULL)
   return(Result)
 }
