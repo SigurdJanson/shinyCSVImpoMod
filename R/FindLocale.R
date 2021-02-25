@@ -1,4 +1,4 @@
-require(readr) # takes care of l10n issues
+library(readr) # takes care of l10n issues
 
 #'
 .Locales <- list(

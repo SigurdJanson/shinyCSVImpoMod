@@ -1,4 +1,4 @@
-require(readr)
+library(readr)
 
 GetDataFromFile <- function() {
   read.csv(header = TRUE, quote  = "", sep = ";", stringsAsFactors = FALSE,
