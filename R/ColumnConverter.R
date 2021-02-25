@@ -9,7 +9,6 @@ require(readr) # takes care of l10n issues
 #' @param Locale Information about the underlying locale
 #' @return A vector of strings indicating the data types
 #' @seealso [readr::guess_parser()], [readr::locale()]
-#' @examples
 GuessColumnTypes <- function(Data, Locale = "de-DE") {
   if (!is.data.frame(Data)) stop("Invalid type of data")
 
@@ -25,6 +24,7 @@ GuessColumnTypes <- function(Data, Locale = "de-DE") {
 #' @param Columns A data frame with columns to cast types
 #' @param Converter A list (see details)
 #' @param Format A list of formats (see details)
+#' @param Locale A locale that can be used in case format is missing
 #' @details
 #' Valid converters: date, time, datetime, character, factor, logical, number,
 #' double, integer, find, regexfind. `NULL` drops a column. Everything else will be
@@ -33,9 +33,9 @@ GuessColumnTypes <- function(Data, Locale = "de-DE") {
 #' The types date, time, and datetime **support** a `Format` specification. If none is available
 #' the `Locale` is used.
 #'
-#' The types find and regexfind **require** a `Format` specification.
-#' @returns a data frame with changed column data types
-ColumnConvert <- function(Columns, Converter, Format) {
+#' The types "find" and "regexfind" **require** a `Format` specification.
+#' @return a data frame with changed column data types
+ColumnConvert <- function(Columns, Converter, Format, Locale) {
   if (!is.data.frame(Columns)) stop("Invalid type of 'Columns' data")
   if (!is.list(Converter)) stop("Invalid type of 'Converter' data")
   if (!missing(Format) && !is.list(Format)) stop("Invalid type of 'Format' data")
@@ -49,18 +49,18 @@ ColumnConvert <- function(Columns, Converter, Format) {
       suppressWarnings({
         Columns[[i]] <- switch(
           Converter[[i]],
-          date     = readr::parse_date(Columns[[i]], format = Format[[i]]),
-          time     = readr::parse_time(Columns[[i]], format = Format[[i]]),
-          datetime = readr::parse_datetime(Columns[[i]], format = Format[[i]]),
+          date     = readr::parse_date(Columns[[i]], format = Format[[i]], locale = Locale),
+          time     = readr::parse_time(Columns[[i]], format = Format[[i]], locale = Locale),
+          datetime = readr::parse_datetime(Columns[[i]], format = Format[[i]], locale = Locale),
           character= readr::parse_character(Columns[[i]]), # no format required
           factor   = readr::parse_factor  (Columns[[i]]), # no format required
-          logical  = readr::parse_logical (Columns[[i]]), # locale only
-          number   = readr::parse_number  (Columns[[i]]), # locale only
-          double   = readr::parse_double  (Columns[[i]]), # locale only
-          integer  = readr::parse_integer (Columns[[i]]), # locale only
+          logical  = readr::parse_logical (Columns[[i]], locale = Locale), # locale only
+          number   = readr::parse_number  (Columns[[i]], locale = Locale), # locale only
+          double   = readr::parse_double  (Columns[[i]], locale = Locale), # locale only
+          integer  = readr::parse_integer (Columns[[i]], locale = Locale), # locale only
           find     = grepl(Format[[i]], Columns[[i]], fixed = TRUE),
           regexfind = grepl(Format[[i]], Columns[[i]]),
-          readr::parse_guess(Columns[[i]])
+          readr::parse_guess(Columns[[i]], locale = Locale)
         )
       })
     }
