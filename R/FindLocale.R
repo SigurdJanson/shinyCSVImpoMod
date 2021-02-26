@@ -25,6 +25,8 @@ library(readr) # takes care of l10n issues
 #' @title Find a locale specification for a given language code
 #' @param LangCode A language code like "de-CH"  or "en-GB"
 #' (i.e. in the form of a IETF language tag).
+#' @details This function improves [readr::locale()]. It does not only allow a
+#' language code but also supports a language specification.
 #' @returns A locale object (see readr::locale())
 #' @seealso [readr::locale()] where `locale` objects are specified
 #' @references \url{https://en.wikipedia.org/wiki/IETF_language_tag},

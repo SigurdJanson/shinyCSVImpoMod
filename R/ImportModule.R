@@ -1,6 +1,11 @@
 library(shiny)
 library(readr)
 
+#TODO
+#- Handle StringAsFactors
+#- Provide UI for users to modify column names and handle
+#- Provide UI for users to modify column types and format and handle
+
 .DefaultOptions <- list(
   Header = TRUE,
   ColSep = ";",
@@ -38,10 +43,10 @@ ModuleImportUI <- function(Id) {
 #'   column heads in the file (character).}
 #'   \item{NameInFile}{A list of column heads in the CSV file (character).}
 #'   \item{Type}{The data types of each variable (character). If no value
-#'   is given, it will be guessed.}
+#'   (i.e. falsy values) is given, it will be guessed.}
 #'   \item{Format}{An additional format specification (character). That
 #'   is supported by "datetime", "date", and "time". If none is given
-#'   the `Options$DateFormat` is used. "find" and "regexfind" types demand a format.}
+#'   the `Options` are used. "find" and "regexfind" types demand a format.}
 #' }
 #' `Options` can have these fields:
 #' \describe{
@@ -73,8 +78,6 @@ ModuleImportServer <- function(Id, ColSpec = NULL, Options = NULL) {
     Id,
 
     function(input, output, session) {
-      ColumnMapping <- list() # TODO: not used do far
-
       ns <- NS(Id)
 
       GlobalLocale  <- locale(date_names = ifelse(is.null(Options$LangCode), "en", Options$LangCode),
@@ -182,24 +185,50 @@ ModuleImportServer <- function(Id, ColSpec = NULL, Options = NULL) {
       # The data frame returned by the module to the calling app.
       # Does all the required data type conversions.
       DataFrame <- debounce(reactive({
-        # Options$StringsAsFactors
-        # c("character", "character", "numeric", "date")) #CHANGE
-        # TODO: convert dates
-        # TODO: "inpThousandsSep"
-        # TODO: "inpDecimalsSep"
-        return(RawDataFrame())
+        if (identical(input$inpDecimalsSep, input$inpThousandsSep)) return()
+
+        df <- RawDataFrame()
+
+        if (!is.null(ColSpec$NameInFile) && length(ColSpec$NameInFile) > 0) {
+          ColNames <- names(df)
+          # get logical vector identifying relevant positions
+          WantedNFound   <- intersect(ColSpec$NameInFile, ColNames)
+          df <- df[, ColNames %in% WantedNFound]
+          names(df) <- ColSpec$Name[match(WantedNFound, ColNames)]
+        }
+
+        # Get column types
+        Locale <- locale(date_names = ifelse(is.null(Options$LangCode), "de", Options$LangCode),
+                         date_format = ifelse(isTruthy(input$inpDateFormat), input$inpDateFormat, Options$DateFormat),
+                         time_format = ifelse(isTruthy(input$inpTimeFormat), input$inpTimeFormat, Options$TimeFormat),
+                         decimal_mark = ifelse(isTruthy(input$inpDecimalsSep), input$inpDecimalsSep, Options$DecimalsSep),
+                         grouping_mark = ifelse(isTruthy(input$inpThousandsSep), input$inpThousandsSep, Options$ThousandsSep),
+                         tz = "UTC", encoding = "UTF-8", asciify = FALSE)
+        ColTypes <- GuessColumnTypes(df, Locale)
+        if (isTruthy(ColSpec$Type)) { # pre-specified types take precedence over guessed type
+          ColTypes <- replace(ColSpec$Type, !isTruthyInside(ColSpec$Type), ColTypes)
+        }
+
+        df <- ColumnConvert(df, as.list(ColTypes), ColSpec$Format, Locale)
+        #TODO: Options$StringsAsFactors
+
+        return(df)
       }), 2000L)
 
 
       output$outImportDataPreview <- renderTable({
-        need(RawDataFrame(), "No data available for preview")
+        validate(
+          need(RawDataFrame(), "No data available for preview"),
+          need(input$inpDecimalsSep != input$inpThousandsSep, "Decimal and thousands separator cannot be equal")
+        )
         df <- head(RawDataFrame())
 
         # Match names to `ColSpec$NameInFile`, drop all missings, and
         # ... replace with desired names
-        if (!is.null(ColSpec$NameInFile) && length(ColSpec$NameInFile) >0) {
+        if (!is.null(ColSpec$NameInFile) && length(ColSpec$NameInFile) > 0) {
           ColNames <- names(df)
-          #WantedNotFound <- setdiff(ColSpec$NameInFile, ColNames) # TODO: HANDLE!!!
+          WantedNotFound <- setdiff(ColSpec$NameInFile, ColNames)
+          if (length(WantedNotFound) > 0) showNotification("Some requested columns have not been found")
           #-UnWanted       <- setdiff(ColNames, ColSpec$NameInFile) # TODO: NOT USED
           # get logical vector identifying relevant positions
           WantedNFound   <- intersect(ColSpec$NameInFile, ColNames)
@@ -207,15 +236,22 @@ ModuleImportServer <- function(Id, ColSpec = NULL, Options = NULL) {
           names(df) <- ColSpec$Name[match(WantedNFound, ColNames)]
         }
 
+        # Get column types
         Locale <- locale(date_names = ifelse(is.null(Options$LangCode), "de", Options$LangCode),
                          date_format = ifelse(isTruthy(input$inpDateFormat), input$inpDateFormat, Options$DateFormat),
                          time_format = ifelse(isTruthy(input$inpTimeFormat), input$inpTimeFormat, Options$TimeFormat),
                          decimal_mark = ifelse(isTruthy(input$inpDecimalsSep), input$inpDecimalsSep, Options$DecimalsSep),
                          grouping_mark = ifelse(isTruthy(input$inpThousandsSep), input$inpThousandsSep, Options$ThousandsSep),
                          tz = "UTC", encoding = "UTF-8", asciify = FALSE)
-
-
         ColTypes <- GuessColumnTypes(df, Locale)
+        if (isTruthy(ColSpec$Type)) { # pre-specified types take precedence over guessed type
+          ColTypes <- replace(ColSpec$Type, !isTruthyInside(ColSpec$Type), ColTypes)
+        }
+
+        # Convert to test what works and re-convert to 'character'
+        #TODOF
+
+        # Create preview data frame
         ColTypesStr <- sprintf("<%s>", ColTypes)
         df <- rbind(Types = ColTypesStr, df)
         return(df)

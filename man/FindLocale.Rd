@@ -16,6 +16,10 @@ A locale object (see readr::locale())
 \description{
 Find a locale specification for a given language code
 }
+\details{
+This function improves \code{\link[readr:locale]{readr::locale()}}. It does not only allow a
+language code but also supports a language specification.
+}
 \references{
 \url{https://en.wikipedia.org/wiki/IETF_language_tag},
 \url{https://cran.r-project.org/web/packages/readr/vignettes/locales.html}

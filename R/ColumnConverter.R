@@ -38,7 +38,8 @@ GuessColumnTypes <- function(Data, Locale = "de-DE") {
 ColumnConvert <- function(Columns, Converter, Format, Locale) {
   if (!is.data.frame(Columns)) stop("Invalid type of 'Columns' data")
   if (!is.list(Converter)) stop("Invalid type of 'Converter' data")
-  if (!missing(Format) && !is.list(Format)) stop("Invalid type of 'Format' data")
+  if (!missing(Format) && !is.null(Format) && !is.list(Format)) stop("Invalid type of 'Format' data")
+  if (missing(Locale)) Locale <- default_locale()
 
   Col2Drop <- integer()
 

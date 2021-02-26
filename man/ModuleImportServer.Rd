@@ -26,13 +26,14 @@ The server function of the CSV import module
 column heads in the file (character).}
 \item{NameInFile}{A list of column heads in the CSV file (character).}
 \item{Type}{The data types of each variable (character). If no value
-is given, it will be guessed.}
+(i.e. falsy values) is given, it will be guessed.}
 \item{Format}{An additional format specification (character). That
 is supported by "datetime", "date", and "time". If none is given
-the \code{Options$DateFormat} is used. "find" and "regexfind" types demand a format.}
+the \code{Options} are used. "find" and "regexfind" types demand a format.}
 }
 \code{Options} can have these fields:
 \describe{
+\item{LangCode}{Language code (e.g. "de" or "en)}
 \item{Header}{Does the CSV file have a header? (\code{TRUE}/\code{FALSE};
 see \code{\link[utils:read.table]{utils::read.csv()}} argument \code{header})}
 \item{ColSep}{A character separating columns (

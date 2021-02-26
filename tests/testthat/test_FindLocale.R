@@ -23,11 +23,13 @@ test_that("Find by country prefix only: de (when 'de-DE' & 'de-CH' exist)", {
   expect_identical(obs, FindLocale("de-DE"))
 })
 
+
 test_that("Exact find: xx-XX", {
   expect_silent(obs <- FindLocale("de-CH"))
   expect_identical(obs$decimal_mark, ".")
   expect_identical(obs$grouping_mark, "'")
 })
+
 
 test_that("Find by country prefix only: ko (when only 'ko' exists)", {
   expect_silent(obs <- FindLocale("ko"))
