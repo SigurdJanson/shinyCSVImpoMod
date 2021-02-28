@@ -116,6 +116,9 @@ ModuleImportServer <- function(Id, ColSpec = NULL, Options = NULL) {
         names(ChoicesDecimalsSep) <- c(paste(i18n$t("Comma"), "(,)"), paste(i18n$t("Period"), "(.)") )
         ChoicesQuote <- list("", "\"", "'")
         names(ChoicesQuote) <- i18n$t(c("None", "Double quote", "Single quote"))
+        ChoicesDate <- list(`yyyy-MM-dd` = "%Y-%m-%d", `dd-MM-yyyy` = "%d-%m-%Y", `dd.MM.yy` = "%d.%m.%y", `dd.MM.yyyy` = "%d.%m.%Y",
+                            `d.M.yyyy` = "%d.%M.%Y", `dd/MM/yy` = "%d/%m/%y", `dd/MM/yyyy` = "%d/%m/%Y",
+                            `d/M/yyyy` = "%d/%M/%Y")
 
         tagList(
           fluidRow(
@@ -138,7 +141,12 @@ ModuleImportServer <- function(Id, ColSpec = NULL, Options = NULL) {
               width = 3L
             ),
             column(
-              textInput(ns("inpDateFormat"),  i18n$t("lblDateFormat"), Options$DateFormat),
+              tags$div(
+                title=i18n$t("inpDateFormat.Tooltip"),
+                selectizeInput(ns("inpDateFormat"), i18n$t("lblDateFormat"),
+                               choices = ChoicesDate, selected = Options$DateFormat,
+                               options = list(create = TRUE))
+              ),
               width = 3L
             ),
             column(

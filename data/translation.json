@@ -50,6 +50,11 @@
             "en": "Date Format"
         },
         {
+            "key": "inpDateFormat.Tooltip",
+            "de": "Wähle ein Format oder definiere ein eigenes mit der Syntax der R-Funktion 'strptime'",
+            "en": "Select a format or add your own by using the R 'strptime' syntax"
+        },
+        {
             "key": "lblTimeFormat",
             "de": "Zeitformat",
             "en": "Time Format"
