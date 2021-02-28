@@ -3,6 +3,7 @@
 export(ImportCSVDemo)
 export(ModuleImportServer)
 export(ModuleImportUI)
+export(isTruthyInside)
 import(shiny)
 importFrom(readr,default_locale)
 importFrom(readr,locale)

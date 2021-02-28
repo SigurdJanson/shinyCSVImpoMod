@@ -3,6 +3,7 @@
 #' tests the vector as a whole)
 #' @param x A vector or list
 #' @return A logical vector for each position indicating `TRUE`/`FALSE`
+#' @export
 #' @examples
 #' isTruthyInside(1:5)
 #' #> [1] TRUE TRUE TRUE TRUE TRUE
