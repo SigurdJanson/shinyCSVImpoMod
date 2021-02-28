@@ -119,6 +119,9 @@ ModuleImportServer <- function(Id, ColSpec = NULL, Options = NULL) {
         ChoicesDate <- list(`yyyy-MM-dd` = "%Y-%m-%d", `dd-MM-yyyy` = "%d-%m-%Y", `dd.MM.yy` = "%d.%m.%y", `dd.MM.yyyy` = "%d.%m.%Y",
                             `d.M.yyyy` = "%d.%M.%Y", `dd/MM/yy` = "%d/%m/%y", `dd/MM/yyyy` = "%d/%m/%Y",
                             `d/M/yyyy` = "%d/%M/%Y")
+        ChoicesTime <- list(list(`HH:MM:SS` = "%H:%M:%S", `HH:MM` = "%R"),
+                            list(`HH:MM:SS am/pm` = "%I:%M:%S %p", `HH:MM am/pm` = "%I:%M %p"))
+        names(ChoicesTime) <- paste(c(12, 24), i18n$t("hours"))
 
         tagList(
           fluidRow(
@@ -150,12 +153,15 @@ ModuleImportServer <- function(Id, ColSpec = NULL, Options = NULL) {
               width = 3L
             ),
             column(
-              textInput(ns("inpTimeFormat"),  i18n$t("lblTimeFormat"), Options$TimeFormat),
+              selectizeInput(ns("inpTimeFormat"), i18n$t("lblTimeFormat"),
+                             choices = ChoicesTime, selected = Options$TimeFormat,
+                             options = list(create = TRUE)),
               width = 3L
             ),
             column(
-              selectInput(ns("inpQuote"), i18n$t("lblQuote"),
-                          choices = ChoicesQuote, selected = Options$Quote),
+              selectizeInput(ns("inpQuote"), i18n$t("lblQuote"),
+                          choices = ChoicesQuote, selected = Options$Quote,
+                          options = list(allowEmptyOption = TRUE)),
               width = 3L
             )
           )

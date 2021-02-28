@@ -284,3 +284,11 @@ names(Choices) <- SelectedDates[["Format"]]
 dput(Choices)
 ```
 
+# Time
+
+Time formats seem simpler. Standard ISO format is HH:MM:SS. In most English-speaking regions no 24 hour notation is used. 
+
+
+```{r}
+
+```

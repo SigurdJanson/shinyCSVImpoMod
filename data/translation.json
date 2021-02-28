@@ -60,6 +60,11 @@
             "en": "Time Format"
         },
         {
+            "key": "hours",
+            "de": "Stunden",
+            "en": "hours"
+        },
+        {
             "key": "lblQuote",
             "de": "Texterkennungszeichen",
             "en": "Quote"
