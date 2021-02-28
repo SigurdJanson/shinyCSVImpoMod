@@ -112,6 +112,11 @@ ModuleImportServer <- function(Id, ColSpec = NULL, Options = NULL) {
       })
 
       output$uiGlobalSettings <- renderUI({
+        ChoicesDecimalsSep <- list(",", ".")
+        names(ChoicesDecimalsSep) <- c(paste(i18n$t("Comma"), "(,)"), paste(i18n$t("Period"), "(.)") )
+        ChoicesQuote <- list("", "\"", "'")
+        names(ChoicesQuote) <- i18n$t(c("None", "Double quote", "Single quote"))
+
         tagList(
           fluidRow(
             column(
@@ -129,7 +134,7 @@ ModuleImportServer <- function(Id, ColSpec = NULL, Options = NULL) {
             ),
             column(
               selectInput(ns("inpDecimalsSep"),  i18n$t("lblDecimalsSep"),
-                          choices = list(`Comma (,)` = ",", `Dot (.)` = "."), selected = Options$DecimalsSep),
+                          choices = ChoicesDecimalsSep, selected = Options$DecimalsSep),
               width = 3L
             ),
             column(
@@ -142,8 +147,7 @@ ModuleImportServer <- function(Id, ColSpec = NULL, Options = NULL) {
             ),
             column(
               selectInput(ns("inpQuote"), i18n$t("lblQuote"),
-                          choices = c("None" = "", "Double quote" = "\"", "Single quote" = "'"),
-                          selected = Options$Quote),
+                          choices = ChoicesQuote, selected = Options$Quote),
               width = 3L
             )
           )

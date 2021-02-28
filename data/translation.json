@@ -90,6 +90,31 @@
             "en": "Some requested columns have not been found"
         },
         {
+            "key": "Comma",
+            "de": "Komma",
+            "en": "Comma"
+        },
+        {
+            "key": "Period",
+            "de": "Punkt",
+            "en": "Period"
+        },
+        {
+            "key": "Double quote",
+            "de": "Anführungszeichen",
+            "en": "Double Quote"
+        },
+        {
+            "key": "Single quote",
+            "de": "Hochkomma",
+            "en": "Single Quote"
+        },
+        {
+            "key": "None",
+            "de": "Keins",
+            "en": "None"
+        },
+        {
             "key": "<character>",
             "de": "<TEXT>",
             "en": "<STRING>"
