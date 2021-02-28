@@ -15,9 +15,13 @@ ModuleImportServer(Id, ColSpec = NULL, Options = NULL)
 }
 \value{
 a data frame containing the uploaded CSV file
+
+Either a data frame or an error message
 }
 \description{
 The server function of the CSV import module
+
+The user's data, parsed into a data frame.
 }
 \details{
 \code{ColSpec} must be a named list with the vectors:
@@ -51,4 +55,8 @@ see \code{\link[utils:read.table]{utils::read.csv()}} argument \code{quote}}
 specified otherwise) (\code{TRUE}/\code{FALSE};
 see \code{\link[utils:read.table]{utils::read.csv()}} argument \code{stringsAsFactors}).}
 }
+}
+\note{
+The raw data frame has only columns of type \code{character} and must
+be converted later.
 }

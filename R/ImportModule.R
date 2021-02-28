@@ -1,4 +1,5 @@
 library(shiny)
+library(shiny.i18n)
 library(readr)
 
 #TODO
@@ -78,7 +79,9 @@ ModuleImportServer <- function(Id, ColSpec = NULL, Options = NULL) {
     Id,
 
     function(input, output, session) {
-      ns <- NS(Id)
+      ns <- NS(Id) # set up name space
+      i18n <- shiny.i18n::Translator$new(translation_json_path = system.file("data", "translation.json", package = "shiny.CSVImport"))
+      i18n$set_translation_language("de")
 
       GlobalLocale  <- locale(date_names = ifelse(is.null(Options$LangCode), "en", Options$LangCode),
                               date_format = ifelse(is.null(Options$DateFormat), "%AD", Options$DateFormat),
@@ -96,11 +99,13 @@ ModuleImportServer <- function(Id, ColSpec = NULL, Options = NULL) {
         tagList(
           fluidRow(
             column(
-              h3("Import"), width = 12L
+              h3(i18n$t("Import")), width = 12L
             ),
             column(
-              fileInput(ns("inpImportData"), "Neue Daten importieren", accept = c("text/csv", ".csv"),
-                        buttonLabel = "Durchsuchen...", placeholder = "Keine Datei", width = "100%"),
+              fileInput(ns("inpImportData"), i18n$t("lblDataImport"),
+                        accept = c("text/csv", ".csv"),
+                        buttonLabel = i18n$t("btnBrowse"), placeholder = i18n$t("lblFilePlaceholder"),
+                        width = "100%"),
               width = 6L
             ))
         )
@@ -110,33 +115,33 @@ ModuleImportServer <- function(Id, ColSpec = NULL, Options = NULL) {
         tagList(
           fluidRow(
             column(
-              checkboxInput(ns("inpHeader"), "Hat Tabellenkopf", value = Options$Header),
+              checkboxInput(ns("inpHeader"), i18n$t("lblHasHeader"), value = Options$Header),
               width = 6L
             )),
           fluidRow(
             column(
-              textInput(ns("inpColSep"), "Spaltentrennzeichen", Options$ColSep),
+              textInput(ns("inpColSep"), i18n$t("lblColumnSeparator"), Options$ColSep),
               width = 3L
             ),
             column(
-              textInput(ns("inpThousandsSep"), "Tausender-Trennzeichen", Options$ThousandsSep),
+              textInput(ns("inpThousandsSep"), i18n$t("lblThousandsSep"), Options$ThousandsSep),
               width = 3L
             ),
             column(
-              selectInput(ns("inpDecimalsSep"),  "Dezimaltrennzeichen",
+              selectInput(ns("inpDecimalsSep"),  i18n$t("lblDecimalsSep"),
                           choices = list(`Comma (,)` = ",", `Dot (.)` = "."), selected = Options$DecimalsSep),
               width = 3L
             ),
             column(
-              textInput(ns("inpDateFormat"),  "Datumsformat", Options$DateFormat),
+              textInput(ns("inpDateFormat"),  i18n$t("lblDateFormat"), Options$DateFormat),
               width = 3L
             ),
             column(
-              textInput(ns("inpTimeFormat"),  "Zeitformat", Options$TimeFormat),
+              textInput(ns("inpTimeFormat"),  i18n$t("lblTimeFormat"), Options$TimeFormat),
               width = 3L
             ),
             column(
-              selectInput(ns("inpQuote"), "Texterkennungszeichen",
+              selectInput(ns("inpQuote"), i18n$t("lblQuote"),
                           choices = c("None" = "", "Double quote" = "\"", "Single quote" = "'"),
                           selected = Options$Quote),
               width = 3L
@@ -151,7 +156,7 @@ ModuleImportServer <- function(Id, ColSpec = NULL, Options = NULL) {
           fluidRow(
             column(
               hr(),
-              h3("Vorschau"),
+              h3(i18n$t("Preview")),
               tableOutput(ns("outImportDataPreview")),
               width = 12L
             )
@@ -164,13 +169,15 @@ ModuleImportServer <- function(Id, ColSpec = NULL, Options = NULL) {
       # The selected file, if any
       UserFile <- reactive({
         # If no file is selected, don't do anything
-        validate(need(input$inpImportData, message = FALSE))
+        req(input$inpImportData)
+
         input$inpImportData
       })
 
-      # The user's data, parsed into a data frame.
-      # The raw data frame has only columns of type `character` and must
-      # be converted later.
+      #' @title The user's data, parsed into a data frame.
+      #' @note The raw data frame has only columns of type `character` and must
+      #' be converted later.
+      #' @returns Either a data frame or an error message
       RawDataFrame <- reactive({
         req(UserFile())
 
@@ -233,10 +240,10 @@ ModuleImportServer <- function(Id, ColSpec = NULL, Options = NULL) {
       #
       output$outImportDataPreview <- renderTable({
         shiny::validate(
-          need(RawDataFrame(), "No data available for preview"),
-          need(is.data.frame(RawDataFrame()), ifelse(is.character(RawDataFrame()), RawDataFrame(), "CSV cannot be parsed")),
-          need(input$inpDecimalsSep != input$inpThousandsSep, "Decimal and thousands separator cannot be equal"),
-          need(isTruthy(input$inpThousandsSep), "Thousands separator is not valid")
+          need(RawDataFrame(), i18n$t("No data available for preview")),
+          need(is.data.frame(RawDataFrame()), ifelse(is.character(RawDataFrame()), RawDataFrame(), i18n$t("CSV cannot be parsed"))),
+          need(input$inpDecimalsSep != input$inpThousandsSep, i18n$t("Decimal and thousands separator cannot be equal")),
+          need(isTruthy(input$inpThousandsSep), i18n$t("Thousands separator is not valid"))
         )
         df <- head(RawDataFrame())
 
@@ -245,7 +252,7 @@ ModuleImportServer <- function(Id, ColSpec = NULL, Options = NULL) {
         if (!is.null(ColSpec$NameInFile) && length(ColSpec$NameInFile) > 0) {
           ColNames <- names(df)
           WantedNotFound <- setdiff(ColSpec$NameInFile, ColNames)
-          if (length(WantedNotFound) > 0) showNotification("Some requested columns have not been found")
+          if (length(WantedNotFound) > 0) showNotification(i18n$t("Some requested columns have not been found"))
           #-UnWanted       <- setdiff(ColNames, ColSpec$NameInFile) # TODO: NOT USED
           # get logical vector identifying relevant positions
           WantedNFound   <- intersect(ColSpec$NameInFile, ColNames)
@@ -269,7 +276,7 @@ ModuleImportServer <- function(Id, ColSpec = NULL, Options = NULL) {
         #TODO
 
         # Create preview data frame
-        ColTypesStr <- sprintf("<%s>", ColTypes)
+        ColTypesStr <- i18n$t(sprintf("<%s>", ColTypes))
         df <- rbind(Types = ColTypesStr, df)
         return(df)
       })

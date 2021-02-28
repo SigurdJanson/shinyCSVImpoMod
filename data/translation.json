@@ -1,0 +1,148 @@
+{
+    "translation": [
+        {
+            "key": "Import",
+            "de": "Importieren",
+            "en": "Import"
+        },
+        {
+            "key": "lblDataImport",
+            "de": "Neue Daten importieren",
+            "en": "Import new data"
+        },
+        {
+            "key": "btnBrowse",
+            "de": "Durchsuchen...",
+            "en": "Browse..."
+
+        },
+        {
+            "key": "lblFilePlaceholder",
+            "de": "Keine Datei gewählt",
+            "en": "No file selected"
+
+        },
+        {
+            "key": "lblHasHeader",
+            "de": "Hat Tabellenkopf",
+            "en": "Has header"
+
+        },
+        {
+            "key": "lblColumnSeparator",
+            "de": "Spaltentrennzeichen",
+            "en": "Column separator"
+
+        },
+        {
+            "key": "lblThousandsSep",
+            "de": "Tausender-Trennzeichen",
+            "en": "Thousands Separator"
+        },
+        {
+            "key": "lblDecimalsSep",
+            "de": "Dezimaltrennzeichen",
+            "en": "Decimals Separator"
+        },
+        {
+            "key": "lblDateFormat",
+            "de": "Datumsformat",
+            "en": "Date Format"
+        },
+        {
+            "key": "lblTimeFormat",
+            "de": "Zeitformat",
+            "en": "Time Format"
+        },
+        {
+            "key": "lblQuote",
+            "de": "Texterkennungszeichen",
+            "en": "Quote"
+        },
+        {
+            "key": "Preview",
+            "de": "Vorschau",
+            "en": "Preview"
+        },
+        {
+            "key": "No data available for preview",
+            "de": "Keine Daten für Vorschau vorhanden",
+            "en": "No data available for preview"
+        },
+        {
+            "key": "CSV cannot be parsed",
+            "de": "CSV kann nicht interpretiert werden",
+            "en": "CSV cannot be interpreted"
+        },
+        {
+            "key": "Decimal and thousands separator cannot be equal",
+            "de": "Dezimal- und Tausendertrennzeichen müssen sich unterscheiden",
+            "en": "Decimal and thousands separator cannot be equal"
+        },
+        {
+            "key": "Thousands separator is not valid",
+            "de": "Ungültiges 1000er-Trennzeichen",
+            "en": "Thousands separator is not valid"
+        },
+        {
+            "key": "Some requested columns have not been found",
+            "de": "Angeforderte Spalten nicht gefunden",
+            "en": "Some requested columns have not been found"
+        },
+        {
+            "key": "<character>",
+            "de": "<TEXT>",
+            "en": "<STRING>"
+        },
+        {
+            "key": "<double>",
+            "de": "<KOMMAZAHL>",
+            "en": "<DECIMAL>"
+        },
+        {
+            "key": "<number>",
+            "de": "<ZAHL>",
+            "en": "<NUMBER>"
+        },
+        {
+            "key": "<logical>",
+            "de": "<WAHRHEIT>",
+            "en": "<LOGICAL>"
+        },
+        {
+            "key": "<date>",
+            "de": "<DATUM>",
+            "en": "<DATE>"
+        },
+        {
+            "key": "<time>",
+            "de": "<ZEIT>",
+            "en": "<TIME>"
+        },
+        {
+            "key": "<datetime>",
+            "de": "<DATUM&ZEIT>",
+            "en": "<DATETIME>"
+        },
+        {
+            "key": "<integer>",
+            "de": "<GANZZAHLIG>",
+            "en": "<INTEGER>"
+        },
+        {
+            "key": "<find>",
+            "de": "<ENTHÄLT>",
+            "en": "<CONTAINS>"
+        },
+        {
+            "key": "<regexfind>",
+            "de": "<REGEX>",
+            "en": "<REGEX>"
+        }
+    ],
+    "languages": [
+        "key",
+        "de",
+        "en"
+    ]
+}
