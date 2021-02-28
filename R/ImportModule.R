@@ -123,7 +123,8 @@ ModuleImportServer <- function(Id, ColSpec = NULL, Options = NULL) {
               width = 3L
             ),
             column(
-              textInput(ns("inpDecimalsSep"),  "Dezimaltrennzeichen", Options$DecimalsSep),
+              selectInput(ns("inpDecimalsSep"),  "Dezimaltrennzeichen",
+                          choices = list(`Comma (,)` = ",", `Dot (.)` = "."), selected = Options$DecimalsSep),
               width = 3L
             ),
             column(
@@ -173,19 +174,30 @@ ModuleImportServer <- function(Id, ColSpec = NULL, Options = NULL) {
       RawDataFrame <- reactive({
         req(UserFile())
 
-        read.csv(UserFile()$datapath,
-                 header = input$inpHeader,
-                 quote  = input$inpQuote,
-                 sep    = input$inpColSep,
-                 stringsAsFactors = FALSE,
-                 colClasses = "character")
+        Result <- NULL
+        tryCatch(
+          Result <- read.csv(UserFile()$datapath,
+                             header = input$inpHeader,
+                             quote  = input$inpQuote,
+                             sep    = input$inpColSep,
+                             stringsAsFactors = FALSE,
+                             colClasses = "character"),
+          error = function(e) Result <<- e$message,
+          warning = function(w) Result <<- w$message
+        )
+        return(Result)
       })
 
 
       # The data frame returned by the module to the calling app.
       # Does all the required data type conversions.
       DataFrame <- debounce(reactive({
-        if (identical(input$inpDecimalsSep, input$inpThousandsSep)) return()
+        req(
+          is.data.frame(RawDataFrame()),
+          !identical(input$inpDecimalsSep, input$inpThousandsSep),
+          input$inpThousandsSep
+        )
+
 
         df <- RawDataFrame()
 
@@ -216,10 +228,15 @@ ModuleImportServer <- function(Id, ColSpec = NULL, Options = NULL) {
       }), 2000L)
 
 
+
+      #
+      #
       output$outImportDataPreview <- renderTable({
-        validate(
+        shiny::validate(
           need(RawDataFrame(), "No data available for preview"),
-          need(input$inpDecimalsSep != input$inpThousandsSep, "Decimal and thousands separator cannot be equal")
+          need(is.data.frame(RawDataFrame()), ifelse(is.character(RawDataFrame()), RawDataFrame(), "CSV cannot be parsed")),
+          need(input$inpDecimalsSep != input$inpThousandsSep, "Decimal and thousands separator cannot be equal"),
+          need(isTruthy(input$inpThousandsSep), "Thousands separator is not valid")
         )
         df <- head(RawDataFrame())
 
@@ -249,7 +266,7 @@ ModuleImportServer <- function(Id, ColSpec = NULL, Options = NULL) {
         }
 
         # Convert to test what works and re-convert to 'character'
-        #TODOF
+        #TODO
 
         # Create preview data frame
         ColTypesStr <- sprintf("<%s>", ColTypes)
