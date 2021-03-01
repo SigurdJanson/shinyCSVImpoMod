@@ -35,6 +35,7 @@ ModuleImportUI <- function(Id) {
 
 #' @title The server function of the CSV import module
 #' @param Id Module name space
+#' @param UiLng Language to be used in the user interface. One of en, de.
 #' @param ColSpec A list specifying the columns to import
 #' @param Options is a list with the basic settings to load the CSV file (see details).
 #' @details
@@ -74,21 +75,28 @@ ModuleImportUI <- function(Id) {
 #' @import shiny
 #' @importFrom utils head read.csv
 #' @importFrom readr default_locale locale
-ModuleImportServer <- function(Id, ColSpec = NULL, Options = NULL) {
+ModuleImportServer <- function(Id, UiLng = "en", ColSpec = NULL, Options = NULL) {
   moduleServer(
     Id,
 
     function(input, output, session) {
+      # SETUP -----------------
       ns <- NS(Id) # set up name space
-      i18n <- shiny.i18n::Translator$new(translation_json_path = system.file("data", "translation.json", package = "shiny.CSVImport"))
-      i18n$set_translation_language("de")
 
+      # setup translator
+      i18n <- shiny.i18n::Translator$new(translation_json_path = system.file("data", "translation.json", package = "shiny.CSVImport"))
+      UiLng <- ifelse(UiLng %in% i18n$get_languages(), UiLng, "en")
+      i18n$set_translation_language(UiLng)
+
+      # setup locale
       GlobalLocale  <- locale(date_names = ifelse(is.null(Options$LangCode), "en", Options$LangCode),
                               date_format = ifelse(is.null(Options$DateFormat), "%AD", Options$DateFormat),
                               time_format = ifelse(is.null(Options$TimeFormat), "%AT", Options$TimeFormat),
                               decimal_mark = ifelse(is.null(Options$DecimalsSep), ".", Options$DecimalsSep),
                               grouping_mark = ifelse(is.null(Options$ThousandsSep), ",", Options$ThousandsSep),
                               tz = "UTC", encoding = "UTF-8", asciify = FALSE)
+
+      #
       if (is.null(Options)) {
         Options <- .DefaultOptions
       }
