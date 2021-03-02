@@ -3,181 +3,212 @@
         {
             "key": "Import",
             "de": "Importieren",
-            "en": "Import"
+            "en": "Import",
+            "ru": "Импорт"
         },
         {
             "key": "lblDataImport",
             "de": "Neue Daten importieren",
-            "en": "Import new data"
+            "en": "Import new data",
+            "ru": "Импорти́ровай нoвый файл"
         },
         {
             "key": "btnBrowse",
             "de": "Durchsuchen...",
-            "en": "Browse..."
-
+            "en": "Browse...",
+            "ru": "просмотреть"
         },
         {
             "key": "lblFilePlaceholder",
             "de": "Keine Datei gewählt",
-            "en": "No file selected"
-
+            "en": "No file selected",
+            "ru": "Файлы не выбраны"
         },
         {
             "key": "lblHasHeader",
             "de": "Hat Tabellenkopf",
-            "en": "Has header"
-
+            "en": "Has header",
+            "ru": "Заголовок таблицы"
         },
         {
             "key": "lblColumnSeparator",
             "de": "Spaltentrennzeichen",
-            "en": "Column separator"
-
+            "en": "Column separator",
+            "ru": "Разделитель столбцов"
         },
         {
             "key": "lblThousandsSep",
             "de": "Tausender-Trennzeichen",
-            "en": "Thousands Separator"
+            "en": "Thousands Separator",
+            "ru": "Разделитель групп разрядов"
         },
         {
             "key": "lblDecimalsSep",
             "de": "Dezimaltrennzeichen",
-            "en": "Decimals Separator"
+            "en": "Decimals Separator",
+            "ru": "Десятичный разделитель"
         },
         {
             "key": "lblDateFormat",
             "de": "Datumsformat",
-            "en": "Date Format"
+            "en": "Date Format",
+            "ru": "Формат даты"
         },
         {
             "key": "inpDateFormat.Tooltip",
             "de": "Wähle ein Format oder definiere ein eigenes mit der Syntax der R-Funktion 'strptime'",
-            "en": "Select a format or add your own by using the R 'strptime' syntax"
+            "en": "Select a format or add your own by using the R 'strptime' syntax",
+            "ru": "###"
         },
         {
             "key": "lblTimeFormat",
             "de": "Zeitformat",
-            "en": "Time Format"
+            "en": "Time Format",
+            "ru": "Формат времени"
         },
         {
             "key": "hours",
             "de": "Stunden",
-            "en": "hours"
+            "en": "hours",
+            "ru": "Часы"
         },
         {
             "key": "lblQuote",
             "de": "Texterkennungszeichen",
-            "en": "Quote"
+            "en": "Quote",
+            "ru": "Ограничитель строк"
         },
         {
             "key": "Preview",
             "de": "Vorschau",
-            "en": "Preview"
+            "en": "Preview",
+            "ru": "Просмотр"
         },
         {
             "key": "No data available for preview",
             "de": "Keine Daten für Vorschau vorhanden",
-            "en": "No data available for preview"
+            "en": "No data available for preview",
+            "ru": "Нет данных для просмотра"
         },
         {
             "key": "CSV cannot be parsed",
             "de": "CSV kann nicht interpretiert werden",
-            "en": "CSV cannot be interpreted"
+            "en": "CSV cannot be interpreted",
+            "ru": "###"
         },
         {
             "key": "Decimal and thousands separator cannot be equal",
             "de": "Dezimal- und Tausendertrennzeichen müssen sich unterscheiden",
-            "en": "Decimal and thousands separator cannot be equal"
+            "en": "Decimal and thousands separator cannot be equal",
+            "ru": "###"
         },
         {
             "key": "Thousands separator is not valid",
             "de": "Ungültiges 1000er-Trennzeichen",
-            "en": "Thousands separator is not valid"
+            "en": "Thousands separator is not valid",
+            "ru": "###"
         },
         {
             "key": "Some requested columns have not been found",
             "de": "Angeforderte Spalten nicht gefunden",
-            "en": "Some requested columns have not been found"
+            "en": "Some requested columns have not been found",
+            "ru": "###"
         },
         {
             "key": "Comma",
             "de": "Komma",
-            "en": "Comma"
+            "en": "Comma",
+            "ru": "Запятая"
         },
         {
             "key": "Period",
             "de": "Punkt",
-            "en": "Period"
+            "en": "Period",
+            "ru": "Точка"
         },
         {
             "key": "Double quote",
             "de": "Anführungszeichen",
-            "en": "Double Quote"
+            "en": "Double Quote",
+            "ru": "Кавычки"
         },
         {
             "key": "Single quote",
             "de": "Hochkomma",
-            "en": "Single Quote"
+            "en": "Single Quote",
+            "ru": "Одинарная кавычка"
         },
         {
             "key": "None",
             "de": "Keins",
-            "en": "None"
+            "en": "None",
+            "ru": "Никакой"
         },
         {
             "key": "<character>",
             "de": "<TEXT>",
-            "en": "<STRING>"
+            "en": "<STRING>",
+            "ru": "<СТРОКА>"
         },
         {
             "key": "<double>",
             "de": "<KOMMAZAHL>",
-            "en": "<DECIMAL>"
+            "en": "<DECIMAL>",
+            "ru": "<Десятичное>"
         },
         {
             "key": "<number>",
             "de": "<ZAHL>",
-            "en": "<NUMBER>"
+            "en": "<NUMBER>",
+            "ru": "<Число>"
         },
         {
             "key": "<logical>",
             "de": "<WAHRHEIT>",
-            "en": "<LOGICAL>"
+            "en": "<LOGICAL>",
+            "ru": "<ЛОГИЧЕСКОЕ>"
         },
         {
             "key": "<date>",
             "de": "<DATUM>",
-            "en": "<DATE>"
+            "en": "<DATE>",
+            "ru": "<ДАТА>"
         },
         {
             "key": "<time>",
             "de": "<ZEIT>",
-            "en": "<TIME>"
+            "en": "<TIME>",
+            "ru": "<ВРЕМЯ>"
         },
         {
             "key": "<datetime>",
             "de": "<DATUM&ZEIT>",
-            "en": "<DATETIME>"
+            "en": "<DATETIME>",
+            "ru": "<ДАТА/ВРЕМЯ>"
         },
         {
             "key": "<integer>",
             "de": "<GANZZAHLIG>",
-            "en": "<INTEGER>"
+            "en": "<INTEGER>",
+            "ru": "<ЦЕЛОЕ>"
         },
         {
             "key": "<find>",
             "de": "<ENTHÄLT>",
-            "en": "<CONTAINS>"
+            "en": "<CONTAINS>",
+            "ru": "<НАЙТИ>"
         },
         {
             "key": "<regexfind>",
             "de": "<REGEX>",
-            "en": "<REGEX>"
+            "en": "<REGEX>",
+            "ru": "<REGEX>"
         }
     ],
     "languages": [
         "key",
         "de",
-        "en"
+        "en",
+        "ru"
     ]
 }
