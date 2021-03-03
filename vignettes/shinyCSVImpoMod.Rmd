@@ -1,0 +1,74 @@
+---
+title: "shiny CSV Import Module"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{shinyCSVImportModule}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(shiny.CSVImport)
+library(knitr)
+```
+
+## What It Does
+
+The CSV import module provides a standard user interface to read and convert a CSV file according to the users' and the apps' needs. Having selected a file, the module displays the available columns and the associated data types. The user can change the data type and specify the required format required to interpret the data correctly.
+
+## The User Interface
+
+Users can specify the general format of the CSV file:
+
+ 1. Does the CSV file have a column header describing variable names? Yes/No
+ 1. Which character separates the columns?
+ 3. The decimal separator
+ 4. Date format
+ 5. time format
+ 6. A character to qualify text
+
+
+The package comes along with it's own translation. These languages are currently available:
+
+ 1. English
+ 2. German - Deutsch
+ 3. Spanish - Español (draft - I would appreciate any help here)
+ 4. Russian - Русский (draft - I would appreciate any help here)
+ 5. Korean - 한국어 (rough draft - any help appreciated)
+
+The Spanish and Russian translation most likely need some improvement but should be clear enough to use (no promises, though).
+
+
+## Available Settings
+
+When calling the module an application can provide many options as arguments. 
+
+* UI language (`UiLng`): use international language codes to set the desired language. 
+* A set of defaults for the user-defined values needed to read the data.
+* A detailed column specification:
+  ** Designated column name that the app expects.
+  ** The according column name in the file. The module will identify each column and rename them to the required specification.
+  ** A data type for each column. If no data type is given the module will guess it.
+  ** A format string that shall be used when converting the data. Format strings are required for date or time variables. If no such format is given the module will use the general format given by the user.
+
+
+## Calling the Module
+
+```{r ModuleImportUI, eval=FALSE, include=TRUE}
+ModuleImportUI("ProjectDataFile")
+```
+
+
+```{r ModuleImportServer, eval=FALSE, include=TRUE}
+ModuleImportServer("ProjectDataFile")
+```
+
+
+
