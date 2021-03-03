@@ -5,238 +5,272 @@
             "de": "Importieren",
             "en": "Import",
             "ru": "Импорт",
-            "es": "Importar"
+            "es": "Importar",
+            "ko": "가져오기"
         },
         {
             "key": "lblDataImport",
             "de": "Neue Daten importieren",
             "en": "Import new data",
             "ru": "Импорти́ровай нoвый файл",
-            "es": "Importar datos"
+            "es": "Importar datos",
+            "ko": "데이터 가져오기"
         },
         {
             "key": "btnBrowse",
             "de": "Durchsuchen...",
             "en": "Browse...",
-            "ru": "просмотреть",
-            "es": "Examinar"
+            "ru": "просмотреть...",
+            "es": "Examinar...",
+            "ko": "찾아보기..."
         },
         {
             "key": "lblFilePlaceholder",
             "de": "Keine Datei gewählt",
             "en": "No file selected",
             "ru": "Файлы не выбраны",
-            "es": "Ningún archivo seleccionado"
+            "es": "Ningún archivo seleccionado",
+            "ko": "선택된 파일 없음"
         },
         {
             "key": "lblHasHeader",
             "de": "Mit Tabellenkopf",
             "en": "With header",
             "ru": "C Заголовком",
-            "es": "Con encabezado"
+            "es": "Con encabezado",
+            "ko": "머리글 행"
         },
         {
             "key": "lblColumnSeparator",
             "de": "Spaltentrennzeichen",
             "en": "Column separator",
             "ru": "Разделитель столбцов",
-            "es": "Separador de columnas"
+            "es": "Separador de columnas",
+            "ko": "열 구분 기호"
         },
         {
             "key": "lblThousandsSep",
             "de": "Tausender-Trennzeichen",
             "en": "Thousands Separator",
             "ru": "Разделитель групп разрядов",
-            "es": "Separador de miles"
+            "es": "Separador de miles",
+            "ko": "천단위 구분 기호"
         },
         {
             "key": "lblDecimalsSep",
             "de": "Dezimaltrennzeichen",
             "en": "Decimal Separator",
             "ru": "Десятичный разделитель",
-            "es": "Separador decimal"
+            "es": "Separador decimal",
+            "ko": "소수 구분 기호"
         },
         {
             "key": "lblDateFormat",
             "de": "Datumsformat",
             "en": "Date Format",
             "ru": "Формат даты",
-            "es": "Formato de fecha"
+            "es": "Formato de fecha",
+            "ko": "날짜 형식"
         },
         {
             "key": "inpDateFormat.Tooltip",
             "de": "Wähle ein Format oder definiere ein eigenes mit der Syntax der R-Funktion 'strptime'",
             "en": "Select a format or add your own by using the R 'strptime' syntax",
             "ru": "Выбрать формат или добавьте собственное",
-            "es": "Seleccione un formato o agregue el suyo propio"
+            "es": "Seleccione un formato o agregue el suyo propio",
+            "ko": "형식을 선택하십시오 ___"
         },
         {
             "key": "lblTimeFormat",
             "de": "Zeitformat",
             "en": "Time Format",
             "ru": "Формат времени",
-            "es": "Formato de hora"
+            "es": "Formato de hora",
+            "ko": "시간 형식"
         },
         {
             "key": "hours",
             "de": "Stunden",
             "en": "hours",
             "ru": "Часы",
-            "es": "Horas"
+            "es": "Horas",
+            "ko": "시간"
         },
         {
             "key": "lblQuote",
             "de": "Texterkennungszeichen",
             "en": "Quote",
             "ru": "Ограничитель строк",
-            "es": "Calificador de texto"
+            "es": "Calificador de texto",
+            "ko": "텍스트 한정자"
         },
         {
             "key": "Preview",
             "de": "Vorschau",
             "en": "Preview",
             "ru": "Просмотр",
-            "es": "Vista previa"
+            "es": "Vista previa",
+            "ko": "미리 보기"
         },
         {
             "key": "No data available for preview",
             "de": "Keine Daten für Vorschau vorhanden",
             "en": "No data available for preview",
             "ru": "Нет данных для просмотра",
-            "es": "No hay datos disponibles para vista previa"
+            "es": "No hay datos disponibles para vista previa",
+            "ko": ""
         },
         {
             "key": "CSV cannot be parsed",
             "de": "CSV kann nicht interpretiert werden",
             "en": "CSV cannot be interpreted",
             "ru": "CSV невозможно интерпретировать",
-            "es": "CSV no se puede interpretar"
+            "es": "CSV no se puede interpretar",
+            "ko": ""
         },
         {
             "key": "Decimal and thousands separator cannot be equal",
             "de": "Dezimal- und Tausendertrennzeichen müssen sich unterscheiden",
             "en": "Decimal and thousands separator cannot be equal",
             "ru": "Десятичный разделитель и pазделитель групп разрядов не могут быть одинаковыми",
-            "es": "Separadores decimal y de miles no pueden ser iguales"
+            "es": "Separadores decimal y de miles no pueden ser iguales",
+            "ko": ""
         },
         {
             "key": "Thousands separator is not valid",
             "de": "Ungültiges 1000er-Trennzeichen",
             "en": "Thousands separator is not valid",
             "ru": "Pазделитель групп разрядов недопустимо",
-            "es": "Separador de miles no es válido"
+            "es": "Separador de miles no es válido",
+            "ko": ""
         },
         {
             "key": "Some requested columns have not been found",
             "de": "Angeforderte Spalten nicht gefunden",
             "en": "Some requested columns have not been found",
-            "ru": "TBD",
-            "es": "No se encuentran algunas solicitadas columnas"
+            "ru": "",
+            "es": "No se encuentran algunas solicitadas columnas",
+            "ko": ""
         },
         {
             "key": "Comma",
             "de": "Komma",
             "en": "Comma",
             "ru": "Запятая",
-            "es": "Coma"
+            "es": "Coma",
+            "ko": "쉼표"
         },
         {
             "key": "Period",
             "de": "Punkt",
             "en": "Period",
             "ru": "Точка",
-            "es": "Punto"
+            "es": "Punto",
+            "ko": "마침표"
         },
         {
             "key": "Double quote",
             "de": "Anführungszeichen",
             "en": "Double Quote",
             "ru": "Кавычки",
-            "es": "Comilla doble"
+            "es": "Comilla doble",
+            "ko": ""
         },
         {
             "key": "Single quote",
             "de": "Hochkomma",
             "en": "Single Quote",
             "ru": "Одинарная кавычка",
-            "es": "Comilla simple"
+            "es": "Comilla simple",
+            "ko": ""
         },
         {
             "key": "None",
             "de": "Keins",
             "en": "None",
             "ru": "Никакой",
-            "es": "Ninguna"
+            "es": "Ninguna",
+            "ko": ""
         },
         {
             "key": "<character>",
             "de": "<TEXT>",
             "en": "<STRING>",
             "ru": "<СТРОКА>",
-            "es": "<CADENA>"
+            "es": "<CADENA>",
+            "ko": "<문자열>"
         },
         {
             "key": "<double>",
             "de": "<KOMMAZAHL>",
             "en": "<DECIMAL>",
             "ru": "<Десятичное>",
-            "es": "<DECIMAL>"
+            "es": "<DECIMAL>",
+            "ko": ""
         },
         {
             "key": "<number>",
             "de": "<ZAHL>",
             "en": "<NUMBER>",
             "ru": "<Число>",
-            "es": "<NÚMERO>"
+            "es": "<NÚMERO>",
+            "ko": ""
         },
         {
             "key": "<logical>",
             "de": "<WAHRHEIT>",
             "en": "<LOGICAL>",
             "ru": "<ЛОГИЧЕСКОЕ>",
-            "es": "<LÓGICO>"
+            "es": "<LÓGICO>",
+            "ko": "<논리>"
         },
         {
             "key": "<date>",
             "de": "<DATUM>",
             "en": "<DATE>",
             "ru": "<ДАТА>",
-            "es": "<FECHA>"
+            "es": "<FECHA>",
+            "ko": "<날짜>"
         },
         {
             "key": "<time>",
             "de": "<ZEIT>",
             "en": "<TIME>",
             "ru": "<ВРЕМЯ>",
-            "es": "<HORA>"
+            "es": "<HORA>",
+            "ko": "<시간>"
         },
         {
             "key": "<datetime>",
             "de": "<DATUM&ZEIT>",
             "en": "<DATETIME>",
             "ru": "<ДАТА/ВРЕМЯ>",
-            "es": "<FECHA/HORA>"
+            "es": "<FECHA/HORA>",
+            "ko": "<날짜/시간>"
         },
         {
             "key": "<integer>",
             "de": "<GANZZAHLIG>",
             "en": "<INTEGER>",
             "ru": "<ЦЕЛОЕ>",
-            "es": "<ENTERO>"
+            "es": "<ENTERO>",
+            "ko": "<정수>"
         },
         {
             "key": "<find>",
             "de": "<ENTHÄLT>",
             "en": "<CONTAINS>",
             "ru": "<НАЙТИ>",
-            "es": "<BUSCAR>"
+            "es": "<BUSCAR>",
+            "ko": "<찾기>"
         },
         {
             "key": "<regexfind>",
             "de": "<REGEX>",
             "en": "<REGEX>",
             "ru": "<REGEX>",
-            "es": "<REGEX>"
+            "es": "<REGEX>",
+            "ko": "<REGEX>"
         }
     ],
     "languages": [
@@ -244,6 +278,7 @@
         "de",
         "en",
         "ru",
-        "es"
+        "es",
+        "ko"
     ]
 }
