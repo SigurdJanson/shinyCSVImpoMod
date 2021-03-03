@@ -101,6 +101,17 @@ ModuleImportServer <- function(Id, UiLng = "en", ColSpec = NULL, Options = NULL)
         Options <- .DefaultOptions
       }
 
+      # Make sure that `NameInFile` are syntactically valid and ...
+      # that all missings are replaced by `Name`
+      if (!is.null(ColSpec)) {
+        if (!is.null(ColSpec$NameInFile)) {
+          # NULL & NA is considered as missing
+          Missing <- is.na(ColSpec[["NameInFile"]]) | sapply(ColSpec[["NameInFile"]], is.null)
+          ColSpec$NameInFile <- make.names(ColSpec$NameInFile)
+          ColSpec$NameInFile[Missing] <- ColSpec$Name[Missing]
+        }
+      }
+
 
       # UI -----------------
       output$uiFileInput <- renderUI({
@@ -196,7 +207,6 @@ ModuleImportServer <- function(Id, UiLng = "en", ColSpec = NULL, Options = NULL)
       UserFile <- reactive({
         # If no file is selected, don't do anything
         req(input$inpImportData)
-
         input$inpImportData
       })
 
