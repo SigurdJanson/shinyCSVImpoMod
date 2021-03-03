@@ -4,211 +4,246 @@
             "key": "Import",
             "de": "Importieren",
             "en": "Import",
-            "ru": "Импорт"
+            "ru": "Импорт",
+            "es": "Importar"
         },
         {
             "key": "lblDataImport",
             "de": "Neue Daten importieren",
             "en": "Import new data",
-            "ru": "Импорти́ровай нoвый файл"
+            "ru": "Импорти́ровай нoвый файл",
+            "es": "Importar datos"
         },
         {
             "key": "btnBrowse",
             "de": "Durchsuchen...",
             "en": "Browse...",
-            "ru": "просмотреть"
+            "ru": "просмотреть",
+            "es": "Examinar"
         },
         {
             "key": "lblFilePlaceholder",
             "de": "Keine Datei gewählt",
             "en": "No file selected",
-            "ru": "Файлы не выбраны"
+            "ru": "Файлы не выбраны",
+            "es": "Ningún archivo seleccionado"
         },
         {
             "key": "lblHasHeader",
-            "de": "Hat Tabellenkopf",
-            "en": "Has header",
-            "ru": "Заголовок таблицы"
+            "de": "Mit Tabellenkopf",
+            "en": "With header",
+            "ru": "C Заголовком",
+            "es": "Con encabezado"
         },
         {
             "key": "lblColumnSeparator",
             "de": "Spaltentrennzeichen",
             "en": "Column separator",
-            "ru": "Разделитель столбцов"
+            "ru": "Разделитель столбцов",
+            "es": "Separador de columnas"
         },
         {
             "key": "lblThousandsSep",
             "de": "Tausender-Trennzeichen",
             "en": "Thousands Separator",
-            "ru": "Разделитель групп разрядов"
+            "ru": "Разделитель групп разрядов",
+            "es": "Separador de miles"
         },
         {
             "key": "lblDecimalsSep",
             "de": "Dezimaltrennzeichen",
-            "en": "Decimals Separator",
-            "ru": "Десятичный разделитель"
+            "en": "Decimal Separator",
+            "ru": "Десятичный разделитель",
+            "es": "Separador decimal"
         },
         {
             "key": "lblDateFormat",
             "de": "Datumsformat",
             "en": "Date Format",
-            "ru": "Формат даты"
+            "ru": "Формат даты",
+            "es": "Formato de fecha"
         },
         {
             "key": "inpDateFormat.Tooltip",
             "de": "Wähle ein Format oder definiere ein eigenes mit der Syntax der R-Funktion 'strptime'",
             "en": "Select a format or add your own by using the R 'strptime' syntax",
-            "ru": "###"
+            "ru": "Выбрать формат или добавьте собственное",
+            "es": "Seleccione un formato o agregue el suyo propio"
         },
         {
             "key": "lblTimeFormat",
             "de": "Zeitformat",
             "en": "Time Format",
-            "ru": "Формат времени"
+            "ru": "Формат времени",
+            "es": "Formato de hora"
         },
         {
             "key": "hours",
             "de": "Stunden",
             "en": "hours",
-            "ru": "Часы"
+            "ru": "Часы",
+            "es": "Horas"
         },
         {
             "key": "lblQuote",
             "de": "Texterkennungszeichen",
             "en": "Quote",
-            "ru": "Ограничитель строк"
+            "ru": "Ограничитель строк",
+            "es": "Calificador de texto"
         },
         {
             "key": "Preview",
             "de": "Vorschau",
             "en": "Preview",
-            "ru": "Просмотр"
+            "ru": "Просмотр",
+            "es": "Vista previa"
         },
         {
             "key": "No data available for preview",
             "de": "Keine Daten für Vorschau vorhanden",
             "en": "No data available for preview",
-            "ru": "Нет данных для просмотра"
+            "ru": "Нет данных для просмотра",
+            "es": "No hay datos disponibles para vista previa"
         },
         {
             "key": "CSV cannot be parsed",
             "de": "CSV kann nicht interpretiert werden",
             "en": "CSV cannot be interpreted",
-            "ru": "###"
+            "ru": "CSV невозможно интерпретировать",
+            "es": "CSV no se puede interpretar"
         },
         {
             "key": "Decimal and thousands separator cannot be equal",
             "de": "Dezimal- und Tausendertrennzeichen müssen sich unterscheiden",
             "en": "Decimal and thousands separator cannot be equal",
-            "ru": "###"
+            "ru": "Десятичный разделитель и pазделитель групп разрядов не могут быть одинаковыми",
+            "es": "Separadores decimal y de miles no pueden ser iguales"
         },
         {
             "key": "Thousands separator is not valid",
             "de": "Ungültiges 1000er-Trennzeichen",
             "en": "Thousands separator is not valid",
-            "ru": "###"
+            "ru": "Pазделитель групп разрядов недопустимо",
+            "es": "Separador de miles no es válido"
         },
         {
             "key": "Some requested columns have not been found",
             "de": "Angeforderte Spalten nicht gefunden",
             "en": "Some requested columns have not been found",
-            "ru": "###"
+            "ru": "TBD",
+            "es": "No se encuentran algunas solicitadas columnas"
         },
         {
             "key": "Comma",
             "de": "Komma",
             "en": "Comma",
-            "ru": "Запятая"
+            "ru": "Запятая",
+            "es": "Coma"
         },
         {
             "key": "Period",
             "de": "Punkt",
             "en": "Period",
-            "ru": "Точка"
+            "ru": "Точка",
+            "es": "Punto"
         },
         {
             "key": "Double quote",
             "de": "Anführungszeichen",
             "en": "Double Quote",
-            "ru": "Кавычки"
+            "ru": "Кавычки",
+            "es": "Comilla doble"
         },
         {
             "key": "Single quote",
             "de": "Hochkomma",
             "en": "Single Quote",
-            "ru": "Одинарная кавычка"
+            "ru": "Одинарная кавычка",
+            "es": "Comilla simple"
         },
         {
             "key": "None",
             "de": "Keins",
             "en": "None",
-            "ru": "Никакой"
+            "ru": "Никакой",
+            "es": "Ninguna"
         },
         {
             "key": "<character>",
             "de": "<TEXT>",
             "en": "<STRING>",
-            "ru": "<СТРОКА>"
+            "ru": "<СТРОКА>",
+            "es": "<CADENA>"
         },
         {
             "key": "<double>",
             "de": "<KOMMAZAHL>",
             "en": "<DECIMAL>",
-            "ru": "<Десятичное>"
+            "ru": "<Десятичное>",
+            "es": "<DECIMAL>"
         },
         {
             "key": "<number>",
             "de": "<ZAHL>",
             "en": "<NUMBER>",
-            "ru": "<Число>"
+            "ru": "<Число>",
+            "es": "<NÚMERO>"
         },
         {
             "key": "<logical>",
             "de": "<WAHRHEIT>",
             "en": "<LOGICAL>",
-            "ru": "<ЛОГИЧЕСКОЕ>"
+            "ru": "<ЛОГИЧЕСКОЕ>",
+            "es": "<LÓGICO>"
         },
         {
             "key": "<date>",
             "de": "<DATUM>",
             "en": "<DATE>",
-            "ru": "<ДАТА>"
+            "ru": "<ДАТА>",
+            "es": "<FECHA>"
         },
         {
             "key": "<time>",
             "de": "<ZEIT>",
             "en": "<TIME>",
-            "ru": "<ВРЕМЯ>"
+            "ru": "<ВРЕМЯ>",
+            "es": "<HORA>"
         },
         {
             "key": "<datetime>",
             "de": "<DATUM&ZEIT>",
             "en": "<DATETIME>",
-            "ru": "<ДАТА/ВРЕМЯ>"
+            "ru": "<ДАТА/ВРЕМЯ>",
+            "es": "<FECHA/HORA>"
         },
         {
             "key": "<integer>",
             "de": "<GANZZAHLIG>",
             "en": "<INTEGER>",
-            "ru": "<ЦЕЛОЕ>"
+            "ru": "<ЦЕЛОЕ>",
+            "es": "<ENTERO>"
         },
         {
             "key": "<find>",
             "de": "<ENTHÄLT>",
             "en": "<CONTAINS>",
-            "ru": "<НАЙТИ>"
+            "ru": "<НАЙТИ>",
+            "es": "<BUSCAR>"
         },
         {
             "key": "<regexfind>",
             "de": "<REGEX>",
             "en": "<REGEX>",
-            "ru": "<REGEX>"
+            "ru": "<REGEX>",
+            "es": "<REGEX>"
         }
     ],
     "languages": [
         "key",
         "de",
         "en",
-        "ru"
+        "ru",
+        "es"
     ]
 }
