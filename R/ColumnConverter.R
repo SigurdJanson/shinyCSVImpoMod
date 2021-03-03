@@ -60,7 +60,7 @@ ColumnConvert <- function(Columns, Converter, Format, Locale) {
           double   = readr::parse_double  (Columns[[i]], locale = Locale), # locale only
           integer  = readr::parse_integer (Columns[[i]], locale = Locale), # locale only
           find     = grepl(Format[[i]], Columns[[i]], fixed = TRUE),
-          regexfind = grepl(Format[[i]], Columns[[i]]),
+          regexfind = grepl(Format[[i]], Columns[[i]], perl = TRUE),
           readr::parse_guess(Columns[[i]], locale = Locale)
         )
       })
