@@ -76,6 +76,15 @@ ModuleImportUI <- function(Id) {
 #' @importFrom utils head read.csv
 #' @importFrom readr default_locale locale
 ModuleImportServer <- function(Id, UiLng = "en", ColSpec = NULL, Options = NULL) {
+  # PRECONDITIONS
+  if (!is.null(ColSpec))
+    if (length(unique(sapply(ColSpec, length))) != 1L)
+      stop("Invalid column specification: length mismatch")
+  if (!is.null(Options))
+    if(anyNA(match(names(Options), names(.DefaultOptions))))
+      stop("Invalid option specification: unknown fields in options structure")
+
+  # SETUP MODULE SERVER
   moduleServer(
     Id,
 
@@ -248,8 +257,16 @@ ModuleImportServer <- function(Id, UiLng = "en", ColSpec = NULL, Options = NULL)
           ColNames <- names(df)
           # get logical vector identifying relevant positions
           WantedNFound   <- intersect(ColSpec$NameInFile, ColNames)
+          # Filter `df` to remove un-requested columns
           df <- df[, ColNames %in% WantedNFound]
-          names(df) <- ColSpec$Name[match(WantedNFound, ColNames)]
+          # Reorder the requested columns to match the imported CSV
+          Positions <- match(ColNames, WantedNFound)
+          ColSpec$Name <- ColSpec$Name[Positions]
+          ColSpec$NameInFile <- ColSpec$NameInFile[Positions]
+          ColSpec$Type <- ColSpec$Type[Positions]
+          ColSpec$Format <- ColSpec$Format[Positions]
+          #
+          names(df) <- ColSpec$Name
         }
 
         # Get column types
@@ -293,7 +310,14 @@ ModuleImportServer <- function(Id, UiLng = "en", ColSpec = NULL, Options = NULL)
           # get logical vector identifying relevant positions
           WantedNFound   <- intersect(ColSpec$NameInFile, ColNames)
           df <- df[, ColNames %in% WantedNFound]
-          names(df) <- ColSpec$Name[match(WantedNFound, ColNames)]
+          # Reorder the requested columns to match the imported CSV
+          Positions <- match(ColNames, WantedNFound)
+          ColSpec$Name <- ColSpec$Name[Positions]
+          ColSpec$NameInFile <- ColSpec$NameInFile[Positions]
+          ColSpec$Type <- ColSpec$Type[Positions]
+          ColSpec$Format <- ColSpec$Format[Positions]
+          #
+          names(df) <- ColSpec$Name
         }
 
         # Get column types
