@@ -27,7 +27,7 @@ test_that("GetCountryTag: Falsy input", {
 
 
 test_that("FormatLocaleCode: Success", {
-  expect_silent(obs <- FormatLocaleCode(c("de-de", "de-CH", "EN-GB", "Es")))
+  obs <- expect_silent(FormatLocaleCode(c("de-de", "de-CH", "EN-GB", "Es")))
   expect_identical(obs, c("de-DE", "de-CH", "en-GB", "es"))
 })
 test_that("FormatLocaleCode: Falsy input", {

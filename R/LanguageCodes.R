@@ -1,14 +1,11 @@
 
-
-
-
 #' @title Extracts the primary language subtags from a list of language tags
 #' @param Code A code as string in the format "xx-XX" or just "xx".
 #' @note The function does not verify if the country code exists
 #' @returns the second subtag(s) extracted from the given codes.
 GetLanguageTag <- function(Code) {
   if (missing(Code) || length(Code) == 0 || is.null(Code) ||
-      is.na(Code) || !is.atomic(Code))
+      anyNA(Code) || !is.atomic(Code))
     stop("Expected code is not truthy")
   tryCatch({
     Split <- strsplit(Code, "[-_]")
@@ -25,7 +22,7 @@ GetLanguageTag <- function(Code) {
 #' country code is missing the function uses `NA`.
 GetCountryTag <- function(Code) {
   if (missing(Code) || length(Code) == 0 || is.null(Code) ||
-      is.na(Code) || !is.atomic(Code))
+      anyNA(Code) || !is.atomic(Code))
     stop("Expected code is not truthy")
   tryCatch({
     Split <- strsplit(Code, "[-_]")
@@ -42,7 +39,7 @@ GetCountryTag <- function(Code) {
 #' forced to lower case and country codes are forced to upper case letters.
 FormatLocaleCode <- function(Code) {
   if (missing(Code) || length(Code) == 0 || is.null(Code) ||
-      is.na(Code) || !is.atomic(Code))
+      anyNA(Code) || !is.atomic(Code))
     stop("Expected code is not truthy")
   tryCatch({
     Split <- strsplit(Code, "[-_]")
