@@ -253,7 +253,7 @@ ModuleImportServer <- function(Id, UiLng = "en", ColSpec = NULL, Options = NULL)
         if (!is.null(ColSpec$NameInFile) && length(ColSpec$NameInFile) > 0) {
           ColNames <- names(df)
           # get logical vector identifying relevant positions
-          WantedNFound   <- intersect(ColSpec$NameInFile, ColNames)
+          WantedNFound <- intersect(ColSpec$NameInFile, ColNames)
           # Filter `df` to remove un-requested columns
           df <- df[, ColNames %in% WantedNFound]
           # Reorder the requested columns to match the imported CSV
@@ -279,7 +279,7 @@ ModuleImportServer <- function(Id, UiLng = "en", ColSpec = NULL, Options = NULL)
         }
 
         df <- ColumnConvert(df, as.list(ColTypes), ColSpec$Format, Locale)
-        if (!isTruthy(ColSpec) && !isTruthyInside(ColSpec)) {
+        if (!(isTruthy(ColSpec) && isTruthyInside(ColSpec))) {
           if (Options$StringsAsFactors) {
             df[sapply(df, is.character)] <- lapply(df[sapply(df, is.character)], as.factor)
           }

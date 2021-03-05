@@ -172,6 +172,16 @@ test_that("Success Case: Skip Columns", {
 })
 
 
+test_that("Missing Format", {
+  # SETUP
+  VecA <- 1:3
+  VecB <- seq(from = 1, to = 2, by = 0.5)
+  df <- data.frame(A = as.character(VecA), B = as.character(VecB))
+
+  # Test with `Format` explicitly set to `NULL`
+  expect_silent(df <- ColumnConvert(df, list("integer", "double"), NULL))
+})
+
 
 
 test_that("Preconditions", {
@@ -180,7 +190,12 @@ test_that("Preconditions", {
   VecB <- seq(from = 1, to = 2, by = 0.5)
   df <- data.frame(A = as.character(VecA), B = as.character(VecB))
 
+  df <- data.frame(A = as.character(VecA), B = as.character(VecB))
   expect_error(df <- ColumnConvert(1:3, list("integer", "double")))
+
+  df <- data.frame(A = as.character(VecA), B = as.character(VecB))
   expect_error(df <- ColumnConvert(df, c("integer", "double")))
+
+  df <- data.frame(A = as.character(VecA), B = as.character(VecB))
   expect_error(df <- ColumnConvert(df, list("integer", "double"), 1:3))
 })

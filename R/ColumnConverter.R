@@ -1,6 +1,7 @@
 #
 # shiny CSV import module
 #
+library(shiny)
 library(readr) # takes care of l10n issues
 
 
@@ -39,6 +40,7 @@ ColumnConvert <- function(Columns, Converter, Format, Locale) {
   if (!is.data.frame(Columns)) stop("Invalid type of 'Columns' data")
   if (!is.list(Converter)) stop("Invalid type of 'Converter' data")
   if (!missing(Format) && !is.null(Format) && !is.list(Format)) stop("Invalid type of 'Format' data")
+  if (missing(Format)) Format <- NULL
   if (missing(Locale)) Locale <- default_locale()
 
   Col2Drop <- integer()
@@ -47,20 +49,21 @@ ColumnConvert <- function(Columns, Converter, Format, Locale) {
     if (is.null(Converter[[i]])) {
       Col2Drop <- c(Col2Drop, i)
     } else {
+      Format_i <- ifelse(is.null(Format[[i]]), "", Format[[i]])
       suppressWarnings({
         Columns[[i]] <- switch(
           Converter[[i]],
-          date     = readr::parse_date(Columns[[i]], format = Format[[i]], locale = Locale),
-          time     = readr::parse_time(Columns[[i]], format = Format[[i]], locale = Locale),
-          datetime = readr::parse_datetime(Columns[[i]], format = Format[[i]], locale = Locale),
+          date     = readr::parse_date(Columns[[i]], format = Format_i, locale = Locale),
+          time     = readr::parse_time(Columns[[i]], format = Format_i, locale = Locale),
+          datetime = readr::parse_datetime(Columns[[i]], format = Format_i, locale = Locale),
           character= readr::parse_character(Columns[[i]]), # no format required
           factor   = readr::parse_factor  (Columns[[i]]), # no format required
           logical  = readr::parse_logical (Columns[[i]], locale = Locale), # locale only
           number   = readr::parse_number  (Columns[[i]], locale = Locale), # locale only
           double   = readr::parse_double  (Columns[[i]], locale = Locale), # locale only
           integer  = readr::parse_integer (Columns[[i]], locale = Locale), # locale only
-          find     = grepl(Format[[i]], Columns[[i]], fixed = TRUE),
-          regexfind = grepl(Format[[i]], Columns[[i]], perl = TRUE),
+          find     = grepl(Format_i, Columns[[i]], fixed = TRUE),
+          regexfind = grepl(Format_i, Columns[[i]], perl = TRUE),
           readr::parse_guess(Columns[[i]], locale = Locale)
         )
       })
@@ -80,3 +83,37 @@ ColumnConvert <- function(Columns, Converter, Format, Locale) {
 #                colClasses = "character")
 # df <- ColumnConvert(df, as.list(rep("logical", 6)))
 # df <- ColumnConvert(df, as.list(rep("find", 5)), as.list(rep("^\\d*$", 5)))
+
+
+
+#' #' @title Filter the columns of a character-ony data frame according to a column specification
+#' #'
+#' #' @param df
+#' #' @param ColSpec
+#' #' @details This function modifies column names, removes unrequested columns
+#' #' @return a changed data frame
+#' FilterColumns <- function(df, ColSpec) {
+#'   # PRECONDITIONS
+#'   if (!isTruthy(df)) stop("Not data frame given")
+#'   if (!isTruthy(ColSpec))
+#'     stop("Not complete column specification is given")
+#'   if (!isTruthy(ColSpec$NameInFile)) return(df)
+#'
+#'   # setup
+#'   ColNames <- names(df)
+#'
+#'   # get logical vector identifying relevant positions
+#'   WantedNFound   <- intersect(ColSpec$NameInFile, ColNames)
+#'
+#'   # filter `df` to remove un-requested columns
+#'   df <- df[, ColNames %in% WantedNFound]
+#'
+#'   # reorder the requested columns to match the imported CSV
+#'   # Positions <- match(ColNames, WantedNFound)
+#'   # ColSpec$Name <- ColSpec$Name[Positions]
+#'   # ColSpec$NameInFile <- ColSpec$NameInFile[Positions]
+#'   # ColSpec$Type <- ColSpec$Type[Positions]
+#'   # ColSpec$Format <- ColSpec$Format[Positions]
+#'   # names(df) <- ColSpec$Name
+#'   return(df)
+#' }
