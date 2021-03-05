@@ -3,7 +3,6 @@ library(shiny.i18n)
 library(readr)
 
 #TODO
-#- Handle StringAsFactors
 #- Provide UI for users to modify column names and handle
 #- Provide UI for users to modify column types and format and handle
 
@@ -282,6 +281,11 @@ ModuleImportServer <- function(Id, UiLng = "en", ColSpec = NULL, Options = NULL)
         }
 
         df <- ColumnConvert(df, as.list(ColTypes), ColSpec$Format, Locale)
+        if (!isTruthy(ColSpec) && !isTruthyInside(ColSpec)) {
+          if (Options$StringsAsFactors) {
+            df[sapply(df, is.character)] <- lapply(df[sapply(df, is.character)], as.factor)
+          }
+        }
         #TODO: Options$StringsAsFactors
 
         return(df)
