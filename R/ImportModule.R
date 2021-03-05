@@ -2,9 +2,7 @@ library(shiny)
 library(shiny.i18n)
 library(readr)
 
-#TODO
-#- Provide UI for users to modify column names and handle
-#- Provide UI for users to modify column types and format and handle
+
 
 .DefaultOptions <- list(
   Header = TRUE,
@@ -286,8 +284,6 @@ ModuleImportServer <- function(Id, UiLng = "en", ColSpec = NULL, Options = NULL)
             df[sapply(df, is.character)] <- lapply(df[sapply(df, is.character)], as.factor)
           }
         }
-        #TODO: Options$StringsAsFactors
-
         return(df)
       }), 2000L)
 
@@ -335,9 +331,6 @@ ModuleImportServer <- function(Id, UiLng = "en", ColSpec = NULL, Options = NULL)
         if (isTruthy(ColSpec$Type)) { # pre-specified types take precedence over guessed type
           ColTypes <- replace(ColSpec$Type, !isTruthyInside(ColSpec$Type), ColTypes)
         }
-
-        # Convert to test what works and re-convert to 'character'
-        #TODO
 
         # Create preview data frame
         ColTypesStr <- i18n$t(sprintf("<%s>", ColTypes))
