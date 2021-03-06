@@ -16,6 +16,16 @@ library(readr)
   StringsAsFactors = FALSE
 )
 
+.HandleUTF8 <- function(x){
+  map <- function(x) {
+    m <- utf8ToInt(x)
+    #-if (is.na(m)) x <- enc2utf8(x)
+    return(ifelse(is.na(m), x, sprintf("&#%d;", m)))
+  }
+  xs <- strsplit(as.character(x), "")[[1]]
+  paste0(sapply(xs, map), collapse="")
+}
+
 #' @title The UI function of the CSV import module
 #' @param Id Module namespace to be set by by caller
 #'
@@ -250,7 +260,8 @@ ModuleImportServer <- function(Id, UiLng = "en", ColSpec = NULL, Options = NULL)
                              quote  = input$inpQuote,
                              sep    = input$inpColSep,
                              stringsAsFactors = FALSE,
-                             colClasses = "character"),
+                             colClasses = "character",
+                             encoding = "UTF-8"),
           error = function(e) Result <<- e$message,
           warning = function(w) Result <<- w$message
         )
@@ -358,7 +369,8 @@ ModuleImportServer <- function(Id, UiLng = "en", ColSpec = NULL, Options = NULL)
         ColTypesStr <- i18n$t(sprintf("<%s>", ColTypes))
         df <- rbind(Types = ColTypesStr, df)
         return(df)
-      })
+      },
+      sanitize.text.function = function(x) sapply(x, .HandleUTF8))
 
       # Return the reactive that yields the data frame
       return(DataFrame)
