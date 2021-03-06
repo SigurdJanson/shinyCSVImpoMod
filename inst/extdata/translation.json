@@ -118,7 +118,7 @@
             "en": "No data available for preview",
             "ru": "Нет данных для просмотра",
             "es": "No hay datos disponibles para vista previa",
-            "ko": ""
+            "ko": "[No data available for preview]"
         },
         {
             "key": "CSV cannot be parsed",
@@ -182,7 +182,7 @@
             "en": "Double Quote",
             "ru": "Кавычки",
             "es": "Comilla doble",
-            "ko": ""
+            "ko": "큰 따옴표"
         },
         {
             "key": "Single quote",
@@ -190,7 +190,7 @@
             "en": "Single Quote",
             "ru": "Одинарная кавычка",
             "es": "Comilla simple",
-            "ko": ""
+            "ko": "작은 따옴표"
         },
         {
             "key": "None",
@@ -198,7 +198,7 @@
             "en": "None",
             "ru": "Никакой",
             "es": "Ninguna",
-            "ko": ""
+            "ko": "[None]"
         },
         {
             "key": "<character>",
@@ -212,17 +212,17 @@
             "key": "<double>",
             "de": "<KOMMAZAHL>",
             "en": "<DECIMAL>",
-            "ru": "<Десятичное>",
+            "ru": "<ДЕСЯТИЧНОЕ>",
             "es": "<DECIMAL>",
-            "ko": ""
+            "ko": "[<DECIMAL>]"
         },
         {
             "key": "<number>",
             "de": "<ZAHL>",
             "en": "<NUMBER>",
-            "ru": "<Число>",
+            "ru": "<ЧИСЛО>",
             "es": "<NÚMERO>",
-            "ko": ""
+            "ko": "[<NUMBER>]"
         },
         {
             "key": "<logical>",
