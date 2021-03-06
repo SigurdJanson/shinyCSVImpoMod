@@ -23,8 +23,10 @@ Suggests:
     knitr,
     rmarkdown,
     spelling,
-    testthat (>= 3.0.0)
+    testthat (>= 3.0.0),
+    qpdf
 VignetteBuilder:
-    knitr
+    knitr,
+    qpdf
 Language: en-GB
 Config/testthat/edition: 3

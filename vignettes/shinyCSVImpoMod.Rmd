@@ -17,6 +17,7 @@ knitr::opts_chunk$set(
 ```{r setup}
 library(shiny.CSVImport)
 library(knitr)
+library(jsonlite)
 ```
 
 ## What It Does
@@ -35,7 +36,7 @@ Users can specify the general format of the CSV file:
  6. A character to qualify text
 
 
-The package comes along with it's own translation. These languages are currently available:
+The package comes along with it's own translations. These languages are currently available:
 
  1. English
  2. German - Deutsch

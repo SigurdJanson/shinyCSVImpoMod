@@ -4,10 +4,12 @@
 \alias{ModuleImportServer}
 \title{The server function of the CSV import module}
 \usage{
-ModuleImportServer(Id, ColSpec = NULL, Options = NULL)
+ModuleImportServer(Id, UiLng = "en", ColSpec = NULL, Options = NULL)
 }
 \arguments{
 \item{Id}{Module name space}
+
+\item{UiLng}{Language to be used in the user interface. One of en, de.}
 
 \item{ColSpec}{A list specifying the columns to import}
 
