@@ -1,5 +1,6 @@
 library(shiny)
 library(shiny.i18n)
+library(shinyjs)
 library(readr)
 
 
@@ -23,11 +24,14 @@ library(readr)
 ModuleImportUI <- function(Id) {
   ns <- NS(Id)
   tagList(
+    useShinyjs(),
     uiOutput(ns("uiFileInput")),
     uiOutput(ns("uiGlobalSettings")),
     uiOutput(ns("uiPreview"))
   )
 }
+
+
 
 
 #' @title The server function of the CSV import module
@@ -50,8 +54,9 @@ ModuleImportUI <- function(Id) {
 #' `Options` can have these fields:
 #' \describe{
 #'   \item{LangCode}{Language code (e.g. "de" or "en)}
-#'   \item{Header}{Does the CSV file have a header? (`TRUE`/`FALSE`;
-#'         see [utils::read.csv()] argument `header`)}
+#'   \item{Header}{Does the CSV file have a header? (`TRUE` (default)/`FALSE`;
+#'         see [utils::read.csv()] argument `header`). If a column specification
+#'         is available, `Header` will be coerced to `TRUE`.}
 #'   \item{ColSep}{A character separating columns (
 #'         see [utils::read.csv()] argument `sep`)}
 #'   \item{ThousandsSep}{The character that separates thousands in numbers.}
@@ -86,6 +91,7 @@ ModuleImportServer <- function(Id, UiLng = "en", ColSpec = NULL, Options = NULL)
     Id,
 
     function(input, output, session) {
+      #
       # SETUP -----------------
       ns <- NS(Id) # set up name space
 
@@ -110,6 +116,9 @@ ModuleImportServer <- function(Id, UiLng = "en", ColSpec = NULL, Options = NULL)
       # Make sure that `NameInFile` are syntactically valid and ...
       # that all missings are replaced by `Name`
       if (!is.null(ColSpec)) {
+        # if column spec exists, override
+        Options$Header <- TRUE
+
         if (!is.null(ColSpec$NameInFile)) {
           # NULL & NA is considered as missing
           Missing <- is.na(ColSpec[["NameInFile"]]) | sapply(ColSpec[["NameInFile"]], is.null)
@@ -119,6 +128,7 @@ ModuleImportServer <- function(Id, UiLng = "en", ColSpec = NULL, Options = NULL)
       }
 
 
+      #
       # UI -----------------
       output$uiFileInput <- renderUI({
         tagList(
@@ -137,13 +147,15 @@ ModuleImportServer <- function(Id, UiLng = "en", ColSpec = NULL, Options = NULL)
       })
 
       output$uiGlobalSettings <- renderUI({
+        # Setup selection choices
         ChoicesDecimalsSep <- list(",", ".")
         names(ChoicesDecimalsSep) <- c(paste(i18n$t("Comma"), "(,)"), paste(i18n$t("Period"), "(.)") )
         ChoicesQuote <- list("", "\"", "'")
         names(ChoicesQuote) <- i18n$t(c("None", "Double quote", "Single quote"))
-        ChoicesDate <- list(`yyyy-MM-dd` = "%Y-%m-%d", `dd-MM-yyyy` = "%d-%m-%Y", `dd.MM.yy` = "%d.%m.%y", `dd.MM.yyyy` = "%d.%m.%Y",
-                            `d.M.yyyy` = "%d.%M.%Y", `dd/MM/yy` = "%d/%m/%y", `dd/MM/yyyy` = "%d/%m/%Y",
-                            `d/M/yyyy` = "%d/%M/%Y")
+        ChoicesDate <- list(`yyyy-MM-dd` = "%Y-%m-%d", `dd-MM-yyyy` = "%d-%m-%Y",
+                            `dd.MM.yy` = "%d.%m.%y",   `dd.MM.yyyy` = "%d.%m.%Y",
+                            `d.M.yyyy` = "%d.%M.%Y",   `dd/MM/yy` = "%d/%m/%y",
+                            `dd/MM/yyyy` = "%d/%m/%Y", `d/M/yyyy` = "%d/%M/%Y")
         ChoicesTime <- list(list(`HH:MM:SS` = "%H:%M:%S", `HH:MM` = "%R"),
                             list(`HH:MM:SS am/pm` = "%I:%M:%S %p", `HH:MM am/pm` = "%I:%M %p"))
         names(ChoicesTime) <- paste(c(12, 24), i18n$t("hours"))
@@ -151,16 +163,23 @@ ModuleImportServer <- function(Id, UiLng = "en", ColSpec = NULL, Options = NULL)
         tagList(
           fluidRow(
             column(
-              checkboxInput(ns("inpHeader"), i18n$t("lblHasHeader"), value = Options$Header),
+              if (!is.null(ColSpec))
+                disabled(checkboxInput(ns("inpHeader"), i18n$t("lblHasHeader"),
+                                       value = Options$Header))
+              else
+                checkboxInput(ns("inpHeader"), i18n$t("lblHasHeader"),
+                              value = Options$Header),
               width = 6L
             )),
           fluidRow(
             column(
-              textInput(ns("inpColSep"), i18n$t("lblColumnSeparator"), Options$ColSep),
+              textInput(ns("inpColSep"), i18n$t("lblColumnSeparator"),
+                        Options$ColSep),
               width = 3L
             ),
             column(
-              textInput(ns("inpThousandsSep"), i18n$t("lblThousandsSep"), Options$ThousandsSep),
+              textInput(ns("inpThousandsSep"), i18n$t("lblThousandsSep"),
+                        Options$ThousandsSep),
               width = 3L
             ),
             column(
@@ -208,6 +227,7 @@ ModuleImportServer <- function(Id, UiLng = "en", ColSpec = NULL, Options = NULL)
       })
 
 
+      #
       # SERVER -------------
       # The selected file, if any
       UserFile <- reactive({
@@ -290,7 +310,7 @@ ModuleImportServer <- function(Id, UiLng = "en", ColSpec = NULL, Options = NULL)
 
 
       #
-      #
+      # The preview inside the module
       output$outImportDataPreview <- renderTable({
         shiny::validate(
           need(RawDataFrame(), i18n$t("No data available for preview")),
@@ -306,7 +326,7 @@ ModuleImportServer <- function(Id, UiLng = "en", ColSpec = NULL, Options = NULL)
           ColNames <- names(df)
           WantedNotFound <- setdiff(ColSpec$NameInFile, ColNames)
           if (length(WantedNotFound) > 0) showNotification(i18n$t("Some requested columns have not been found"))
-          #-UnWanted       <- setdiff(ColNames, ColSpec$NameInFile) # TODO: NOT USED
+          #-UnWanted       <- setdiff(ColNames, ColSpec$NameInFile) # CURRENTLY NOT USED
           # get logical vector identifying relevant positions
           WantedNFound   <- intersect(ColSpec$NameInFile, ColNames)
           df <- df[, ColNames %in% WantedNFound]
