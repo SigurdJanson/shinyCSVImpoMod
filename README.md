@@ -1,6 +1,16 @@
 # shinyCSVImpoMod
 
-This package provides an `R` Shiny module with the functionality needed to import CSV files into a Shiny app. 
+This package provides an `R` Shiny module with the functionality needed to import CSV files into a Shiny app. Users can change the most important settings:
+
+* Character to separate columns
+* Numeric data
+  * Thousands separator
+  * Decimal separator
+* Date / time format
+
+The calling app can set a default of these options, too. Additionally, it can specify in detail which columns it expects including their name and format.
+
+
 
 ## Example
 
@@ -17,7 +27,7 @@ shinyCSVImpoMod::runExample()
 
 ### UI
 
-In the UI part of your app you should call the `ModuleImportUI` function using a namespace id of your choice (here "ProjectDataFile").
+In the UI part of your app you should call the `ModuleImportUI` function using a name space id of your choice (here "ProjectDataFile").
 
 For example:
 ```R
@@ -29,9 +39,11 @@ ui <- fluidPage(
   )
 ```
 
+
+
 ### Server
 
-You can access to the input's value in the server side by calling the module using the corresponding namespace id (here "ProjectDataFile"):
+You can access to the input's value in the server side by calling the module using the corresponding name space id (here "ProjectDataFile"):
 
 ```R
 server <- function(input,output,session) {
@@ -43,7 +55,6 @@ server <- function(input,output,session) {
     })
 }
 ```
-
 
 
 
@@ -64,6 +75,8 @@ Once the package is installed, start using it:
 library(shiny.CSVImport)
 help(package=shiny.CSVImport)
 ```
+
+
 
 ## Issues
 When encountering a problem with the package, you can report issues on GitHub directly [here](https://github.com/SigurdJanson/shinyCSVImpoMod/issues).
@@ -88,6 +101,13 @@ I invest some time and effort to create this package. Please cite it when using 
 citation("shiny.CSVImport")
 ```
 See also `citation()` for citing R itself.
+
+
+
+## Known Limitations
+
+* So far, only CSV files encoded as UTF-8 can be handled without the risk of losing quality.
+* A next step will be to give users a UI that lets them change the column specification.
 
 
 
