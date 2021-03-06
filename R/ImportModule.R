@@ -263,6 +263,7 @@ ModuleImportServer <- function(Id, UiLng = "en", ColSpec = NULL, Options = NULL)
       DataFrame <- debounce(reactive({
         req(
           is.data.frame(RawDataFrame()),
+          input$inpColSep,
           !identical(input$inpDecimalsSep, input$inpThousandsSep),
           input$inpThousandsSep
         )
@@ -315,6 +316,7 @@ ModuleImportServer <- function(Id, UiLng = "en", ColSpec = NULL, Options = NULL)
         shiny::validate(
           need(RawDataFrame(), i18n$t("No data available for preview")),
           need(is.data.frame(RawDataFrame()), ifelse(is.character(RawDataFrame()), RawDataFrame(), i18n$t("CSV cannot be parsed"))),
+          need(input$inpColSep,i18n$t("msgMissingColSep")),
           need(input$inpDecimalsSep != input$inpThousandsSep, i18n$t("Decimal and thousands separator cannot be equal")),
           need(isTruthy(input$inpThousandsSep), i18n$t("Thousands separator is not valid"))
         )

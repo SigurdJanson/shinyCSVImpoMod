@@ -126,7 +126,7 @@
             "en": "CSV cannot be interpreted",
             "ru": "CSV невозможно интерпретировать",
             "es": "CSV no se puede interpretar",
-            "ko": ""
+            "ko": "[CSV cannot be interpreted]"
         },
         {
             "key": "Decimal and thousands separator cannot be equal",
@@ -134,7 +134,7 @@
             "en": "Decimal and thousands separator cannot be equal",
             "ru": "Десятичный разделитель и pазделитель групп разрядов не могут быть одинаковыми",
             "es": "Separadores decimal y de miles no pueden ser iguales",
-            "ko": ""
+            "ko": "[Decimal and thousands separator cannot be equal]"
         },
         {
             "key": "Thousands separator is not valid",
@@ -142,15 +142,23 @@
             "en": "Thousands separator is not valid",
             "ru": "Pазделитель групп разрядов недопустимо",
             "es": "Separador de miles no es válido",
-            "ko": ""
+            "ko": "[Thousands separator is not valid]"
         },
         {
             "key": "Some requested columns have not been found",
             "de": "Angeforderte Spalten nicht gefunden",
             "en": "Some requested columns have not been found",
-            "ru": "",
+            "ru": "[Some requested columns have not been found]",
             "es": "No se encuentran algunas solicitadas columnas",
-            "ko": ""
+            "ko": "[Some requested columns have not been found]"
+        },
+        {
+            "key": "msgMissingColSep",
+            "de": "Spaltentrennzeichen fehlt",
+            "en": "Column separator is missing",
+            "ru": "Разделитель столбцов отсутствует",
+            "es": "Falta Separador de columnas",
+            "ko": "열 구분 기호가 없습니다"
         },
         {
             "key": "Comma",
