@@ -97,8 +97,7 @@ ModuleImportServer("ProjectDataFile")
 The module depends on the capabilities of `R`. Thus, it uses the POSIX syntax to specify the expected format of date and time values.
 
 ```{r POSIX_Codes, echo=FALSE}
-knitr::kable(
-  read.table(sep = ";", header = TRUE, 
+TimeFormats <- read.table(sep = ";", header = TRUE, 
   text = "Code;Meaning; Example
   %a;Abbreviated weekday;Mon
   %A;Full weekday;  Monday
@@ -122,7 +121,30 @@ knitr::kable(
   %Y;4-digit year; 2012
   %z;Offset from GMT;
   %Z;Time zone (character);UST")
+knitr::kable(
+  TimeFormats
 )
 ```
 
+A few examples:
 
+```{r echo=TRUE}
+  x <- strptime(c("2020-01-24 16:07:52.12345"), "%Y-%m-%d %H:%M:%OS")
+
+  # Dates
+  format(x, "%Y-%m-%d")     # yyyy-mm-dd
+  format(x, "%Y-%j")        # yyyy-[day of year]
+  format(x, "%Y-W%V-%u")    # 
+  format(x, "%B, %d is in CW%V") # dddd, dd is in CW[week]
+
+  # Time
+  format(x, "%H:%M:%S")
+  format(x, "%I:%M:%OS4 %p") # "am/pm" will be missing because this has run on a German system
+  
+  # Test am/pm
+  format(x, "%G-W%V-%u")
+```
+
+<center>
+![](img/logo_csvmodule.svg){ width=25% }
+</center>
