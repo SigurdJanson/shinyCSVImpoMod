@@ -38,7 +38,7 @@ ui <- fluidPage(
   )
 ```
 
-![User Interface of the Shiny CSV Module](blob/main/vignette/img/csvmodule_ui.png)
+![User Interface of the Shiny CSV Module](vignette/img/csvmodule_ui.png)
 
 ### Server
 
