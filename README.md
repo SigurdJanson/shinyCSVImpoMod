@@ -32,13 +32,15 @@ For example:
 ```R
 ui <- fluidPage(
     title = "CSV Import Sample App",
+    
     ModuleImportUI("ProjectDataFile"),
+    
     h3("Example App Preview"),
     tableOutput("AppOutputTest")
   )
 ```
 
-![User Interface of the Shiny CSV Module](vignette/img/csvmodule_ui.png)
+![User Interface of the Shiny CSV Module](vignettes/img/csvmodule_ui.png)
 
 ### Server
 
@@ -46,10 +48,11 @@ You can access to the input's value in the server side by calling the module usi
 
 ```R
 server <- function(input,output,session) {
-    DataFile <- ModuleImportServer("ProjectDataFile", UiLng = "de")
+
+    DataFile <- ModuleImportServer("ProjectDataFile", UiLng = "en")
 
     output$AppOutputTest <- renderTable({
-      need(DataFile(), "Keine Daten vorhanden")
+      need(DataFile(), "No data available")
       return(DataFile())
     })
 }
