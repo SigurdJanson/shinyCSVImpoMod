@@ -16,21 +16,13 @@ library(readr)
   StringsAsFactors = FALSE
 )
 
-.HandleUTF8 <- function(x){
-  map <- function(x) {
-    m <- utf8ToInt(x)
-    #-if (is.na(m)) x <- enc2utf8(x)
-    return(ifelse(is.na(m), x, sprintf("&#%d;", m)))
-  }
-  xs <- strsplit(as.character(x), "")[[1]]
-  paste0(sapply(xs, map), collapse="")
-}
 
 #' @title The UI function of the CSV import module
 #' @param Id Module namespace to be set by by caller
 #'
 #' @export
 #' @import shiny
+#' @importFrom shinyjs useShinyjs
 ModuleImportUI <- function(Id) {
   ns <- NS(Id)
   tagList(
@@ -85,6 +77,7 @@ ModuleImportUI <- function(Id) {
 #' @return a data frame containing the uploaded CSV file
 #' @export
 #' @import shiny
+#' @importFrom shinyjs disabled
 #' @importFrom utils head read.csv
 #' @importFrom readr default_locale locale
 ModuleImportServer <- function(Id, UiLng = "en", ColSpec = NULL, Options = NULL) {
@@ -339,7 +332,7 @@ ModuleImportServer <- function(Id, UiLng = "en", ColSpec = NULL, Options = NULL)
           ColNames <- names(df)
           WantedNotFound <- setdiff(ColSpec$NameInFile, ColNames)
           if (length(WantedNotFound) > 0) showNotification(i18n$t("Some requested columns have not been found"))
-          #-UnWanted       <- setdiff(ColNames, ColSpec$NameInFile) # CURRENTLY NOT USED
+          #-UnWanted <- setdiff(ColNames, ColSpec$NameInFile) # CURRENTLY NOT USED
           # get logical vector identifying relevant positions
           WantedNFound   <- intersect(ColSpec$NameInFile, ColNames)
           df <- df[, ColNames %in% WantedNFound]
