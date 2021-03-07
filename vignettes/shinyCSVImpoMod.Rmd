@@ -14,10 +14,9 @@ knitr::opts_chunk$set(
 )
 ```
 
-```{r setup}
+```{r setup, include = FALSE}
 library(shiny.CSVImport)
 library(knitr)
-#library(jsonlite)
 ```
 
 ## What It Does
@@ -91,5 +90,39 @@ ModuleImportUI("ProjectDataFile")
 ModuleImportServer("ProjectDataFile")
 ```
 
+![User Interface of the Shiny CSV Module](img/csvmodule_ui.png){ width=75% }
+
+## Specify Date & Time Format
+
+The module depends on the capabilities of `R`. Thus, it uses the POSIX syntax to specify the expected format of date and time values.
+
+```{r POSIX_Codes, echo=FALSE}
+knitr::kable(
+  read.table(sep = ";", header = TRUE, 
+  text = "Code;Meaning; Example
+  %a;Abbreviated weekday;Mon
+  %A;Full weekday;  Monday
+  %b;Abbreviated month; Jan
+  %B;Full month; January
+  %c;Locale-specific date and time;
+  %d;Decimal date;
+  %H;Decimal hours (24 hour); 14
+  %I;Decimal hours (12 hour); 02
+  %j;Decimal day of the year; 
+  %m;Decimal month; 6 (June)
+  %M;Decimal minute; 22
+  %p;Locale-specific AM/PM; 
+  %S;Decimal second; 56
+  %U;Decimal week of the year (starting on Sunday); 3
+  %w;Decimal Weekday (0=Sunday); 0
+  %W;Decimal week of the year (starting on Monday); 1
+  %x;Locale-specific Date;
+  %X;Locale-specific Time;
+  %y;2-digit year; 12
+  %Y;4-digit year; 2012
+  %z;Offset from GMT;
+  %Z;Time zone (character);UST")
+)
+```
 
 
