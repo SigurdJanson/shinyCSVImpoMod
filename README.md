@@ -18,7 +18,7 @@ Once you have downloaded the package, you can run an example app:
 
 <sub>In your `R` console:</sub>
 ```R
-shinyCSVImpoMod::runExample()
+shiny.CSVImport::runExample()
 ```
 
 
