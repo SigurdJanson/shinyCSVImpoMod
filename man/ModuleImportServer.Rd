@@ -40,8 +40,9 @@ the \code{Options} are used. "find" and "regexfind" types demand a format.}
 \code{Options} can have these fields:
 \describe{
 \item{LangCode}{Language code (e.g. "de" or "en)}
-\item{Header}{Does the CSV file have a header? (\code{TRUE}/\code{FALSE};
-see \code{\link[utils:read.table]{utils::read.csv()}} argument \code{header})}
+\item{Header}{Does the CSV file have a header? (\code{TRUE} (default)/\code{FALSE};
+see \code{\link[utils:read.table]{utils::read.csv()}} argument \code{header}). If a column specification
+is available, \code{Header} will be coerced to \code{TRUE}.}
 \item{ColSep}{A character separating columns (
 see \code{\link[utils:read.table]{utils::read.csv()}} argument \code{sep})}
 \item{ThousandsSep}{The character that separates thousands in numbers.}

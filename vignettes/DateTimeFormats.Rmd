@@ -20,7 +20,6 @@ library(knitr)
 library(jsonlite)
 ```
 
-
 # Date Formats
 
 ```{r DateDefinition, include=FALSE}
@@ -237,7 +236,6 @@ library(jsonlite)
     "zu-ZA": "yyyy/MM/dd"
   }'
 
-require(jsonlite)
 DateFormats <- jsonlite::fromJSON(.DateFormats)
 ```
 
@@ -257,9 +255,7 @@ colnames(Frequencies) <- c("Format", "Frequency")
 kable(Frequencies)
 ```
 
-
 Based on these data I chose the following formats as default. All formats with 10 occurrences or more are selected without question. I chose a few more that seemed pretty much redundant given the list which was already there. The standard format specified by ISO 8601 (yyyy-mm-dd) is among the top 10, too.
-
 
 ```{r echo=FALSE}
 SelectedDates <- Frequencies[c(1:6), ]
@@ -287,9 +283,106 @@ dput(Choices)
 
 # Time
 
-Time formats seem simpler. Standard ISO format is HH:MM:SS. In most English-speaking regions no 24 hour notation is used. 
-
+Time formats seem simpler. Standard ISO format is HH:MM:SS. In most English-speaking regions no 24 hour notation is used.
 
 ```{r}
 
 ```
+
+# Formatting Strings
+
+For a better usability it makes more sense to use a ["dd.mm.yyyy" format syntax](https://docs.microsoft.com/en-us/dotnet/standard/base-types/custom-date-and-time-format-strings) instead of `R`s POSIX notation.
+
+| Format       | POSIX Format | Description             | Examples                        |
+|:-----------  |:-----------  |:------------------------|:--------------------------------|
+| d            | %e           | Day of the month, 1-31  | 2009-06-01T13:45:30 -\> 1  <br> 2009-06-15T13:45:30 -\> 15 |
+| dd           | %d           | Day of the month, 01-31 | 2009-06-01T13:45:30 -\> 01 <br> 2009-06-15T13:45:30 -\> 15 |
+| ddd          | %a           | Abbreviated name of the day of the week | 2009-06-15T13:45:30 -\> Mon (en-US)  <br> 2009-06-15T13:45:30 -\> Пн (ru-RU) <br> 2009-06-15T13:45:30 -\> lun. (fr-FR) |
+| dddd         | %A           | Full name of the day of the week        | 2009-06-15T13:45:30 -\> Monday (en-US)  <br>  2009-06-15T13:45:30 -\> понедельник (ru-RU)  <br>  2009-06-15T13:45:30 -\> lundi (fr-FR) |
+|              | %u           | Weekday as a decimal number (1--7, Monday is 1) |                             |
+|              | %w           | Weekday as decimal number (0--6, Sunday is 0)   |                             |
+| f            | -            | Tenths of a second                       | 2009-06-15T13:45:30.6170000 -\> 6 <br> 2009-06-15T13:45:30.05 -\> 0 |
+| ff           | -            | Hundredths of a second                   | 2009-06-15T13:45:30.6170000 -\> 61 <br> 2009-06-15T13:45:30.0050000 -\> 00 |
+| fff          | -            | Milliseconds                             | 6/15/2009 13:45:30.617 -\> 617 <br> 6/15/2009 13:45:30.0005 -\> 000    |
+| ffff         | -            | Ten thousandths of a second              | 2009-06-15T13:45:30.6175000 -\> 6175 <br> 2009-06-15T13:45:30.0000500 -\> 0000 |
+| ffffff       | -            | Millionths of a second                   | 2009-06-15T13:45:30.6175425 -\> 6175425 <br> 2009-06-15T13:45:30.0001150 -\> 0001150 |
+| F            | -            | Tenths of a second (if non-zero)         | 2009-06-15T13:45:30.6170000 -\> 6 <br> 2009-06-15T13:45:30.0500000 -\> (no output) |
+| FF           | -            | Hundredths of a second (if non-zero)     | 2009-06-15T13:45:30.6170000 -\> 61 <br> 2009-06-15T13:45:30.0050000 -\> (no output) |
+| FFF          | -            | Milliseconds (if non-zero)               | 009-06-15T13:45:30.6170000 -\> 617 <br> 2009-06-15T13:45:30.0005000 -\> (no output) |
+| FFFF         | -            | Ten thousandths of a second (if non-zero) | 2009-06-15T13:45:30.5275000 -\> 5275 <br> 2009-06-15T13:45:30.0000500 -\> (no output) |
+| FFFFF        | -            | Hundred thousandths of a second (if non-zero) | 2009-06-15T13:45:30.6175400 -\> 61754 <br> 2009-06-15T13:45:30.0000050 -\> (no output) |
+| FFFFFF       | -            | Millionths of a second (if non-zero)   | 2009-06-15T13:45:30.6175420 -\> 617542 <br> 2009-06-15T13:45:30.0000005 -\> (no output) |
+| FFFFFFF      | -            | Ten millionths of a second (if non-zero) | 2009-06-15T13:45:30.6175425 -\> 6175425 <br> 2009-06-15T13:45:30.0001150 -\> 000115 |
+| ss.f[f[f[f]]]| %OSn         | Seconds and fractions. `n` specifies 10E-n | |
+| g, gg        |              | Period or era                        | 2009-06-15T13:45:30.6170000 -\> A.D. |
+| h            | %l \*        | Hour, on a 12-hour clock 1-12        | 2009-06-15T01:45:30 -\> 1  |
+| hh           | %I           | Hour, on a 12-hour clock 01-12       | 2009-06-15T01:45:30 -\> 01 |
+| H            | %k \*        | Hour, on a 24-hour clock 0-23        | 2009-06-15T01:45:30 -\> 1 <br> 2009-06-15T13:45:30 -\> 13 |
+| HH           | %H           | Hour, on a 24-hour clock 00-23       | 2009-06-15T01:45:30 -\> 01 <br> 2009-06-15T13:45:30 -\> 13 |
+| K            |              | Time zone information                   | 2009-06-15T13:45:30, Kind Unspecified -\>  <br>  2009-06-15T13:45:30, Kind Utc -\> Z  <br>  2009-06-15T13:45:30, Kind Local -\> -07:00 (depends on local computer settings)  <br>  With DateTimeOffset values:  <br>  2009-06-15T01:45:30-07:00 --\> -07:00  <br>  2009-06-15T08:45:30+00:00 --\> +00:00 |
+| m            |              | Minute, 0-59                            | 2009-06-15T13:29:30 -\> 29 |
+| mm           | %M           | Minute, 00-59                           | 2009-06-15T01:45:30 -\> 45 |
+| M            |              | Month, 1-12                             | 2009-06-15T13:45:30 -\> 6  |
+| MM           | %m           | Month, 01-12                            | 2009-06-15T13:45:30 -\> 06 |
+| MMM          | %b           | Abbreviated name of month               | 2009-06-15T13:45:30 -\> Jun (en-US)  <br>  2009-06-15T13:45:30 -\> juin (fr-FR)  <br>  2009-06-15T13:45:30 -\> Jun (zu-ZA)  |
+| MMMM         | %B           | Full name of month                      | 2009-06-15T13:45:30 -\> June (en-US)  <br>  2009-06-15T13:45:30 -\> juni (da-DK)  <br>  2009-06-15T13:45:30 -\> uJuni (zu-ZA)|
+| s            | %S (input only)| Second, 0-59                          | 2012-06-15T13:45:09 -\> 9  |
+| ss           | %S           | Second, 00-59                           | 2012-06-15T13:45:09 -\> 09 |
+| t            |              | First character of the AM/PM designator | 2009-06-15T13:45:30 -\> P (en-US)  <br>  2009-06-15T13:45:30 -\> 午 (ja-JP)  <br>  2009-06-15T13:45:30 -\> (fr-FR)    |
+| tt           | %p           | AM/PM designator                        | 2009-06-15T13:45:30 -\> PM (en-US)  <br>  2009-06-15T13:45:30 -\> 午後 (ja-JP)  <br>  2009-06-15T13:45:30 -\> (fr-FR)    |
+| y            | %y (input only) | Year, 0-99                           | 0001-01-01T00:00:00 -\> 1 <br>  0900-01-01T00:00:00 -\> 0   <br>  1900-01-01T00:00:00 -\> 0   <br>  2009-06-15T13:45:30 -\> 9 <br>  2019-06-15T13:45:30 -\> 19 |
+| yy           | %y           | Year, 00-99                             | 0001-01-01T00:00:00 -\> 01  <br>  0900-01-01T00:00:00 -\> 00  <br>  1900-01-01T00:00:00 -\> 00  <br>  2019-06-15T13:45:30 -\> 19    |
+| yyy          | n/a          | Year, with a minimum of three digits    | 0001-01-01T00:00:00 -\> 001 <br> 0900-01-01T00:00:00 -\> 900 <br> 1900-01-01T00:00:00 -\> 1900 <br> 2009-06-15T13:45:30 -\> 2009  |
+| yyyy         | %Y           | Year as a four-digit number             | 0900-01-01T00:00:00 -\> 0900  <br>  1900-01-01T00:00:00 -\> 1900  <br>  2009-06-15T13:45:30 -\> 2009  |
+| yyyyy        |              | Year as a five-digit number             | 0001-01-01T00:00:00 -\> 00001  <br>  2009-06-15T13:45:30 -\> 02009 |
+| z            |              | Hours offset from UTC, without leading zeros | 2009-06-15T13:45:30-07:00 -\> -7 |
+| zz           |              | Hours offset from UTC, with leading zero for a single-digit value | 009-06-15T13:45:30-07:00 -\> -07 |
+| zzz          |              | Hours and minutes offset from UTC      | 2009-06-15T13:45:30-07:00 -\> -07:00 |
+|              | %z           | Signed offset in hours and minutes from UTC, so -0800 is 8 hours behind UTC. | |
+| :            |              | Time separator                         | 2009-06-15T13:45:30 -\> : (en-US) |
+|              |              |                                        | 2009-06-15T13:45:30 -\> . (it-IT) |
+|              |              |                                        | 2009-06-15T13:45:30 -\> : (ja-JP) |
+| /            |              | Date separator                         | 2009-06-15T13:45:30 -\> / (en-US) |
+|              |              |                                        | 2009-06-15T13:45:30 -\> - (ar-DZ) |
+|              |              |                                        | 2009-06-15T13:45:30 -\> . (tr-TR) |
+| "string"     |              | Literal string delimiter               | 2009-06-15T13:45:30 ("arr:" h:m t) -\> arr: 1:45 P |
+|              |              |                                        | |
+| 'string'     |              |                                        | 2009-06-15T13:45:30 ('arr:' h:m t) -\> arr: 1:45 P |
+| \%           |              | Defines the following character as a custom format specifier | 2009-06-15T13:45:30 (%h) -\> 1 |
+| \\           |              | Escape character                       | 2009-06-15T13:45:30 (h \h) -\> 1 h |
+| Any other character |       | The character is copied to the result string unchanged | 2009-06-15T01:45:30 (arr hh:mm t) -\> arr 01:45 A |
+\* Not in the POSIX standards and less widely implemented
+
+
+
+### POSIX Combination Formats
+
+| Format      | POSIX Format | Description                            | Examples                        |
+|-------------|:-------------|:---------------------------------------|:--------------------------------|
+| \-          | %c           | Date and time. Locale-specific on output, "%a %b %e %H:%M:%S %Y" on input. | |
+| \-          | %D           | Date format such as %m/%d/%y: the C99 standard says it should be that exact format (but not all OSes comply). | |
+| yyyy-mm-dd  | %F           | %Y-%m-%d  | |
+| hh:mm:ss tt | %r           | For output, the 12-hour clock time (using the locale's AM or PM): only defined in some locales, and on some OSes misleading in locales which do not define an AM/PM indicator. For input, equivalent to %I:%M:%S %p. | |
+| HH:mm       | %R           | %H:%M     | |
+| HH:mm:ss    | %T           | %H:%M:%S  | |
+| yy/mm/dd    | %x           | Date.     | |
+|             |              | Locale-specific on output, "%y/%m/%d" on input. |   |
+| (HH:mm:ss)  | %X           | Time. Locale-specific on output, "%H:%M:%S" on input. |  |
+| \-          | %+           | (Output only) Similar to %c, often "%a %b %e %H:%M:%S %Z %Y". May depend on locale. | |
+
+
+### POSIX only
+
+| Format      | POSIX Format | Description                            | Examples                        |
+|-------------|:-------------|:---------------------------------------|:--------------------------------|
+|             | %g            | last two digits of the week-based year (see %V)    | |
+|             | %G            | week-based year (see %V) as a decimal number       | |
+|             | %j            | Day of year as decimal number (001--366): For input, 366 is only valid in a leap year.| |
+| \-          | %n            | Newline on output, arbitrary white space on input. | |
+|             | %t            | Tab on output, arbitrary white space on input.     | |
+|             | %U            | Week of the year as decimal number (00--53) using Sunday as the first day 1 of the week | |
+|             | %W            | Week of the year as decimal number (00--53) using Monday as the first day of week       | |
+|             | %s \*         |                                                                                         | |
+
+\* Not in the POSIX standards and less widely implemented
+

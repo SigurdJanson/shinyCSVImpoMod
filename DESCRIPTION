@@ -1,11 +1,11 @@
 Package: shiny.CSVImport
-Title: Package with CSV Import Module
-Version: 0.0.0.9000
+Title: Easily import CSV files into a Shiny App with a pre-built import module
+Version: 0.99.0.0000
 Authors@R: 
     person(given = "Jan",
            family = "Seifert",
            role = c("aut", "cre"),
-           email = "first.last@example.com")
+           email = "github@sigurdjanson.anonaddy.com")
 Description: A package providing a module with all functionality needed to import CSV files to a Shiny app. The module allows the user to make the required settings (like decimal and column separator character). The module returns a data frame.
 URL: https://github.com/SigurdJanson/shinyCSVImpoMod
 BugReports: https://github.com/SigurdJanson/shinyCSVImpoMod/issues
@@ -15,18 +15,21 @@ LazyData: true
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.1.1
 Imports:
-   shiny (>= 1.6.0),
-   shiny.i18n (>= 0.2.0),
-   readr (>= 1.4.0)
+    shiny (>= 1.6.0),
+    shiny.i18n (>= 0.2.0),
+    shinyjs (>= 2.0.0),
+    readr (>= 1.4.0)
 Suggests:
     covr,
     knitr,
     rmarkdown,
     spelling,
     testthat (>= 3.0.0),
-    qpdf
+    qpdf,
+    jsonlite
 VignetteBuilder:
     knitr,
-    qpdf
+    qpdf,
+    jsonlite
 Language: en-GB
 Config/testthat/edition: 3

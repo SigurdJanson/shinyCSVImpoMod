@@ -10,6 +10,7 @@ C;Hagen;41;03.02.1980;1.000.000,99;true")
 }
 
 
+# SUCCESS CASES -----------------
 test_that("Success Case: numeric (double, integer)", {
   # SETUP
   VecA <- 1:3
@@ -22,6 +23,7 @@ test_that("Success Case: numeric (double, integer)", {
   expect_identical(df$A, as.integer(VecA))
   expect_identical(df$B, VecB)
 })
+
 
 
 test_that("Success Case: find", {
@@ -76,6 +78,7 @@ test_that("Success Case: regexfind", {
 })
 
 
+
 test_that("Success Case: factor", {
   # SETUP
   df <- GetDataFromFile()
@@ -92,6 +95,7 @@ test_that("Success Case: factor", {
     expect_length(levels(df[[i]]), NLevels[i])
   }
 })
+
 
 
 # test_that("Success Case: logical", {
@@ -111,6 +115,8 @@ test_that("Success Case: factor", {
 #       expect_identical(df[[i]], rep(NA, nrow(df)), info = paste0("Column", i))
 #   }
 # })
+
+
 
 test_that("Success Case: Mixed", {
   # SETUP
@@ -172,6 +178,7 @@ test_that("Success Case: Skip Columns", {
 })
 
 
+
 test_that("Missing Format", {
   # SETUP
   VecA <- 1:3
@@ -183,7 +190,7 @@ test_that("Missing Format", {
 })
 
 
-
+# ERROR CASES -----------------
 test_that("Preconditions", {
   # SETUP
   VecA <- 1:3
