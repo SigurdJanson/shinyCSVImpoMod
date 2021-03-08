@@ -100,7 +100,7 @@ ModuleImportServer <- function(Id, UiLng = "en", ColSpec = NULL, Options = NULL)
       ns <- NS(Id) # set up name space
 
       # setup translator
-      i18n <- shiny.i18n::Translator$new(translation_json_path = system.file("inst", "extdata", "translation.json", package = "shiny.CSVImport"))
+      i18n <- shiny.i18n::Translator$new(translation_json_path = system.file("extdata", "translation.json", package = "shiny.CSVImport"))
       UiLng <- ifelse(UiLng %in% i18n$get_languages(), UiLng, "en")
       i18n$set_translation_language(UiLng)
 
