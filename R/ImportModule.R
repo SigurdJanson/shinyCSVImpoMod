@@ -6,6 +6,7 @@ library(readr)
 
 
 .DefaultOptions <- list(
+  LangCode = "en",
   Header = TRUE,
   ColSep = ";",
   ThousandsSep = ",",
