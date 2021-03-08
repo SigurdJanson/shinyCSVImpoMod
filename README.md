@@ -1,4 +1,4 @@
-# shinyCSVImpoMod
+# shinyCSVImpoMod <img src="vignettes/img/logo_csvmodule.svg" align="right" />
 
 This package provides an `R` Shiny module with the functionality needed to import CSV files into a Shiny app. Users can change the most important settings:
 
