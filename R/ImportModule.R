@@ -104,14 +104,6 @@ ModuleImportServer <- function(Id, UiLng = "en", ColSpec = NULL, Options = NULL)
       UiLng <- ifelse(UiLng %in% i18n$get_languages(), UiLng, "en")
       i18n$set_translation_language(UiLng)
 
-      # setup locale
-      # GlobalLocale  <- locale(date_names = ifelse(is.null(Options$LangCode), "en", Options$LangCode),
-      #                         date_format = ifelse(is.null(Options$DateFormat), "%AD", Options$DateFormat),
-      #                         time_format = ifelse(is.null(Options$TimeFormat), "%AT", Options$TimeFormat),
-      #                         decimal_mark = ifelse(is.null(Options$DecimalsSep), ".", Options$DecimalsSep),
-      #                         grouping_mark = ifelse(is.null(Options$ThousandsSep), ",", Options$ThousandsSep),
-      #                         tz = "UTC", encoding = "UTF-8", asciify = FALSE)
-
       #
       if (is.null(Options)) {
         Options <- .DefaultOptions

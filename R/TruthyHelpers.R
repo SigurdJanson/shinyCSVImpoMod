@@ -19,7 +19,18 @@ isTruthyInside <- function(x) {
 
 
 
-Truthy <- function(X, Replacement) {
+#' @title Choose a value if it truthy. If not, choose it's replacement
+#' @param X The designated value
+#' @param Replacement The replacement in case `X` is falsy
+#' @return `X` or `Replacement`
+#' @export
+#' @examples
+#' PickTruthy(1, 2) # 1
+#' PickTruthy("1", 2) # "1"
+#' PickTruthy("", 2) # 2
+#' PickTruthy(NULL, 3) # 3
+#' PickTruthy(NULL, NA) # NA
+PickTruthy <- function(X, Replacement) {
   return( ifelse(isTruthy(X), X, Replacement) )
 }
 

@@ -82,6 +82,16 @@ ColumnConvert <- function(Columns, Converter, Format, Locale) {
 
 
 
+#' @title Do conversions on a data frame
+#' @param Df A data frame
+#' @param ColSpec
+#' @param Options
+#' @param Preview FALSE (default) returns a working data frame. If `Preview` is `TRUE` or
+#' numeric all columns are character. The number of rows can be changed with `Preview` being
+#' numeric.
+#' @importFrom ModuleImportServer
+#'
+#' @return a data frame
 DataFrameConvert <- function(Df, ColSpec, Options, Preview = FALSE) {
   if (missing(Df)) stop("Internal module error: data frame is missing")
   if (missing(ColSpec)) stop("Internal module error: column specification is missing")
@@ -112,11 +122,11 @@ DataFrameConvert <- function(Df, ColSpec, Options, Preview = FALSE) {
   }
 
   # Get column types
-  Locale <- locale(date_names    = Truthy(Options$LangCode, "en"),
-                   date_format   = Truthy(Options$DateFormat, "%AD"),
-                   time_format   = Truthy(Options$TimeFormat, "%AT"),
-                   decimal_mark  = Truthy(Options$DecimalsSep, "."),
-                   grouping_mark = Truthy(Options$ThousandsSep, ","),
+  Locale <- locale(date_names    = PickTruthy(Options$LangCode, "en"),
+                   date_format   = PickTruthy(Options$DateFormat, "%AD"),
+                   time_format   = PickTruthy(Options$TimeFormat, "%AT"),
+                   decimal_mark  = PickTruthy(Options$DecimalsSep, "."),
+                   grouping_mark = PickTruthy(Options$ThousandsSep, ","),
                    tz = "UTC", encoding = "UTF-8", asciify = FALSE)
   ColTypes <- GuessColumnTypes(Df, Locale)
   if (isTruthy(ColSpec$Type)) { # pre-specified types take precedence over guessed type
@@ -147,36 +157,3 @@ DataFrameConvert <- function(Df, ColSpec, Options, Preview = FALSE) {
 # df <- ColumnConvert(df, as.list(rep("logical", 6)))
 # df <- ColumnConvert(df, as.list(rep("find", 5)), as.list(rep("^\\d*$", 5)))
 
-
-
-#' #' @title Filter the columns of a character-ony data frame according to a column specification
-#' #'
-#' #' @param df
-#' #' @param ColSpec
-#' #' @details This function modifies column names, removes unrequested columns
-#' #' @return a changed data frame
-#' FilterColumns <- function(df, ColSpec) {
-#'   # PRECONDITIONS
-#'   if (!isTruthy(df)) stop("Not data frame given")
-#'   if (!isTruthy(ColSpec))
-#'     stop("Not complete column specification is given")
-#'   if (!isTruthy(ColSpec$NameInFile)) return(df)
-#'
-#'   # setup
-#'   ColNames <- names(df)
-#'
-#'   # get logical vector identifying relevant positions
-#'   WantedNFound   <- intersect(ColSpec$NameInFile, ColNames)
-#'
-#'   # filter `df` to remove un-requested columns
-#'   df <- df[, ColNames %in% WantedNFound]
-#'
-#'   # reorder the requested columns to match the imported CSV
-#'   # Positions <- match(ColNames, WantedNFound)
-#'   # ColSpec$Name <- ColSpec$Name[Positions]
-#'   # ColSpec$NameInFile <- ColSpec$NameInFile[Positions]
-#'   # ColSpec$Type <- ColSpec$Type[Positions]
-#'   # ColSpec$Format <- ColSpec$Format[Positions]
-#'   # names(df) <- ColSpec$Name
-#'   return(df)
-#' }
