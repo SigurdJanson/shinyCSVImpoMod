@@ -8,7 +8,7 @@ library(readr)
 .DefaultOptions <- list(
   LangCode = "en",
   Header = TRUE,
-  ColSep = ";",
+  ColSep = " ",
   ThousandsSep = ",",
   DecimalsSep = ".",
   DateFormat = "%Y-%m-%d", # strptime() default
@@ -95,8 +95,8 @@ ModuleImportServer <- function(Id, UiLng = "en", ColSpec = NULL, Options = NULL)
     Id,
 
     function(input, output, session) {
-      #
-      # SETUP -----------------
+    #
+    # SETUP -----------------
       ns <- NS(Id) # set up name space
 
       # setup translator
@@ -105,12 +105,12 @@ ModuleImportServer <- function(Id, UiLng = "en", ColSpec = NULL, Options = NULL)
       i18n$set_translation_language(UiLng)
 
       # setup locale
-      GlobalLocale  <- locale(date_names = ifelse(is.null(Options$LangCode), "en", Options$LangCode),
-                              date_format = ifelse(is.null(Options$DateFormat), "%AD", Options$DateFormat),
-                              time_format = ifelse(is.null(Options$TimeFormat), "%AT", Options$TimeFormat),
-                              decimal_mark = ifelse(is.null(Options$DecimalsSep), ".", Options$DecimalsSep),
-                              grouping_mark = ifelse(is.null(Options$ThousandsSep), ",", Options$ThousandsSep),
-                              tz = "UTC", encoding = "UTF-8", asciify = FALSE)
+      # GlobalLocale  <- locale(date_names = ifelse(is.null(Options$LangCode), "en", Options$LangCode),
+      #                         date_format = ifelse(is.null(Options$DateFormat), "%AD", Options$DateFormat),
+      #                         time_format = ifelse(is.null(Options$TimeFormat), "%AT", Options$TimeFormat),
+      #                         decimal_mark = ifelse(is.null(Options$DecimalsSep), ".", Options$DecimalsSep),
+      #                         grouping_mark = ifelse(is.null(Options$ThousandsSep), ",", Options$ThousandsSep),
+      #                         tz = "UTC", encoding = "UTF-8", asciify = FALSE)
 
       #
       if (is.null(Options)) {
@@ -132,8 +132,8 @@ ModuleImportServer <- function(Id, UiLng = "en", ColSpec = NULL, Options = NULL)
       }
 
 
-      #
-      # UI -----------------
+    #
+    # UI -----------------
       output$uiFileInput <- renderUI({
         tagList(
           fluidRow(
@@ -231,28 +231,36 @@ ModuleImportServer <- function(Id, UiLng = "en", ColSpec = NULL, Options = NULL)
       })
 
 
-      #
-      # SERVER -------------
-      # The selected file, if any
-      UserFile <- reactive({
-        # If no file is selected, don't do anything
-        req(input$inpImportData)
-        input$inpImportData
+    #
+    # SERVER -------------
+
+      LiveOptions <- reactive({
+        Result <- Options
+        if (isTruthy(input$inpHeader))      Result[["Header"]] <- input$inpHeader
+        if (isTruthy(input$inpColSep))      Result[["ColSep"]] <- input$inpColSep
+        if (isTruthy(input$inpThousandsSep))Result[["ThousandsSep"]] <- input$inpThousandsSep
+        if (isTruthy(input$inpDecimalsSep)) Result[["DecimalsSep"]] <- input$inpDecimalsSep
+        if (isTruthy(input$inpDateFormat))  Result[["DateFormat"]] <- input$inpDateFormat
+        if (isTruthy(input$inpTimeFormat))  Result[["TimeFormat"]] <- input$inpTimeFormat
+        if (isTruthy(input$inpQuote))       Result[["Quote"]] <- input$inpQuote
+        #Result[["StringsAsFactors"]] # No user at the moment setting
+        return(Result)
       })
+
 
       #' @title The user's data, parsed into a data frame.
       #' @note The raw data frame has only columns of type `character` and must
       #' be converted later.
       #' @returns Either a data frame or an error message
       RawDataFrame <- reactive({
-        req(UserFile())
+        req(input$inpImportData)
 
         Result <- NULL
         tryCatch(
-          Result <- read.csv(UserFile()$datapath,
-                             header = input$inpHeader,
-                             quote  = input$inpQuote,
-                             sep    = input$inpColSep,
+          Result <- read.csv(input$inpImportData$datapath,
+                             header = LiveOptions()$Header,
+                             quote  = LiveOptions()$Quote,
+                             sep    = LiveOptions()$ColSep,
                              stringsAsFactors = FALSE,
                              colClasses = "character",
                              encoding = "UTF-8"),
@@ -273,43 +281,8 @@ ModuleImportServer <- function(Id, UiLng = "en", ColSpec = NULL, Options = NULL)
           input$inpThousandsSep
         )
 
+        df <- DataFrameConvert(RawDataFrame(), ColSpec, LiveOptions(), Preview = FALSE)
 
-        df <- RawDataFrame()
-
-        if (!is.null(ColSpec$NameInFile) && length(ColSpec$NameInFile) > 0) {
-          ColNames <- names(df)
-          # get logical vector identifying relevant positions
-          WantedNFound <- intersect(ColSpec$NameInFile, ColNames)
-          # Filter `df` to remove un-requested columns
-          df <- df[, ColNames %in% WantedNFound]
-          # Reorder the requested columns to match the imported CSV
-          Positions <- match(ColNames, WantedNFound)
-          ColSpec$Name <- ColSpec$Name[Positions]
-          ColSpec$NameInFile <- ColSpec$NameInFile[Positions]
-          ColSpec$Type <- ColSpec$Type[Positions]
-          ColSpec$Format <- ColSpec$Format[Positions]
-          #
-          names(df) <- ColSpec$Name
-        }
-
-        # Get column types
-        Locale <- locale(date_names = ifelse(is.null(Options$LangCode), "de", Options$LangCode),
-                         date_format = ifelse(isTruthy(input$inpDateFormat), input$inpDateFormat, Options$DateFormat),
-                         time_format = ifelse(isTruthy(input$inpTimeFormat), input$inpTimeFormat, Options$TimeFormat),
-                         decimal_mark = ifelse(isTruthy(input$inpDecimalsSep), input$inpDecimalsSep, Options$DecimalsSep),
-                         grouping_mark = ifelse(isTruthy(input$inpThousandsSep), input$inpThousandsSep, Options$ThousandsSep),
-                         tz = "UTC", encoding = "UTF-8", asciify = FALSE)
-        ColTypes <- GuessColumnTypes(df, Locale)
-        if (isTruthy(ColSpec$Type)) { # pre-specified types take precedence over guessed type
-          ColTypes <- replace(ColSpec$Type, !isTruthyInside(ColSpec$Type), ColTypes)
-        }
-
-        df <- ColumnConvert(df, as.list(ColTypes), ColSpec$Format, Locale)
-        if (!(isTruthy(ColSpec) && isTruthyInside(ColSpec))) {
-          if (Options$StringsAsFactors) {
-            df[sapply(df, is.character)] <- lapply(df[sapply(df, is.character)], as.factor)
-          }
-        }
         return(df)
       }), 2000L)
 
@@ -323,45 +296,15 @@ ModuleImportServer <- function(Id, UiLng = "en", ColSpec = NULL, Options = NULL)
           need(is.data.frame(RawDataFrame()), ifelse(is.character(RawDataFrame()), RawDataFrame(), i18n$t("CSV cannot be parsed"))),
           need(input$inpColSep,i18n$t("msgMissingColSep")),
           need(input$inpDecimalsSep != input$inpThousandsSep, i18n$t("Decimal and thousands separator cannot be equal")),
-          need(isTruthy(input$inpThousandsSep), i18n$t("Thousands separator is not valid"))
+          need(input$inpThousandsSep, i18n$t("Thousands separator is not valid"))
         )
-        df <- head(RawDataFrame())
 
-        # Match names to `ColSpec$NameInFile`, drop all missings, and
-        # ... replace with desired names
-        if (!is.null(ColSpec$NameInFile) && length(ColSpec$NameInFile) > 0) {
-          ColNames <- names(df)
-          WantedNotFound <- setdiff(ColSpec$NameInFile, ColNames)
-          if (length(WantedNotFound) > 0) showNotification(i18n$t("Some requested columns have not been found"))
-          #-UnWanted <- setdiff(ColNames, ColSpec$NameInFile) # CURRENTLY NOT USED
-          # get logical vector identifying relevant positions
-          WantedNFound   <- intersect(ColSpec$NameInFile, ColNames)
-          df <- df[, ColNames %in% WantedNFound]
-          # Reorder the requested columns to match the imported CSV
-          Positions <- match(ColNames, WantedNFound)
-          ColSpec$Name <- ColSpec$Name[Positions]
-          ColSpec$NameInFile <- ColSpec$NameInFile[Positions]
-          ColSpec$Type <- ColSpec$Type[Positions]
-          ColSpec$Format <- ColSpec$Format[Positions]
-          #
-          names(df) <- ColSpec$Name
-        }
+        tryCatch(
+          df <- DataFrameConvert(RawDataFrame(), ColSpec, LiveOptions(), Preview = TRUE),
+          error = function(e) stop(i18n$t(e))
+        )
+        df[1,] <- i18n$t(unlist(df[1,]))
 
-        # Get column types
-        Locale <- locale(date_names = ifelse(is.null(Options$LangCode), "de", Options$LangCode),
-                         date_format = ifelse(isTruthy(input$inpDateFormat), input$inpDateFormat, Options$DateFormat),
-                         time_format = ifelse(isTruthy(input$inpTimeFormat), input$inpTimeFormat, Options$TimeFormat),
-                         decimal_mark = ifelse(isTruthy(input$inpDecimalsSep), input$inpDecimalsSep, Options$DecimalsSep),
-                         grouping_mark = ifelse(isTruthy(input$inpThousandsSep), input$inpThousandsSep, Options$ThousandsSep),
-                         tz = "UTC", encoding = "UTF-8", asciify = FALSE)
-        ColTypes <- GuessColumnTypes(df, Locale)
-        if (isTruthy(ColSpec$Type)) { # pre-specified types take precedence over guessed type
-          ColTypes <- replace(ColSpec$Type, !isTruthyInside(ColSpec$Type), ColTypes)
-        }
-
-        # Create preview data frame
-        ColTypesStr <- i18n$t(sprintf("<%s>", ColTypes))
-        df <- rbind(Types = ColTypesStr, df)
         return(df)
       },
       sanitize.text.function = function(x) sapply(x, .HandleUTF8))

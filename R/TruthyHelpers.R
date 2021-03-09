@@ -18,3 +18,8 @@ isTruthyInside <- function(x) {
 }
 
 
+
+Truthy <- function(X, Replacement) {
+  return( ifelse(isTruthy(X), X, Replacement) )
+}
+

@@ -78,6 +78,69 @@ ColumnConvert <- function(Columns, Converter, Format, Locale) {
   return(Columns)
 }
 
+
+
+
+
+DataFrameConvert <- function(Df, ColSpec, Options, Preview = FALSE) {
+  if (missing(Df)) stop("Internal module error: data frame is missing")
+  if (missing(ColSpec)) stop("Internal module error: column specification is missing")
+  if (missing(Options)) stop("Internal module error: Locale options are missing")
+
+  if (isTRUE(Preview) || is.numeric(Preview))
+    Df <- head(Df, ifelse(is.numeric(Preview), Preview, 6L))
+
+  # Match names to `ColSpec$NameInFile`, drop all missings, and
+  # ... replace with desired names
+  if (!is.null(ColSpec$NameInFile) && length(ColSpec$NameInFile) > 0L) {
+    ColNames <- names(Df)
+    WantedNotFound <- setdiff(ColSpec$NameInFile, ColNames)
+    #if (length(WantedNotFound) > 0) showNotification("Some requested columns have not been found")
+    #-UnWanted <- setdiff(ColNames, ColSpec$NameInFile) # CURRENTLY NOT USED
+    # get logical vector identifying relevant positions
+    WantedNFound <- intersect(ColSpec$NameInFile, ColNames)
+    # Filter `Df` to remove un-requested columns
+    Df <- Df[, ColNames %in% WantedNFound]
+    # Reorder the requested columns to match the imported CSV
+    Positions <- match(ColNames, WantedNFound)
+    ColSpec$Name <- ColSpec$Name[Positions]
+    ColSpec$NameInFile <- ColSpec$NameInFile[Positions]
+    ColSpec$Type <- ColSpec$Type[Positions]
+    ColSpec$Format <- ColSpec$Format[Positions]
+    #
+    names(Df) <- ColSpec$Name
+  }
+
+  # Get column types
+  Locale <- locale(date_names    = Truthy(Options$LangCode, "en"),
+                   date_format   = Truthy(Options$DateFormat, "%AD"),
+                   time_format   = Truthy(Options$TimeFormat, "%AT"),
+                   decimal_mark  = Truthy(Options$DecimalsSep, "."),
+                   grouping_mark = Truthy(Options$ThousandsSep, ","),
+                   tz = "UTC", encoding = "UTF-8", asciify = FALSE)
+  ColTypes <- GuessColumnTypes(Df, Locale)
+  if (isTruthy(ColSpec$Type)) { # pre-specified types take precedence over guessed type
+    ColTypes <- replace(ColSpec$Type, !isTruthyInside(ColSpec$Type), ColTypes)
+  }
+
+  #
+  if (isFALSE(Preview) && !is.numeric(Preview)) {
+    Df <- ColumnConvert(Df, as.list(ColTypes), ColSpec$Format, Locale)
+    if (!(isTruthy(ColSpec) && isTruthyInside(ColSpec))) {
+      if (Options$StringsAsFactors) {
+        Df[sapply(Df, is.character)] <- lapply(Df[sapply(Df, is.character)], as.factor)
+      }
+    }
+  } else { # Preview
+    # Create preview data frame
+    ColTypesStr <- sprintf("<%s>", ColTypes)
+    Df <- rbind(Types = ColTypesStr, Df)
+  }
+
+  return(Df)
+}
+
+
 # df <- read.csv(system.file("inst", "extdata", "table.csv", package = "shiny.CSVImport"),
 #                header = TRUE, quote  = "", sep = ";", stringsAsFactors = FALSE,
 #                colClasses = "character")

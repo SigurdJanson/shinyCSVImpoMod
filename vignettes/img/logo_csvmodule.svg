@@ -31,11 +31,11 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="1"
-     inkscape:cx="313.87342"
-     inkscape:cy="376.59281"
+     inkscape:zoom="2.8284271"
+     inkscape:cx="367.726"
+     inkscape:cy="270.25447"
      inkscape:document-units="px"
-     inkscape:current-layer="layer3"
+     inkscape:current-layer="layer4"
      inkscape:document-rotation="0"
      showgrid="false"
      units="px"
@@ -176,8 +176,7 @@
      inkscape:groupmode="layer"
      id="layer4"
      inkscape:label="NewText"
-     style="display:inline"
-     sodipodi:insensitive="true">
+     style="display:inline">
     <path
        style="fill:none;stroke:#c0ffff;stroke-width:8;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        d="m 365.625,224.375 -55.83129,-32.23421 -55.52185,32.05556 55.54237,32.0674 -55.35063,31.9567 -55.44131,-32.00905"
@@ -189,8 +188,8 @@
     <path
        id="rect1226"
        style="font-variation-settings:normal;display:inline;opacity:1;vector-effect:none;fill:none;fill-opacity:1;stroke:#c0ffff;stroke-width:8;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:fill markers stroke;stop-color:#000000;stop-opacity:1"
-       d="M 457.77291,298.07835 421.6484,318.63577 314.14446,321.49144 370.1819,289.13821 431.63024,253.661"
-       sodipodi:nodetypes="ccccc" />
+       d="m 457.64791,300.14085 -34.68701,19.99492 -110.97269,0.0432 110.52781,-63.7379"
+       sodipodi:nodetypes="cccc" />
     <text
        xml:space="preserve"
        style="font-style:normal;font-variant:normal;font-weight:300;font-stretch:normal;font-size:45.9328px;line-height:1.25;font-family:'Leelawadee UI';-inkscape-font-specification:'Leelawadee UI, Light';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;letter-spacing:0px;word-spacing:0px;display:inline;fill:#ffffff;fill-opacity:0.98324;stroke:none;stroke-width:1"
@@ -245,9 +244,10 @@
      inkscape:groupmode="layer"
      id="layer3"
      inkscape:label="Shine"
-     style="display:inline">
+     style="display:inline"
+     sodipodi:insensitive="true">
     <rect
-       style="font-variation-settings:normal;opacity:1;vector-effect:none;fill:#fffede;fill-opacity:0.06424581;stroke:none;stroke-width:16.0888;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:fill markers stroke;stop-color:#000000;stop-opacity:1"
+       style="font-variation-settings:normal;opacity:1;vector-effect:none;fill:#fffede;fill-opacity:0.0642458;stroke:none;stroke-width:16.0888;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:fill markers stroke;stop-color:#000000;stop-opacity:1"
        id="rect879"
        width="256.94501"
        height="256.94501"
