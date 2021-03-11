@@ -146,11 +146,11 @@
         },
         {
             "key": "Some requested columns have not been found",
-            "de": "Angeforderte Spalten nicht gefunden",
-            "en": "Some requested columns have not been found",
-            "ru": "[Some requested columns have not been found]",
+            "de": "Einige geforderte Spalten fehlen in der Datei",
+            "en": "Some requested columns have not been found in file",
+            "ru": "[Some requested columns have not been found in file]",
             "es": "No se encuentran algunas solicitadas columnas",
-            "ko": "[Some requested columns have not been found]"
+            "ko": "[Some requested columns have not been found in file]"
         },
         {
             "key": "msgMissingColSep",

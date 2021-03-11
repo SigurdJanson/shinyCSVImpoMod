@@ -90,7 +90,6 @@ ColumnConvert <- function(Columns, Converter, Format, Locale) {
 #' numeric all columns are character. The number of rows can be changed with `Preview` being
 #' numeric.
 #' @importFrom ModuleImportServer
-#'
 #' @return a data frame
 DataFrameConvert <- function(Df, ColSpec, Options, Preview = FALSE) {
   if (missing(Df)) stop("Internal module error: data frame is missing")
@@ -101,12 +100,9 @@ DataFrameConvert <- function(Df, ColSpec, Options, Preview = FALSE) {
     Df <- head(Df, ifelse(is.numeric(Preview), Preview, 6L))
 
   # Match names to `ColSpec$NameInFile`, drop all missings, and
-  # ... replace with desired names
+  # ... replace matching ones with desired names
   if (!is.null(ColSpec$NameInFile) && length(ColSpec$NameInFile) > 0L) {
     ColNames <- names(Df)
-    WantedNotFound <- setdiff(ColSpec$NameInFile, ColNames)
-    #if (length(WantedNotFound) > 0) showNotification("Some requested columns have not been found")
-    #-UnWanted <- setdiff(ColNames, ColSpec$NameInFile) # CURRENTLY NOT USED
     # get logical vector identifying relevant positions
     WantedNFound <- intersect(ColSpec$NameInFile, ColNames)
     # Filter `Df` to remove un-requested columns

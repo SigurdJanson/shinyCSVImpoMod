@@ -259,6 +259,16 @@ ModuleImportServer <- function(Id, UiLng = "en", ColSpec = NULL, Options = NULL)
           error = function(e) Result <<- e$message,
           warning = function(w) Result <<- w$message
         )
+
+        # check if all requested variables are there
+        if (!is.null(ColSpec$NameInFile) && length(ColSpec$NameInFile) > 0L) {
+          ColNames <- names(Result)
+          WantedNotFound <- setdiff(ColSpec$NameInFile, ColNames)
+          if (length(WantedNotFound) > 0)
+            showNotification(i18n$t("Some requested columns have not been found"))
+          #-UnWanted <- setdiff(ColNames, ColSpec$NameInFile) # CURRENTLY NOT USED
+        }
+
         return(Result)
       })
 
