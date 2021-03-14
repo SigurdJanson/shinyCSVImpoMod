@@ -115,11 +115,11 @@ ModuleImportServer <- function(Id, UiLng = "en", ColSpec = NULL, Options = NULL)
         # if column spec exists, override
         Options$Header <- TRUE
 
-        if (!is.null(ColSpec$NameInFile)) {
+        if (isTruthy(ColSpec$NameInFile)) {
           # NULL & NA is considered as missing
-          Missing <- is.na(ColSpec[["NameInFile"]]) | sapply(ColSpec[["NameInFile"]], is.null)
+          Missing <- !isTruthyInside(ColSpec[["NameInFile"]])
           ColSpec$NameInFile[Missing] <- ColSpec$Name[Missing]
-          ColSpec$NameInFile <- make.names(ColSpec$NameInFile)
+          ColSpec$NameInFile <- as.list(make.names(ColSpec$NameInFile))
         }
       }
 
@@ -285,7 +285,7 @@ ModuleImportServer <- function(Id, UiLng = "en", ColSpec = NULL, Options = NULL)
 
         tryCatch(
           df <- DataFrameConvert(RawDataFrame(), ColSpec, LiveOptions(), Preview = FALSE),
-          error = function(e) shiny::validate(NULL, i18n$t(e$message))
+          error = function(e) shiny::validate(need(NULL, i18n$t(e$message)))
         )
         return(df)
       }), 2000L)
@@ -302,10 +302,10 @@ ModuleImportServer <- function(Id, UiLng = "en", ColSpec = NULL, Options = NULL)
           need(input$inpDecimalsSep != input$inpThousandsSep, i18n$t("Decimal and thousands separator cannot be equal")),
           need(input$inpThousandsSep, i18n$t("Thousands separator is not valid"))
         )
-
+browser()
         tryCatch(
           df <- DataFrameConvert(RawDataFrame(), ColSpec, LiveOptions(), Preview = TRUE),
-          error = function(e) shiny::validate(NULL, i18n$t(e$message))
+          error = function(e) shiny::validate(need(NULL, i18n$t(e$message)))
         )
         df[1,] <- i18n$t(unlist(df[1,]))
 

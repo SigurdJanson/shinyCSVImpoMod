@@ -92,9 +92,10 @@ ColumnConvert <- function(Columns, Converter, Format, Locale) {
 #' @importFrom ModuleImportServer
 #' @return a data frame
 DataFrameConvert <- function(Df, ColSpec, Options, Preview = FALSE) {
-  if (missing(Df)) stop("Internal module error: data frame is missing")
-  if (missing(ColSpec)) stop("Internal module error: column specification is missing")
-  if (missing(Options)) stop("Internal module error: Locale options are missing")
+  if (missing(Df) || !isTruthy(Df)) stop("Internal module error: data frame is missing")
+  if (missing(ColSpec) || !isTruthy(ColSpec)) stop("Internal module error: column specification is missing")
+  if (missing(Options) || !isTruthy(Options)) stop("Internal module error: Locale options are missing")
+  if (isTruthy(ColSpec$NameInFile) && !all(isTruthyInside(ColSpec$NameInFile))) stop("Internal module error: 'NameInFile' must be specified")
 
   if (isTRUE(Preview) || is.numeric(Preview))
     Df <- head(Df, ifelse(is.numeric(Preview), Preview, 6L))
@@ -104,7 +105,7 @@ DataFrameConvert <- function(Df, ColSpec, Options, Preview = FALSE) {
   if (!is.null(ColSpec$NameInFile) && length(ColSpec$NameInFile) > 0L) {
     ColNames <- names(Df)
     # get logical vector identifying relevant positions
-    WantedNFound <- intersect(ColSpec$NameInFile, ColNames) # Best case
+    WantedNFound <- intersect(ColNames, ColSpec$NameInFile) # order of arguments counts!
     # Filter `Df` to remove un-requested columns
     Df <- Df[, ColNames %in% WantedNFound]
     if (ncol(Df) == 0) stop("msgConfigurationYieldsEmpty")
@@ -163,22 +164,34 @@ DataFrameConvert <- function(Df, ColSpec, Options, Preview = FALSE) {
 #   Quote = "",
 #   StringsAsFactors = FALSE
 # )
-# ColSpec <- list(
-#   Name       = as.list(c(paste0("Super", 1:3), "Extra", paste0("Super", 4:6))),
-#   NameInFile = list("Spalte.A", "Name", "Alter", "Extra", "Datum", "GermanFloatingPoint", "Truth"),
-#   Type       = list("character", "character", "integer", "time", "date", "number", "logical"),
-#   Format     = list(NA, NA, NULL, NA, NA, NA, vector())
+# ColSpec = list(
+#   Name = list("Name", "Age", "Date", "Double", "T/F", "Time", "LETTER"),
+#   NameInFile = list("Name", "Alter", "Datum", "GermanFloatingPoint", "Truth", "Time", "Spalte.A"),
+#   Type = list("character", "integer", "date", "number", "logical", "time", "character"),
+#   Format = list(NA, NA, "%d.%m.%Y", NA, NA, "%H:%M", NA)
 # )
-# # df <- read.csv(system.file("inst", "extdata", "table.csv", package = "shiny.CSVImport"),
-# #                header = TRUE, quote  = "", sep = ";", stringsAsFactors = FALSE,
-# #                colClasses = "character")
-# #
+# df <- read.csv(system.file("inst", "extdata", "table.csv", package = "shiny.CSVImport"),
+#                header = TRUE, quote  = "", sep = ";", stringsAsFactors = FALSE,
+#                colClasses = "character")
+#
 # df <- read.csv(header = TRUE, quote  = "", sep = ";", stringsAsFactors = FALSE,
 #          colClasses = "character",
 #          text = "Spalte A;Name;Alter;Datum;GermanFloatingPoint;Truth
 # A;Jan;46;24.01.1975;1.024,64;TRUE
 # B;Geert;49;19.04.1971;123,45;FALSE
 # C;Hagen;41;03.02.1980;1.000.000,99;true")
+
+
+# ColSpec = list(
+#   Name = list("Name", "Age", "Date", "Double", "T/F", "Time", "LETTER"),
+#   NameInFile = list("Name", "Age", "Datum", "GermanFloatingPoint", "Truth", "Time", "Column.A"),
+#   Type = list("character", "integer", "date", "number", "logical", "time", "character"),
+#   Format = list(NA, NA, "%d.%m.%Y", NA, NA, "%H:%M", NA)
+# )
+# df <- read.csv(file = system.file("extdata", "table.csv", package = "shiny.CSVImport"),
+#                  header = TRUE, quote  = "", sep = ";", stringsAsFactors = FALSE,
+#                  colClasses = "character")
+#
 # DataFrameConvert(df, ColSpec, .Options)
 
 
