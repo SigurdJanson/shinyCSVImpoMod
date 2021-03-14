@@ -49,7 +49,7 @@ ColumnConvert <- function(Columns, Converter, Format, Locale) {
     if (is.null(Converter[[i]])) {
       Col2Drop <- c(Col2Drop, i)
     } else {
-      Format_i <- ifelse(is.null(Format[[i]]), "", Format[[i]])
+      Format_i <- ifelse(isTruthy(Format[[i]]), Format[[i]], "")
       suppressWarnings({
         Columns[[i]] <- switch(
           Converter[[i]],
@@ -104,16 +104,20 @@ DataFrameConvert <- function(Df, ColSpec, Options, Preview = FALSE) {
   if (!is.null(ColSpec$NameInFile) && length(ColSpec$NameInFile) > 0L) {
     ColNames <- names(Df)
     # get logical vector identifying relevant positions
-    WantedNFound <- intersect(ColSpec$NameInFile, ColNames)
+    WantedNFound <- intersect(ColSpec$NameInFile, ColNames) # Best case
     # Filter `Df` to remove un-requested columns
     Df <- Df[, ColNames %in% WantedNFound]
+
     # Reorder the requested columns to match the imported CSV
-    Positions <- match(ColNames, WantedNFound)
+    # - get positions and use na.omit because otherwise, NA would still be in there
+    Positions <- match(WantedNFound, ColSpec$NameInFile) #as.vector(na.omit(match(ColSpec$NameInFile, WantedNFound)))
+    # - filter
     ColSpec$Name <- ColSpec$Name[Positions]
-    ColSpec$NameInFile <- ColSpec$NameInFile[Positions]
+    ColSpec$NameInFile <- ColSpec$NameInFile[Positions] #FEHLER HIER
     ColSpec$Type <- ColSpec$Type[Positions]
     ColSpec$Format <- ColSpec$Format[Positions]
-    #
+
+    # Set the correct names required by column specification
     names(Df) <- ColSpec$Name
   }
 
@@ -147,9 +151,42 @@ DataFrameConvert <- function(Df, ColSpec, Options, Preview = FALSE) {
 }
 
 
+# .Options <- list(
+#   LangCode = "en",
+#   Header = TRUE,
+#   ColSep = ";",
+#   ThousandsSep = ".",
+#   DecimalsSep = ",",
+#   DateFormat = "%d.%m.%Y",
+#   TimeFormat = "%H:%M:%S", # strptime() default
+#   Quote = "",
+#   StringsAsFactors = FALSE
+# )
+# ColSpec <- list(
+#   Name       = as.list(c(paste0("Super", 1:3), "Extra", paste0("Super", 4:6))),
+#   NameInFile = list("Spalte.A", "Name", "Alter", "Extra", "Datum", "GermanFloatingPoint", "Truth"),
+#   Type       = list("character", "character", "integer", "time", "date", "number", "logical"),
+#   Format     = list(NA, NA, NULL, NA, NA, NA, vector())
+# )
+# # df <- read.csv(system.file("inst", "extdata", "table.csv", package = "shiny.CSVImport"),
+# #                header = TRUE, quote  = "", sep = ";", stringsAsFactors = FALSE,
+# #                colClasses = "character")
+# #
+# df <- read.csv(header = TRUE, quote  = "", sep = ";", stringsAsFactors = FALSE,
+#          colClasses = "character",
+#          text = "Spalte A;Name;Alter;Datum;GermanFloatingPoint;Truth
+# A;Jan;46;24.01.1975;1.024,64;TRUE
+# B;Geert;49;19.04.1971;123,45;FALSE
+# C;Hagen;41;03.02.1980;1.000.000,99;true")
+# DataFrameConvert(df, ColSpec, .Options)
+
+
+
 # df <- read.csv(system.file("inst", "extdata", "table.csv", package = "shiny.CSVImport"),
 #                header = TRUE, quote  = "", sep = ";", stringsAsFactors = FALSE,
 #                colClasses = "character")
+# DataFrameConvert(df)
+
 # df <- ColumnConvert(df, as.list(rep("logical", 6)))
 # df <- ColumnConvert(df, as.list(rep("find", 5)), as.list(rep("^\\d*$", 5)))
 
