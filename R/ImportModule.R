@@ -118,8 +118,8 @@ ModuleImportServer <- function(Id, UiLng = "en", ColSpec = NULL, Options = NULL)
         if (!is.null(ColSpec$NameInFile)) {
           # NULL & NA is considered as missing
           Missing <- is.na(ColSpec[["NameInFile"]]) | sapply(ColSpec[["NameInFile"]], is.null)
-          ColSpec$NameInFile <- make.names(ColSpec$NameInFile)
           ColSpec$NameInFile[Missing] <- ColSpec$Name[Missing]
+          ColSpec$NameInFile <- make.names(ColSpec$NameInFile)
         }
       }
 
@@ -264,8 +264,8 @@ ModuleImportServer <- function(Id, UiLng = "en", ColSpec = NULL, Options = NULL)
         if (!is.null(ColSpec$NameInFile) && length(ColSpec$NameInFile) > 0L) {
           ColNames <- names(Result)
           WantedNotFound <- setdiff(ColSpec$NameInFile, ColNames)
-          if (length(WantedNotFound) > 0)
-            showNotification(i18n$t("Some requested columns have not been found"))
+          # if (length(WantedNotFound) > 0)
+          #   showNotification(i18n$t("Some requested columns have not been found"))
           #-UnWanted <- setdiff(ColNames, ColSpec$NameInFile) # CURRENTLY NOT USED
         }
 
@@ -283,8 +283,10 @@ ModuleImportServer <- function(Id, UiLng = "en", ColSpec = NULL, Options = NULL)
           input$inpThousandsSep
         )
 
-        df <- DataFrameConvert(RawDataFrame(), ColSpec, LiveOptions(), Preview = FALSE)
-
+        tryCatch(
+          df <- DataFrameConvert(RawDataFrame(), ColSpec, LiveOptions(), Preview = FALSE),
+          error = function(e) shiny::validate(NULL, i18n$t(e$message))
+        )
         return(df)
       }), 2000L)
 
@@ -303,7 +305,7 @@ ModuleImportServer <- function(Id, UiLng = "en", ColSpec = NULL, Options = NULL)
 
         tryCatch(
           df <- DataFrameConvert(RawDataFrame(), ColSpec, LiveOptions(), Preview = TRUE),
-          error = function(e) stop(i18n$t(e))
+          error = function(e) shiny::validate(NULL, i18n$t(e$message))
         )
         df[1,] <- i18n$t(unlist(df[1,]))
 

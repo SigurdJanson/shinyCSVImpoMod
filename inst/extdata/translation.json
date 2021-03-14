@@ -161,6 +161,14 @@
             "ko": "열 구분 기호가 없습니다"
         },
         {
+            "key": "msgConfigurationYieldsEmpty",
+            "de": "Die Konfiguration führt zu keinem Ergebnis",
+            "en": "Configuration yields empty result",
+            "ru": "Kонфигурация вернула пустой результат",
+            "es": "Configuración devolvió un resultado vacío",
+            "ko": "[Configuration yields empty result]"
+        },
+        {
             "key": "Comma",
             "de": "Komma",
             "en": "Comma",

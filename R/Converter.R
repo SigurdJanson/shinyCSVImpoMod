@@ -107,6 +107,7 @@ DataFrameConvert <- function(Df, ColSpec, Options, Preview = FALSE) {
     WantedNFound <- intersect(ColSpec$NameInFile, ColNames) # Best case
     # Filter `Df` to remove un-requested columns
     Df <- Df[, ColNames %in% WantedNFound]
+    if (ncol(Df) == 0) stop("msgConfigurationYieldsEmpty")
 
     # Reorder the requested columns to match the imported CSV
     # - get positions and use na.omit because otherwise, NA would still be in there
