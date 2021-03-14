@@ -9,10 +9,10 @@ shinyApp(
     DataFile <- ModuleImportServer("ProjectDataFile",
                                    UiLng = "en",
                                    ColSpec = list(
-                                     Name = list("Name", "Age", "Date", "Double", "T/F", "Time", "eMoney", "LETTER"),
-                                     NameInFile = list(NA, NULL, "Datum", "GermanFloatingPoint", "Truth", "Time", NA, "Column A"),
-                                     Type = list("character", "integer", "date", "number", "logical", "time", "number", "character"),
-                                     Format = list(NA, NA, "%d.%m.%Y", NA, NA, "%H:%M", NA, NA)
+                                     Name = list("Name", "Age", "Date", "Double", "T/F", "Time", "LETTER"),
+                                     NameInFile = list(NA, NULL, "Datum", "GermanFloatingPoint", "Truth", "Time", "Column A"),
+                                     Type = list("character", "integer", "date", "number", "logical", "time", "character"),
+                                     Format = list(NA, NA, "%d.%m.%Y", NA, NA, "%H:%M", NA)
                                      )
                                    )
 
