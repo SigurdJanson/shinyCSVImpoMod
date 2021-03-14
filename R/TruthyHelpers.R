@@ -2,7 +2,8 @@
 #' @title isTruthyInside tests the truthiness of positions of a vector (while `isTruthy`
 #' tests the vector as a whole)
 #' @param x A vector or list
-#' @return A logical vector for each position indicating `TRUE`/`FALSE`
+#' @return A logical vector for each position indicating `TRUE`/`FALSE`.
+#' Returns `NULL` if operation was not successful.
 #' @export
 #' @examples
 #' isTruthyInside(1:5)

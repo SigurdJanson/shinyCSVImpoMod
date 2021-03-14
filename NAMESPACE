@@ -3,6 +3,7 @@
 export(ImportCSVDemo)
 export(ModuleImportServer)
 export(ModuleImportUI)
+export(PickTruthy)
 export(isTruthyInside)
 export(runExample)
 import(shiny)

@@ -1,3 +1,5 @@
+library(readr)
+
 GetDataFromFile <- function() {
   read.csv(header = TRUE, quote  = "", sep = ";", stringsAsFactors = FALSE,
            colClasses = "character",

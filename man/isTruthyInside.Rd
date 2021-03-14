@@ -11,7 +11,8 @@ isTruthyInside(x)
 \item{x}{A vector or list}
 }
 \value{
-A logical vector for each position indicating \code{TRUE}/\code{FALSE}
+A logical vector for each position indicating \code{TRUE}/\code{FALSE}.
+Returns \code{NULL} if operation was not successful.
 }
 \description{
 isTruthyInside tests the truthiness of positions of a vector (while \code{isTruthy}

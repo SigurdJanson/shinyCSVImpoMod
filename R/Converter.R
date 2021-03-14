@@ -84,12 +84,10 @@ ColumnConvert <- function(Columns, Converter, Format, Locale) {
 
 #' @title Do conversions on a data frame
 #' @param Df A data frame
-#' @param ColSpec
-#' @param Options
 #' @param Preview FALSE (default) returns a working data frame. If `Preview` is `TRUE` or
 #' numeric all columns are character. The number of rows can be changed with `Preview` being
 #' numeric.
-#' @importFrom ModuleImportServer
+#' @inheritParams ModuleImportServer
 #' @return a data frame
 DataFrameConvert <- function(Df, ColSpec, Options, Preview = FALSE) {
   if (missing(Df) || !isTruthy(Df)) stop("Internal module error: data frame is missing")
@@ -138,7 +136,7 @@ DataFrameConvert <- function(Df, ColSpec, Options, Preview = FALSE) {
   #
   if (isFALSE(Preview) && !is.numeric(Preview)) {
     Df <- ColumnConvert(Df, as.list(ColTypes), ColSpec$Format, Locale)
-    if (!(isTruthy(ColSpec) && isTruthyInside(ColSpec))) {
+    if (!(isTruthy(ColSpec) && all(isTruthyInside(ColSpec)))) {
       if (Options$StringsAsFactors) {
         Df[sapply(Df, is.character)] <- lapply(Df[sapply(Df, is.character)], as.factor)
       }
