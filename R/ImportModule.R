@@ -71,8 +71,7 @@ ModuleImportUI <- function(Id) {
 #'         (format specification by [base::strptime()]).}
 #'   \item{Quote}{Character to identify text
 #'         see [utils::read.csv()] argument `quote`}
-#'   \item{StringsAsFactors}{Shall strings be converted to factors (unless
-#'         specified otherwise) (`TRUE`/`FALSE`;
+#'   \item{StringsAsFactors}{Convert all strings to factors (`TRUE`/`FALSE` is default;
 #'         see [utils::read.csv()] argument `stringsAsFactors`).}
 #' }
 #' @return a data frame containing the uploaded CSV file
@@ -302,7 +301,7 @@ ModuleImportServer <- function(Id, UiLng = "en", ColSpec = NULL, Options = NULL)
           need(input$inpDecimalsSep != input$inpThousandsSep, i18n$t("Decimal and thousands separator cannot be equal")),
           need(input$inpThousandsSep, i18n$t("Thousands separator is not valid"))
         )
-browser()
+
         tryCatch(
           df <- DataFrameConvert(RawDataFrame(), ColSpec, LiveOptions(), Preview = TRUE),
           error = function(e) shiny::validate(need(NULL, i18n$t(e$message)))

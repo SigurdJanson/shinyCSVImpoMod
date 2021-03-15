@@ -57,7 +57,7 @@ ColumnConvert <- function(Columns, Converter, Format, Locale) {
           time     = readr::parse_time(Columns[[i]], format = Format_i, locale = Locale),
           datetime = readr::parse_datetime(Columns[[i]], format = Format_i, locale = Locale),
           character= readr::parse_character(Columns[[i]]), # no format required
-          factor   = readr::parse_factor  (Columns[[i]]), # no format required
+          factor   = readr::parse_factor  (Columns[[i]]),  # no format required
           logical  = readr::parse_logical (Columns[[i]], locale = Locale), # locale only
           number   = readr::parse_number  (Columns[[i]], locale = Locale), # locale only
           double   = readr::parse_double  (Columns[[i]], locale = Locale), # locale only
@@ -136,13 +136,24 @@ DataFrameConvert <- function(Df, ColSpec, Options, Preview = FALSE) {
   #
   if (isFALSE(Preview) && !is.numeric(Preview)) {
     Df <- ColumnConvert(Df, as.list(ColTypes), ColSpec$Format, Locale)
-    if (!(isTruthy(ColSpec) && all(isTruthyInside(ColSpec)))) {
-      if (Options$StringsAsFactors) {
-        Df[sapply(Df, is.character)] <- lapply(Df[sapply(Df, is.character)], as.factor)
-      }
-    }
+
+    if (Options$StringsAsFactors)
+      CoerceToFactor <- sapply(Df, is.character)
+    else if (isTruthy(ColSpec) && all(isTruthyInside(ColSpec)))
+      CoerceToFactor <- ColSpec$Type == "factor"
+    else
+      CoerceToFactor <- logical()
+
+    if (length(CoerceToFactor) > 0)
+      for (i in 1:ncol(Df))
+        if (CoerceToFactor[i]) Df[[i]] <- as.factor(Df[[i]])
+
   } else { # Preview
     # Create preview data frame
+    if (Options$StringsAsFactors) {
+      ColTypes <- sapply(ColTypes, USE.NAMES = FALSE,
+                         FUN = function(x) ifelse(x == "character", "factor", x))
+    }
     ColTypesStr <- sprintf("<%s>", ColTypes)
     Df <- rbind(Types = ColTypesStr, Df)
   }

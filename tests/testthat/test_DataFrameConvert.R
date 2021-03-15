@@ -225,6 +225,65 @@ test_that("Variables in different order", {
   obs <- expect_silent(
     DataFrameConvert(Data, ColSpec, .DefaultOptions, Preview = FALSE)
   )
-  expect_identical(names(obs), c("LETTER", "Name", "Age", "Date", "Double", "T/F", "Time")
-)
+  expect_identical(names(obs), c("LETTER", "Name", "Age", "Date", "Double", "T/F", "Time"))
+})
+
+
+
+
+
+# String as Factors ------------------
+test_that("String as Factors: factors specified in ColSpec", {
+  # SETUP
+  ColSpec = list(
+    Name = list("LETTER", "Name", "Age", "Date", "Double", "T/F"),
+    NameInFile = list("Spalte.A", "Name", "Alter", "Datum", "GermanFloatingPoint", "Truth"),
+    Type = list("character", "factor", "integer", "date", "number", "logical"),
+    Format = list(NA, NA, "%d.%m.%Y", NA, NA, NA)
+  )
+
+  # TEST: PREVIEW with Options$StringsAsFActors = FALSE, 2. column is <factor>
+  obs <- expect_silent(
+    DataFrameConvert(GetDataFromFile(), ColSpec, .DefaultOptions, Preview = TRUE)
+  )
+  expect_identical(obs[1, 2], "<factor>")
+
+  # TEST: Options$StringsAsFActors = FALSE, 2. column is <factor>
+  obs <- expect_silent(
+    DataFrameConvert(GetDataFromFile(), ColSpec, .DefaultOptions, Preview = FALSE)
+  )
+  expect_s3_class(obs[[2]], "factor")
+})
+
+
+test_that("String as Factors: factors specified in Options", {
+  # SETUP
+  ColSpec = list(
+    Name = list("LETTER", "Name", "Age", "Date", "Double", "T/F"),
+    NameInFile = list("Spalte.A", "Name", "Alter", "Datum", "GermanFloatingPoint", "Truth"),
+    Type = list("character", "factor", "integer", "date", "number", "logical"),
+    Format = list(NA, NA, "%d.%m.%Y", NA, NA, NA)
+  )
+  Options <- .DefaultOptions
+  Options$StringsAsFactors <- TRUE
+
+  # TEST: PREVIEW with Options$StringsAsFActors = FALSE, 2. column is <factor>
+  obs <- expect_silent(
+    DataFrameConvert(GetDataFromFile(), ColSpec, Options, Preview = TRUE)
+  )
+  expect_type(obs, "list") #  a data frame is a list
+  expect_identical(ncol(obs), length(ColSpec$Name))
+  expect_identical(colnames(obs), unlist(ColSpec$Name))
+  expect_identical(obs[1, 1], "<factor>")
+  expect_identical(obs[1, 2], "<factor>")
+
+  # TEST: Options$StringsAsFActors = FALSE, 2. column is <factor>
+  obs <- expect_silent(
+    DataFrameConvert(GetDataFromFile(), ColSpec, Options, Preview = FALSE)
+  )
+  expect_type(obs, "list") #  a data frame is a list
+  expect_identical(ncol(obs), length(ColSpec$Name))
+  expect_s3_class(obs[[1]], "factor")
+  expect_s3_class(obs[[2]], "factor")
+
 })
