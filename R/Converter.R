@@ -173,16 +173,6 @@ DataFrameConvert <- function(Df, ColSpec, Options, Preview = FALSE) {
 #   Quote = "",
 #   StringsAsFactors = FALSE
 # )
-# ColSpec = list(
-#   Name = list("Name", "Age", "Date", "Double", "T/F", "Time", "LETTER"),
-#   NameInFile = list("Name", "Alter", "Datum", "GermanFloatingPoint", "Truth", "Time", "Spalte.A"),
-#   Type = list("character", "integer", "date", "number", "logical", "time", "character"),
-#   Format = list(NA, NA, "%d.%m.%Y", NA, NA, "%H:%M", NA)
-# )
-# df <- read.csv(system.file("inst", "extdata", "table.csv", package = "shiny.CSVImport"),
-#                header = TRUE, quote  = "", sep = ";", stringsAsFactors = FALSE,
-#                colClasses = "character")
-#
 # df <- read.csv(header = TRUE, quote  = "", sep = ";", stringsAsFactors = FALSE,
 #          colClasses = "character",
 #          text = "Spalte A;Name;Alter;Datum;GermanFloatingPoint;Truth
@@ -197,19 +187,5 @@ DataFrameConvert <- function(Df, ColSpec, Options, Preview = FALSE) {
 #   Type = list("character", "integer", "date", "number", "logical", "time", "character"),
 #   Format = list(NA, NA, "%d.%m.%Y", NA, NA, "%H:%M", NA)
 # )
-# df <- read.csv(file = system.file("extdata", "table.csv", package = "shiny.CSVImport"),
-#                  header = TRUE, quote  = "", sep = ";", stringsAsFactors = FALSE,
-#                  colClasses = "character")
-#
 # DataFrameConvert(df, ColSpec, .Options)
-
-
-
-# df <- read.csv(system.file("inst", "extdata", "table.csv", package = "shiny.CSVImport"),
-#                header = TRUE, quote  = "", sep = ";", stringsAsFactors = FALSE,
-#                colClasses = "character")
-# DataFrameConvert(df)
-
-# df <- ColumnConvert(df, as.list(rep("logical", 6)))
-# df <- ColumnConvert(df, as.list(rep("find", 5)), as.list(rep("^\\d*$", 5)))
 

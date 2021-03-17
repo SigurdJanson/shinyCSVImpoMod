@@ -54,8 +54,7 @@ see \code{\link[utils:read.table]{utils::read.csv()}} argument \code{sep})}
 (format specification by \code{\link[base:strptime]{base::strptime()}}).}
 \item{Quote}{Character to identify text
 see \code{\link[utils:read.table]{utils::read.csv()}} argument \code{quote}}
-\item{StringsAsFactors}{Shall strings be converted to factors (unless
-specified otherwise) (\code{TRUE}/\code{FALSE};
+\item{StringsAsFactors}{Convert all strings to factors (\code{TRUE}/\code{FALSE} is default;
 see \code{\link[utils:read.table]{utils::read.csv()}} argument \code{stringsAsFactors}).}
 }
 }
