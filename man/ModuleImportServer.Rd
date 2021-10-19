@@ -4,16 +4,18 @@
 \alias{ModuleImportServer}
 \title{The server function of the CSV import module}
 \usage{
-ModuleImportServer(Id, UiLng = "en", ColSpec = NULL, Options = NULL)
+ModuleImportServer(Id, UiLng = "en", ColSpec = NULL, Expected = NULL)
 }
 \arguments{
 \item{Id}{Module name space}
 
-\item{UiLng}{Language to be used in the user interface. One of en, de.}
+\item{UiLng}{Language to be used in the user interface.
+One of en, de.}
 
-\item{ColSpec}{A list specifying the columns to import}
+\item{ColSpec}{A list specifying the columns to import.}
 
-\item{Options}{is a list with the basic settings to load the CSV file (see details).}
+\item{Expected}{A list describing the expected CSV format.
+(see details).}
 }
 \value{
 a data frame containing the uploaded CSV file
@@ -28,16 +30,19 @@ The user's data, parsed into a data frame.
 \details{
 \code{ColSpec} must be a named list with the vectors:
 \describe{
-\item{Name}{A list of variable (i.e. column) names that shall replace the
-column heads in the file (character).}
-\item{NameInFile}{A list of column heads in the CSV file (character).}
-\item{Type}{The data types of each variable (character). If no value
-(i.e. falsy values) is given, it will be guessed.}
-\item{Format}{An additional format specification (character). That
-is supported by "datetime", "date", and "time". If none is given
-the \code{Options} are used. "find" and "regexfind" types demand a format.}
+\item{Name}{A list of variable (i.e. column) names
+that shall replace the column heads in the file (character).}
+\item{NameInFile}{A list of column heads in the CSV
+file (character).}
+\item{Type}{The data types of each variable (character).
+If no value (i.e. falsy values) is given, it will be
+guessed.}
+\item{Format}{An additional format specification (character).
+That is supported by "datetime", "date", and "time". If none
+is given the \code{Expected} options are used. "find" and "regexfind" types
+demand a format.}
 }
-\code{Options} can have these fields:
+\code{Expected} can have these fields:
 \describe{
 \item{LangCode}{Language code (e.g. "de" or "en)}
 \item{Header}{Does the CSV file have a header? (\code{TRUE} (default)/\code{FALSE};

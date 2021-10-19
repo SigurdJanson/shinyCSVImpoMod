@@ -4,14 +4,15 @@
 \alias{DataFrameConvert}
 \title{Do conversions on a data frame}
 \usage{
-DataFrameConvert(Df, ColSpec, Options, Preview = FALSE)
+DataFrameConvert(Df, ColSpec, Expected, Preview = FALSE)
 }
 \arguments{
 \item{Df}{A data frame}
 
-\item{ColSpec}{A list specifying the columns to import}
+\item{ColSpec}{A list specifying the columns to import.}
 
-\item{Options}{is a list with the basic settings to load the CSV file (see details).}
+\item{Expected}{A list describing the expected CSV format.
+(see details).}
 
 \item{Preview}{FALSE (default) returns a working data frame. If \code{Preview} is \code{TRUE} or
 numeric all columns are character. The number of rows can be changed with \code{Preview} being
