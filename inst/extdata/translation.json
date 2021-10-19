@@ -168,7 +168,39 @@
             "es": "Configuración devolvió un resultado vacío",
             "ko": "[Configuration yields empty result]"
         },
+        { /*Converter.R*/
+            "key": "Internal module error: data frame is missing",
+            "de": "Interner Fehler im Modul: data frame fehlt",
+            "en": "Internal module error: data frame is missing",
+            "ru": "[Internal module error: data frame is missing]",
+            "es": "[Internal module error: data frame is missing]",
+            "ko": "[Internal module error: data frame is missing]"
+        },
         {
+            "key": "Internal module error: column specification is missing",
+            "de": "Interner Fehler im Modul: Spalten sind nicht spezifiert",
+            "en": "Internal module error: column specification is missing",
+            "ru": "[Internal module error: column specification is missing]",
+            "es": "[Internal module error: column specification is missing]",
+            "ko": "[Internal module error: column specification is missing]"
+        },
+        {
+            "key": "Internal module error: Locale options are missing",
+            "de": "Interner Fehler im Modul: Locale fehlt",
+            "en": "Internal module error: Locale options are missing",
+            "ru": "[Internal module error: Locale options are missing]",
+            "es": "[Internal module error: Locale options are missing]",
+            "ko": "[Internal module error: Locale options are missing]"
+        },
+        {
+            "key": "Internal module error: 'NameInFile' must be specified",
+            "de": "Interner Fehler im Modul: 'NameInFile' muss angegeben sein",
+            "en": "Internal module error: 'NameInFile' must be specified",
+            "ru": "[Internal module error: 'NameInFile' must be specified]",
+            "es": "[Internal module error: 'NameInFile' must be specified]",
+            "ko": "[Internal module error: 'NameInFile' must be specified]"
+        },
+        { /* General */
             "key": "Comma",
             "de": "Komma",
             "en": "Comma",
