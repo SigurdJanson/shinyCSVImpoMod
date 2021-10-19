@@ -92,7 +92,7 @@ ModuleImportServer <- function(Id, UiLng = "en", ColSpec = NULL, Expected = NULL
       stop("Invalid column specification: length mismatch")
   if (!is.null(Expected))
     if(anyNA(match(names(Expected), names(.DefaultOptions))))
-      stop("Invalid option specification: unknown fields in options structure")
+      stop("Invalid specification of expected format: unknown fields in data structure")
 
   # SETUP MODULE SERVER
   moduleServer(
@@ -147,6 +147,7 @@ ModuleImportServer <- function(Id, UiLng = "en", ColSpec = NULL, Expected = NULL
             ))
         )
       })
+
 
       output$uiGlobalSettings <- renderUI({
         # Setup selection choices
@@ -244,13 +245,12 @@ ModuleImportServer <- function(Id, UiLng = "en", ColSpec = NULL, Expected = NULL
 
       LiveOptions <- reactive({
         Result <- Expected
-        if (isTruthy(input$inpHeader))      Result[["Header"]] <- input$inpHeader
-        if (isTruthy(input$inpColSep))      Result[["ColSep"]] <- input$inpColSep
-        if (isTruthy(input$inpThousandsSep))Result[["ThousandsSep"]] <- input$inpThousandsSep
-        if (isTruthy(input$inpDecimalsSep)) Result[["DecimalsSep"]] <- input$inpDecimalsSep
-        if (isTruthy(input$inpDateFormat))  Result[["DateFormat"]] <- input$inpDateFormat
-        if (isTruthy(input$inpTimeFormat))  Result[["TimeFormat"]] <- input$inpTimeFormat
-        if (isTruthy(input$inpQuote))       Result[["Quote"]] <- input$inpQuote
+        for (inp in c("Header", "ColSep", "ThousandsSep", "DecimalsSep",
+                    "DateFormat", "TimeFormat", "Quote")) {
+          if (isTruthy(input[[paste0("inp", inp)]])) {
+            Result[[inp]] <- input[[paste0("inp", inp)]]
+          }
+        }
         #Result[["StringsAsFactors"]] # No user at the moment setting
         return(Result)
       })
