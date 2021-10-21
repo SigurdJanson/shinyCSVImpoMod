@@ -5,18 +5,6 @@ library(readr)
 
 
 
-.DefaultOptions <- list(
-  LangCode = "en",
-  Header = TRUE,
-  ColSep = " ",
-  ThousandsSep = ",",
-  DecimalsSep = ".",
-  DateFormat = "%Y-%m-%d", # strptime() default
-  TimeFormat = "%H:%M:%S", # strptime() default
-  Quote = "",
-  StringsAsFactors = FALSE
-)
-
 
 #' @title The UI function of the CSV import module
 #' @param Id Module namespace to be set by by caller
@@ -39,11 +27,11 @@ ModuleImportUI <- function(Id) {
 
 #' @title The server function of the CSV import module
 #' @param Id Module name space
-#' @param UiLng Language to be used in the user interface.
-#' One of en, de.
 #' @param ColSpec A list specifying the columns to import.
 #' @param Expected A list describing the expected CSV format.
 #' (see details).
+#' @param Options Use `Options$UILang` for the language
+#' in the user interface (allowed values: "en", "de").
 #' @details
 #' `ColSpec` must be a named list with the vectors:
 #' \describe{
@@ -84,52 +72,45 @@ ModuleImportUI <- function(Id) {
 #' @importFrom shinyjs disabled
 #' @importFrom utils head read.csv
 #' @importFrom readr default_locale locale
-ModuleImportServer <- function(Id, ColSpec = NULL, Expected = NULL, UiLng = "en") {
-  # PRECONDITIONS
-  if (!is.null(ColSpec))
-    if (length(unique(sapply(ColSpec, length))) != 1L)
-      stop("Invalid column specification: length mismatch")
-  if (!is.null(Expected))
-    if(anyNA(match(names(Expected), names(.DefaultOptions))))
-      stop("Invalid specification of expected format: unknown fields in data structure")
+ModuleImportServer <- function(Id, ColSpec = NULL, Expected = NULL, Options = NULL) {
+
+  # COLUMNS SPECIFICATION
+  tryCatch(
+    ColSpec <- VerifyColSpecFormat(ColSpec),
+    error = function(e) e,
+    warning = function(w) w
+  )
+
+  # EXPECTED DEFAULTS (column separator, date/time and number formats)
+  tryCatch(
+    Expected <- VerifyExpectedFormat(Expected),
+    error = function(e) e,
+    warning = function(w) w
+  )
+
+  # I18N
+  i18n <- shiny.i18n::Translator$new(
+    translation_json_path = system.file("extdata", "translation.json",
+                                        package = "shiny.CSVImport"))
+
+  # MODULE OPTIONS
+  tryCatch(
+    Options <- VerifyNSetupOptions(Options, i18n),
+    error = function(e) e,
+    warning = function(w) w
+  )
+
 
   # SETUP MODULE SERVER
-  moduleServer(
-    Id,
+  moduleServer(Id,
 
     function(input, output, session) {
-    #
-    # SETUP -----------------
+      #
+      # SETUP -----------------
       ns <- NS(Id) # set up name space
 
-      # setup translator (if language isn't available, default is en)
-      i18n <- shiny.i18n::Translator$new(translation_json_path =
-                                           system.file("extdata", "translation.json", package = "shiny.CSVImport"))
-      UiLng <- ifelse(UiLng %in% i18n$get_languages(), UiLng, "en")
-      i18n$set_translation_language(UiLng)
-
       #
-      if (is.null(Expected)) {
-        Expected <- .DefaultOptions
-      }
-
-      # Make sure that `NameInFile` are syntactically valid and ...
-      # that all missings are replaced by `Name`
-      if (!is.null(ColSpec)) {
-        # if column spec exists, override
-        Expected$Header <- TRUE
-
-        if (isTruthy(ColSpec$NameInFile)) {
-          # NULL & NA is considered as missing
-          Missing <- !isTruthyInside(ColSpec[["NameInFile"]])
-          ColSpec$NameInFile[Missing] <- ColSpec$Name[Missing]
-          ColSpec$NameInFile <- as.list(make.names(ColSpec$NameInFile))
-        }
-      }
-
-
-    #
-    # UI -----------------
+      # UI -----------------
       output$uiFileInput <- renderUI({
         tagList(
           fluidRow(
