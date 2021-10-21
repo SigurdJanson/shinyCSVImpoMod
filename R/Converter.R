@@ -21,46 +21,61 @@ GuessColumnTypes <- function(Data, Locale = "de-DE") {
 }
 
 
-#' @title Convert columns of a data frame from character to their desired type
+#' @title ColumnConvert
+#' @description
+#' Convert columns of a data frame to their desired types. Columns in
+#' source data frame are all of type `character`.
+#'
 #' @param Columns A data frame with columns to cast types
 #' @param Converter A list (see details)
 #' @param Format A list of formats (see details)
 #' @param Locale A locale that can be used in case format is missing
 #' @details
 #' Valid converters: date, time, datetime, character, factor, logical, number,
-#' double, integer. `NULL` drops a column. Everything else will be
-#' guessed by [`readr::parse_guess()`].
+#' double, integer. Long and short names are allowed (see [`vroom::cols()`].
+#'
+#' `NULL` drops a column. Everything else will be  guessed by [`readr::parse_guess()`].
 #'
 #' The types date, time, and datetime **support** a `Format` specification.
 #' If none is available the `Locale` is used.
 #' @return a data frame with changed column data types
-ColumnConvert <- function(Columns, Converter, Format, Locale) {
-  if (!is.data.frame(Columns)) stop("Invalid type of 'Columns' data")
-  if (!is.list(Converter)) stop("Invalid type of 'Converter' data")
-  if (!missing(Format) && !is.null(Format) && !is.list(Format)) stop("Invalid type of 'Format' data")
+ColumnConvert <- function(Data, Converter, Format, Locale) {
+  if (!is.data.frame(Data))
+    stop("Invalid type of 'Columns' data")
+  if (!is.list(Converter))
+    stop("Invalid type of 'Converter' data")
+  if (!missing(Format) && !is.null(Format) && !is.list(Format))
+    stop("Invalid type of 'Format' data")
+
   if (missing(Format)) Format <- NULL
   if (missing(Locale)) Locale <- default_locale()
 
+  # Parse formats to get unambiguous strings
+  Converter[sapply(Converter, is.null)] <- "skip" # replace NULL with string
+  .Cnvrt <- vroom::as.col_spec(Converter) # return object of class `col_spec`
+  .Cnvrt <- sapply(.Cnvrt$cols, function(i) class(i)[[1]])
+  .Cnvrt <- substr(.Cnvrt, nchar("collector_")+1, 99) # remove leading "collector_"
+
   Col2Drop <- integer()
 
-  for (i in 1:length(Columns)) {
-    if (is.null(Converter[[i]])) {
+  for (i in 1:length(Data)) { # use length instead of `ncol` because of performance
+    if (.Cnvrt[i] == "skip") {
       Col2Drop <- c(Col2Drop, i)
     } else {
       Format_i <- ifelse(isTruthy(Format[[i]]), Format[[i]], "")
       suppressWarnings({
-        Columns[[i]] <- switch(
-          Converter[[i]],
-          date     = readr::parse_date(Columns[[i]], format = Format_i, locale = Locale),
-          time     = readr::parse_time(Columns[[i]], format = Format_i, locale = Locale),
-          datetime = readr::parse_datetime(Columns[[i]], format = Format_i, locale = Locale),
-          character= readr::parse_character(Columns[[i]]), # no format required
-          factor   = readr::parse_factor  (Columns[[i]]),  # no format required
-          logical  = readr::parse_logical (Columns[[i]], locale = Locale), # locale only
-          number   = readr::parse_number  (Columns[[i]], locale = Locale), # locale only
-          double   = readr::parse_double  (Columns[[i]], locale = Locale), # locale only
-          integer  = readr::parse_integer (Columns[[i]], locale = Locale), # locale only
-          readr::parse_guess(Columns[[i]], locale = Locale)
+        Data[[i]] <- switch(
+          .Cnvrt[i],
+          date     = readr::parse_date(Data[[i]], format = Format_i, locale = Locale),
+          time     = readr::parse_time(Data[[i]], format = Format_i, locale = Locale),
+          datetime = readr::parse_datetime(Data[[i]], format = Format_i, locale = Locale),
+          character= readr::parse_character(Data[[i]]), # no format required
+          factor   = readr::parse_factor  (Data[[i]]),  # no format required
+          logical  = readr::parse_logical (Data[[i]], locale = Locale), # locale only
+          number   = readr::parse_number  (Data[[i]], locale = Locale), # locale only
+          double   = readr::parse_double  (Data[[i]], locale = Locale), # locale only
+          integer  = readr::parse_integer (Data[[i]], locale = Locale), # locale only
+          readr::parse_guess(Data[[i]], locale = Locale)
         )
       })
     }
@@ -68,10 +83,10 @@ ColumnConvert <- function(Columns, Converter, Format, Locale) {
 
   if (length(Col2Drop) > 0)
     for(i in length(Col2Drop):1) { # move backwards
-      Columns[[ Col2Drop[i] ]] <- NULL
+      Data[[ Col2Drop[i] ]] <- NULL
     }
 
-  return(Columns)
+  return(Data)
 }
 
 
