@@ -28,13 +28,11 @@ GuessColumnTypes <- function(Data, Locale = "de-DE") {
 #' @param Locale A locale that can be used in case format is missing
 #' @details
 #' Valid converters: date, time, datetime, character, factor, logical, number,
-#' double, integer, find, regexfind. `NULL` drops a column. Everything else will be
+#' double, integer. `NULL` drops a column. Everything else will be
 #' guessed by [`readr::parse_guess()`].
 #'
-#' The types date, time, and datetime **support** a `Format` specification. If none is available
-#' the `Locale` is used.
-#'
-#' The types "find" and "regexfind" **require** a `Format` specification.
+#' The types date, time, and datetime **support** a `Format` specification.
+#' If none is available the `Locale` is used.
 #' @return a data frame with changed column data types
 ColumnConvert <- function(Columns, Converter, Format, Locale) {
   if (!is.data.frame(Columns)) stop("Invalid type of 'Columns' data")
@@ -62,8 +60,6 @@ ColumnConvert <- function(Columns, Converter, Format, Locale) {
           number   = readr::parse_number  (Columns[[i]], locale = Locale), # locale only
           double   = readr::parse_double  (Columns[[i]], locale = Locale), # locale only
           integer  = readr::parse_integer (Columns[[i]], locale = Locale), # locale only
-          find     = grepl(Format_i, Columns[[i]], fixed = TRUE),
-          regexfind = grepl(Format_i, Columns[[i]], perl = TRUE),
           readr::parse_guess(Columns[[i]], locale = Locale)
         )
       })

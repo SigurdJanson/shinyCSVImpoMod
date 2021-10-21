@@ -26,58 +26,6 @@ test_that("Success Case: numeric (double, integer)", {
 
 
 
-test_that("Success Case: find", {
-  # SETUP
-  df <- GetDataFromFile()
-  NCol <- ncol(df)
-
-  # FIND COLUMNS CONTAINING DIGITS (%d)
-  CanBeFound <- c(FALSE, FALSE, FALSE, TRUE, TRUE, FALSE)
-  expect_silent( df <- ColumnConvert(df, as.list(rep("find", NCol)), as.list(rep(".", NCol))) )
-  expect_type(df, "list")
-  expect_s3_class(df, "data.frame")
-  for (i in 1:NCol) {
-    if (!CanBeFound[i])
-      expect_identical(df[[i]], rep(CanBeFound[i], nrow(df)), info = paste0("Column", i))
-    else
-      if (i == 4)
-        expect_identical(df[[i]], rep(CanBeFound[i], nrow(df)), info = paste0("Column", i))
-      else
-        expect_identical(df[[i]], c(TRUE, FALSE, TRUE), info = paste0("Column", i))
-  }
-})
-
-
-
-test_that("Success Case: regexfind", {
-  # SETUP
-  df <- GetDataFromFile()
-  NCol <- ncol(df)
-
-  # FIND COLUMNS CONTAINING DIGITS (%d)
-  Expected <- c(FALSE, FALSE, TRUE, TRUE, TRUE, FALSE)
-  expect_silent( df <- ColumnConvert(df, as.list(rep("regexfind", NCol)), as.list(rep("\\d", NCol))) )
-  expect_type(df, "list")
-  expect_s3_class(df, "data.frame")
-  for (i in 1:NCol)
-    expect_identical(df[[i]], rep(Expected[i], nrow(df)), info = paste0("Column", i))
-
-
-  # SETUP
-  df <- GetDataFromFile()
-  NCol <- ncol(df)
-
-  # FIND COLUMNS CONTAINING only DIGITS (^%d$)
-  Expected <- c(FALSE, FALSE, TRUE, FALSE, FALSE, FALSE)
-  expect_silent( df <- ColumnConvert(df, as.list(rep("regexfind", NCol)), as.list(rep("^\\d*$", NCol))) )
-  expect_type(df, "list")
-  expect_s3_class(df, "data.frame")
-  for (i in 1:NCol)
-    expect_identical(df[[i]], rep(Expected[i], nrow(df)), info = paste0("Column", i))
-
-})
-
-
 
 test_that("Success Case: factor", {
   # SETUP

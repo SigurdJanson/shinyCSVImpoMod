@@ -56,8 +56,7 @@ ModuleImportUI <- function(Id) {
 #'   guessed.}
 #'   \item{Format}{An additional format specification (character).
 #'   That is supported by "datetime", "date", and "time". If none
-#'   is given the `Expected` options are used. "find" and "regexfind" types
-#'   demand a format.}
+#'   is given the `Expected` options are used.}
 #' }
 #' `Expected` can have these fields:
 #' \describe{
