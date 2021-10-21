@@ -84,7 +84,7 @@ ModuleImportUI <- function(Id) {
 #' @importFrom shinyjs disabled
 #' @importFrom utils head read.csv
 #' @importFrom readr default_locale locale
-ModuleImportServer <- function(Id, UiLng = "en", ColSpec = NULL, Expected = NULL) {
+ModuleImportServer <- function(Id, ColSpec = NULL, Expected = NULL, UiLng = "en") {
   # PRECONDITIONS
   if (!is.null(ColSpec))
     if (length(unique(sapply(ColSpec, length))) != 1L)
