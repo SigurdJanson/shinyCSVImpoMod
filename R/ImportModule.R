@@ -139,7 +139,7 @@ ModuleImportServer <- function(Id, UiLng = "en", ColSpec = NULL, Expected = NULL
             ),
             column(
               fileInput(ns("inpImportData"), i18n$t("lblDataImport"),
-                        accept = c("text/csv", ".csv"),
+                        accept = c("text/csv", ".csv", ".txt"),
                         buttonLabel = i18n$t("btnBrowse"),
                         placeholder = i18n$t("lblFilePlaceholder"),
                         width = "100%"),
@@ -242,6 +242,19 @@ ModuleImportServer <- function(Id, UiLng = "en", ColSpec = NULL, Expected = NULL
 
     #
     # SERVER -------------
+      LiveColSpec <- eventReactive(
+        input$inpImportData,
+        {
+          if (isTruthy(ColSpec))
+            return(ColSpec)
+          else {
+            # input$inpImportData$datapath
+            # df <- Read with vroom
+            # vroom::spec(df)
+            #
+          }
+        }, ignoreInit  = TRUE)
+
 
       LiveOptions <- reactive({
         Result <- Expected
@@ -251,7 +264,7 @@ ModuleImportServer <- function(Id, UiLng = "en", ColSpec = NULL, Expected = NULL
             Result[[inp]] <- input[[paste0("inp", inp)]]
           }
         }
-        #Result[["StringsAsFactors"]] # No user at the moment setting
+        #Result[["StringsAsFactors"]] # Not used at the moment setting
         return(Result)
       })
 
