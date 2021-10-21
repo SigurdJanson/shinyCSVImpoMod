@@ -119,7 +119,7 @@ DataFrameConvert <- function(Df, ColSpec, Expected, Preview = FALSE) {
     Positions <- match(WantedNFound, ColSpec$NameInFile) #as.vector(na.omit(match(ColSpec$NameInFile, WantedNFound)))
     # - filter
     ColSpec$Name <- ColSpec$Name[Positions]
-    ColSpec$NameInFile <- ColSpec$NameInFile[Positions] #FEHLER HIER
+    ColSpec$NameInFile <- ColSpec$NameInFile[Positions] #TODO: FEHLER HIER
     ColSpec$Type <- ColSpec$Type[Positions]
     ColSpec$Format <- ColSpec$Format[Positions]
 
@@ -135,7 +135,8 @@ DataFrameConvert <- function(Df, ColSpec, Expected, Preview = FALSE) {
                    grouping_mark = PickTruthy(Expected$ThousandsSep, ","),
                    tz = "UTC", encoding = "UTF-8", asciify = FALSE)
   ColTypes <- GuessColumnTypes(Df, Locale)
-  if (isTruthy(ColSpec$Type)) { # pre-specified types take precedence over guessed type
+  # Pre-specified types take precedence over guessed type
+  if (isTruthy(ColSpec$Type)) {
     ColTypes <- replace(ColSpec$Type, !isTruthyInside(ColSpec$Type), ColTypes)
   }
 
@@ -156,7 +157,7 @@ DataFrameConvert <- function(Df, ColSpec, Expected, Preview = FALSE) {
 
   } else { # Preview
     # Create preview data frame
-    if (Expected$StringsAsFactors) {
+    if (isTRUE(Expected$StringsAsFactors)) {
       ColTypes <- sapply(ColTypes, USE.NAMES = FALSE,
                          FUN = function(x) ifelse(x == "character", "factor", x))
     }
