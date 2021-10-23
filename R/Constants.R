@@ -1,0 +1,3 @@
+# CONSTANTS
+
+.ImportMaxCol = 999
