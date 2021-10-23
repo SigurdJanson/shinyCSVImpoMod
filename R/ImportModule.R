@@ -1,8 +1,8 @@
 library(shiny)
 library(shiny.i18n)
 library(shinyjs)
+library(vroom)
 library(readr)
-
 
 
 
@@ -72,7 +72,8 @@ ModuleImportUI <- function(Id) {
 #' @importFrom shinyjs disabled
 #' @importFrom utils head read.csv
 #' @importFrom readr default_locale locale
-ModuleImportServer <- function(Id, ColSpec = NULL, Expected = NULL, Options = NULL) {
+ModuleImportServer <- function(Id,
+                               ColSpec = NULL, Expected = NULL, Options = NULL) {
 
   # COLUMNS SPECIFICATION
   tryCatch(
@@ -258,19 +259,24 @@ ModuleImportServer <- function(Id, ColSpec = NULL, Expected = NULL, Options = NU
 
         Result <- NULL
         tryCatch(
-          Result <- read.csv(input$inpImportData$datapath,
-                             header = LiveOptions()$Header,
-                             quote  = LiveOptions()$Quote,
-                             sep    = LiveOptions()$ColSep,
-                             stringsAsFactors = FALSE,
-                             colClasses = "character",
-                             encoding = "UTF-8"),
+          # Result <- read.csv(input$inpImportData$datapath,
+          #                    header = LiveOptions()$Header,
+          #                    quote  = LiveOptions()$Quote,
+          #                    sep    = LiveOptions()$ColSep,
+          #                    stringsAsFactors = FALSE,
+          #                    colClasses = "character",
+          #                    encoding = "UTF-8"),
+          Result <- PeekIntoFile(input$inpImportData$datapath,
+                                  col_names = LiveOptions()$Header,
+                                  quote  = LiveOptions()$Quote,
+                                  delim  = LiveOptions()$ColSep,
+                                  col_types = paste0(rep("c", .ImportMaxCol))),
           error = function(e) Result <<- e$message,
           warning = function(w) Result <<- w$message
         )
 
         # check if all requested variables are there
-        if (!is.null(ColSpec$NameInFile) && length(ColSpec$NameInFile) > 0L) {
+        if (isTruthy(ColSpec$NameInFile) && length(ColSpec$NameInFile) > 0L) {
           ColNames <- names(Result)
           WantedNotFound <- setdiff(ColSpec$NameInFile, ColNames)
           # if (length(WantedNotFound) > 0)

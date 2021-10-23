@@ -4,18 +4,18 @@
 \alias{ModuleImportServer}
 \title{The server function of the CSV import module}
 \usage{
-ModuleImportServer(Id, UiLng = "en", ColSpec = NULL, Expected = NULL)
+ModuleImportServer(Id, ColSpec = NULL, Expected = NULL, Options = NULL)
 }
 \arguments{
 \item{Id}{Module name space}
-
-\item{UiLng}{Language to be used in the user interface.
-One of en, de.}
 
 \item{ColSpec}{A list specifying the columns to import.}
 
 \item{Expected}{A list describing the expected CSV format.
 (see details).}
+
+\item{Options}{Use \code{Options$UILang} for the language
+in the user interface (allowed values: "en", "de").}
 }
 \value{
 a data frame containing the uploaded CSV file
@@ -39,8 +39,7 @@ If no value (i.e. falsy values) is given, it will be
 guessed.}
 \item{Format}{An additional format specification (character).
 That is supported by "datetime", "date", and "time". If none
-is given the \code{Expected} options are used. "find" and "regexfind" types
-demand a format.}
+is given the \code{Expected} options are used.}
 }
 \code{Expected} can have these fields:
 \describe{

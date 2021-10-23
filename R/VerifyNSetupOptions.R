@@ -1,7 +1,7 @@
 
 
 
-VerifyOptions <- function(Options, I18n) {
+VerifyNSetupOptions <- function(Options, I18n) {
   if (is.null(Options)) {
     Options$UILang <- "en"
   }
