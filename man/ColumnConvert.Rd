@@ -2,12 +2,12 @@
 % Please edit documentation in R/Converter.R
 \name{ColumnConvert}
 \alias{ColumnConvert}
-\title{Convert columns of a data frame from character to their desired type}
+\title{ColumnConvert}
 \usage{
-ColumnConvert(Columns, Converter, Format, Locale)
+ColumnConvert(Data, Converter, Format, Locale)
 }
 \arguments{
-\item{Columns}{A data frame with columns to cast types}
+\item{Data}{A data frame with columns to cast types}
 
 \item{Converter}{A list (see details)}
 
@@ -19,15 +19,15 @@ ColumnConvert(Columns, Converter, Format, Locale)
 a data frame with changed column data types
 }
 \description{
-Convert columns of a data frame from character to their desired type
+Convert columns of a data frame to their desired types. Columns in
+source data frame are all of type \code{character}.
 }
 \details{
 Valid converters: date, time, datetime, character, factor, logical, number,
-double, integer, find, regexfind. \code{NULL} drops a column. Everything else will be
-guessed by \code{\link[readr:parse_guess]{readr::parse_guess()}}.
+double, integer. Long and short names are allowed (see \code{\link[vroom:cols]{vroom::cols()}}.
 
-The types date, time, and datetime \strong{support} a \code{Format} specification. If none is available
-the \code{Locale} is used.
+\code{NULL} drops a column. Everything else will be  guessed by \code{\link[readr:parse_guess]{readr::parse_guess()}}.
 
-The types "find" and "regexfind" \strong{require} a \code{Format} specification.
+The types date, time, and datetime \strong{support} a \code{Format} specification.
+If none is available the \code{Locale} is used.
 }

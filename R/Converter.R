@@ -2,7 +2,7 @@
 # shiny CSV import module
 #
 library(shiny)
-library(readr) # takes care of l10n issues
+library(readr)
 
 
 #' @title Guess all column types of a data frame from character data
@@ -26,7 +26,7 @@ GuessColumnTypes <- function(Data, Locale = "de-DE") {
 #' Convert columns of a data frame to their desired types. Columns in
 #' source data frame are all of type `character`.
 #'
-#' @param Columns A data frame with columns to cast types
+#' @param Data A data frame with columns to cast types
 #' @param Converter A list (see details)
 #' @param Format A list of formats (see details)
 #' @param Locale A locale that can be used in case format is missing
@@ -81,6 +81,7 @@ ColumnConvert <- function(Data, Converter, Format, Locale) {
     }
   }
 
+  # Remove skipped columns
   if (length(Col2Drop) > 0)
     for(i in length(Col2Drop):1) { # move backwards
       Data[[ Col2Drop[i] ]] <- NULL
