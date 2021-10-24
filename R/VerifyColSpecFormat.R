@@ -7,9 +7,9 @@ lengthAllEqual <- function(x)
 
 #' VerifyColSpecFormat
 #'
-#' @param ColSpec A column specification. Either an object of class `col_spec`
-#'
-#' @return A column specification in the format of a `col_spec` class.
+#' @param ColSpec A column specification.
+#' @return A valid column specification in the format of a `col_spec`
+#' class that the import module can handle.
 #' @seealso [readr::cols_condense()]
 #' @examples
 VerifyColSpecFormat <- function(ColSpec) {
@@ -17,21 +17,24 @@ VerifyColSpecFormat <- function(ColSpec) {
 }
 
 
-
+#' @describeIn VerifyColSpecFormat
 VerifyColSpecFormat.default <- function(ColSpec)
   stop("Unknown format of column specification")
 
 
+#' @describeIn VerifyColSpecFormat
 VerifyColSpecFormat.col_spec <- function(ColSpec) {
   return(ColSpec)
 }
 
 
+#' @describeIn VerifyColSpecFormat
 VerifyColSpecFormat.tbl_df <- function(ColSpec) {
   ColSpec <- vroom::spec(ColSpec)
   return(ColSpec)
 }
 
+#' @describeIn VerifyColSpecFormat
 VerifyColSpecFormat.list <- function(ColSpec) {
   if(names(ColSpec) == ColumnSpecificationListNames) {
     # (Sub-) lists aren't of equal length
