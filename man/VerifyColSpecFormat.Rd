@@ -2,19 +2,46 @@
 % Please edit documentation in R/VerifyColSpecFormat.R
 \name{VerifyColSpecFormat}
 \alias{VerifyColSpecFormat}
+\alias{VerifyColSpecFormat.default}
+\alias{VerifyColSpecFormat.col_spec}
+\alias{VerifyColSpecFormat.tbl_df}
+\alias{VerifyColSpecFormat.list}
 \title{VerifyColSpecFormat}
 \usage{
 VerifyColSpecFormat(ColSpec)
+
+\method{VerifyColSpecFormat}{default}(ColSpec)
+
+\method{VerifyColSpecFormat}{col_spec}(ColSpec)
+
+\method{VerifyColSpecFormat}{tbl_df}(ColSpec)
+
+\method{VerifyColSpecFormat}{list}(ColSpec)
 }
 \arguments{
-\item{ColSpec}{A column specification. Either an object of class \code{col_spec}}
+\item{ColSpec}{A column specification.}
 }
 \value{
-A column specification in the format of a \code{col_spec} class.
+A valid column specification in the format of a \code{col_spec}
+class that the import module can handle.
 }
 \description{
 VerifyColSpecFormat
 }
+\section{Methods (by class)}{
+\itemize{
+\item \code{default}: Default method throws an error
+to ignore unspecified data types.
+
+\item \code{col_spec}: Handle \code{col_spec} objects and simply returns
+the object itself.
+
+\item \code{tbl_df}: Specific method to handle \code{tibble} objects.
+
+\item \code{list}: Specific method to handle \code{list}s.
+It converts the information from the list into a valid \code{col_spec} object.
+}}
+
 \seealso{
 \code{\link[readr:spec]{readr::cols_condense()}}
 }

@@ -11,30 +11,32 @@ lengthAllEqual <- function(x)
 #' @return A valid column specification in the format of a `col_spec`
 #' class that the import module can handle.
 #' @seealso [readr::cols_condense()]
-#' @examples
 VerifyColSpecFormat <- function(ColSpec) {
   UseMethod("VerifyColSpecFormat")
 }
 
 
-#' @describeIn VerifyColSpecFormat
+#' @describeIn VerifyColSpecFormat Default method throws an error
+#' to ignore unspecified data types.
 VerifyColSpecFormat.default <- function(ColSpec)
   stop("Unknown format of column specification")
 
 
-#' @describeIn VerifyColSpecFormat
+#' @describeIn VerifyColSpecFormat Handle `col_spec` objects and simply returns
+#' the object itself.
 VerifyColSpecFormat.col_spec <- function(ColSpec) {
   return(ColSpec)
 }
 
 
-#' @describeIn VerifyColSpecFormat
+#' @describeIn VerifyColSpecFormat Specific method to handle `tibble` objects.
 VerifyColSpecFormat.tbl_df <- function(ColSpec) {
   ColSpec <- vroom::spec(ColSpec)
   return(ColSpec)
 }
 
-#' @describeIn VerifyColSpecFormat
+#' @describeIn VerifyColSpecFormat Specific method to handle `list`s.
+#' It converts the information from the list into a valid `col_spec` object.
 VerifyColSpecFormat.list <- function(ColSpec) {
   if(names(ColSpec) == ColumnSpecificationListNames) {
     # (Sub-) lists aren't of equal length
