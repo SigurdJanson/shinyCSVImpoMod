@@ -1,7 +1,9 @@
 shinyApp(
   fluidPage(
     title = "CSV Import Sample App",
-    ModuleImportUI("ProjectDataFile"),
+    wellPanel(
+      ModuleImportUI("ProjectDataFile")
+    ),
     h3("Example App Preview"),
     tableOutput("AppOutputTest")
   ),
