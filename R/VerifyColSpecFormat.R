@@ -12,7 +12,7 @@ lengthAllEqual <- function(x)
 #' class that the import module can handle.
 #' @seealso [readr::cols_condense()]
 VerifyColSpecFormat <- function(ColSpec) {
-  UseMethod("VerifyColSpecFormat")
+  UseMethod("VerifyColSpecFormat", ColSpec)
 }
 
 
@@ -35,29 +35,31 @@ VerifyColSpecFormat.tbl_df <- function(ColSpec) {
   return(ColSpec)
 }
 
+
 #' @describeIn VerifyColSpecFormat Specific method to handle `list`s.
 #' It converts the information from the list into a valid `col_spec` object.
 VerifyColSpecFormat.list <- function(ColSpec) {
-  if(names(ColSpec) == ColumnSpecificationListNames) {
-    # (Sub-) lists aren't of equal length
-    if (!lengthAllEqual(ColSpec))
-      stop("Specification suggest an ambiguous number of columns")
 
-    # Make sure that `NameInFile` are syntactically valid and ...
-    # that all missings are replaced by `Name`
-    if (isTruthy(ColSpec$NameInFile)) {
-      # NULL & NA is considered as missing
-      Missing <- !isTruthyInside(ColSpec[["NameInFile"]])
-      ColSpec$NameInFile[Missing] <- ColSpec$Name[Missing]
-      ColSpec$NameInFile <- as.list(make.names(ColSpec$NameInFile))
-    }
-
-    # Convert from list spec
-    .ColSpec <- ColSpec$Type
-    names(.ColSpec) <- ColSpec$NameInFile
-    ColSpec <- do.call(vroom::cols, .ColSpec)
-    return(ColSpec)
-  } else {
+  Names <- intersect(names(ColSpec), ColumnSpecificationListNames)
+  if(length(Names) != length(ColumnSpecificationListNames))
     stop("Wrong format of column specification")
+
+  # (Sub-) lists must be of equal length
+  if (!lengthAllEqual(ColSpec))
+    stop("Specification suggest an ambiguous number of columns")
+
+  # Make sure that `NameInFile` are syntactically valid and ...
+  # that all missings are replaced by `Name`
+  if (isTruthy(ColSpec$NameInFile)) {
+    # NULL & NA is considered as missing
+    Missing <- !isTruthyInside(ColSpec[["NameInFile"]])
+    ColSpec$NameInFile[Missing] <- ColSpec$Name[Missing]
+    ColSpec$NameInFile <- as.list(make.names(ColSpec$NameInFile))
   }
+
+  # Convert from list spec
+  .ColSpec <- as.list(ColSpec$Type)
+  names(.ColSpec) <- ColSpec$NameInFile
+  ColSpec <- do.call(vroom::cols, .ColSpec)
+  return(ColSpec)
 }
