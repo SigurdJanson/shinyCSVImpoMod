@@ -1,4 +1,6 @@
-
+##
+## COL_SPEC ###############
+##
 
 test_that("VerifyColSpecFormat: mtcars: col_spec: returns as is", {
   # Arrange
@@ -13,6 +15,9 @@ test_that("VerifyColSpecFormat: mtcars: col_spec: returns as is", {
 })
 
 
+##
+## TIBBLE ###############
+##
 
 test_that("VerifyColSpecFormat: mtcars: tibble: returns `col_spec`", {
   # Arrange
@@ -28,6 +33,12 @@ test_that("VerifyColSpecFormat: mtcars: tibble: returns `col_spec`", {
   expect_equal(names(observed$cols), colnames(data))
 })
 
+
+
+##
+## LIST ###############
+## Name, NameInFile, Type, Format
+##
 
 test_that("Valid list", {
   # Arrange
@@ -51,6 +62,68 @@ test_that("Valid list", {
 })
 
 
+
+test_that("List: ambiguous vector lengths yield error", {
+  # Arrange
+  data <- list(
+    Name = c("model", colnames(mtcars)),
+    NameInFile = c("model", colnames(mtcars)),
+    Type = c("c", rep("d", ncol(mtcars))),
+    Format = rep("", ncol(mtcars)-4)
+  )
+
+  # Act
+  # Assert
+  expect_error(
+    VerifyColSpecFormat(data)
+  )
+})
+
+
+test_that("List: missing element yields error", {
+  for (i in c("Name", "NameInFile", "Type")) {
+    # Arrange
+    data <- list(
+      Name = c("model", colnames(mtcars)),
+      NameInFile = c("model", colnames(mtcars)),
+      Type = c("c", rep("d", ncol(mtcars))),
+      Format = rep("", ncol(mtcars)-4)
+    )
+    data[[i]] <- NULL
+
+    # Act
+    # Assert
+    expect_error(
+      VerifyColSpecFormat(data), "Wrong format"
+    )
+
+  }
+})
+
+
+test_that("List: missing 'format' will be handled by function", {
+  # Arrange
+  data <- list(
+    Name = c("model", colnames(mtcars)),
+    NameInFile = c("model", colnames(mtcars)),
+    Type = c("c", rep("d", ncol(mtcars)))
+  )
+
+  # Act
+  observed <- VerifyColSpecFormat(data)
+
+  # Assert
+  expect_s3_class(observed, "col_spec")
+  expect_length(observed$cols, length(data$Name))
+  expect_equal(names(observed$cols), data$Name)
+})
+
+
+
+##
+## UNKNOWN FORMAT ########
+##
+
 test_that("Unknown class returns error", {
   # Arrange
   # Act
@@ -59,5 +132,3 @@ test_that("Unknown class returns error", {
     VerifyColSpecFormat(mtcars)
   )
 })
-
-
