@@ -29,11 +29,10 @@
 FixupList <- function(x, Default) {
   stopifnot(!(is.null(x) || is.null(Default)))
 
-  Falsies <- !isTruthyInside(x)
-
   # Remove extra values in x
   x <- x[names(x) %in% names(Default)]
   # Replace falsy values in x[..] by Default[..]
+  Falsies <- !isTruthyInside(x)
   Result <- replace(x,
                     Falsies,
                     Default[match(names(x), names(Default))][Falsies])

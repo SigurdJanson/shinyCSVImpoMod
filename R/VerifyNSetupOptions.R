@@ -4,12 +4,8 @@
 )
 
 VerifyNSetupOptions <- function(Options) {
-  if (is.null(Options)) {
-    Options <- .DefaultOptions
-    return(Options)
-  } else {
-    #TODO: FixupList
-  }
-
-  return(Options)
+  if (is.null(Options))
+    return(.DefaultOptions)
+  else
+    return(FixupList(Options, .DefaultOptions))
 }
