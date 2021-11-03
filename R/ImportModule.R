@@ -89,17 +89,22 @@ ModuleImportServer <- function(Id,
     warning = function(w) w
   )
 
+  # MODULE OPTIONS
+  tryCatch(
+    Options <- VerifyNSetupOptions(Options),
+    error = function(e) e,
+    warning = function(w) w
+  )
+
   # I18N
   i18n <- shiny.i18n::Translator$new(
     translation_json_path = system.file("extdata", "translation.json",
                                         package = "shiny.CSVImport"))
-
-  # MODULE OPTIONS
-  tryCatch(
-    Options <- VerifyNSetupOptions(Options, i18n),
-    error = function(e) e,
-    warning = function(w) w
-  )
+  # setup translator (if language isn't available, default is en)
+  if (Options$UILang %in% i18n$get_languages())
+    i18n$set_translation_language(Options$UILang)
+  else
+    i18n$set_translation_language(.DefaultOptions$UILang)
 
 
   # SETUP MODULE SERVER

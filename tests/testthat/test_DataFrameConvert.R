@@ -9,7 +9,7 @@ B;Geert;49;19.04.1971;123,45;FALSE
 C;Hagen;41;03.02.1980;1.000.000,99;true")
 }
 
-.DefaultOptions <- list(
+.DefaultTestOptions <- list(
   LangCode = "en",
   Header = TRUE,
   ColSep = ";",
@@ -35,20 +35,20 @@ test_that("Are preconditions checked correctly?", {
   # TEST
   # check `Df`
   obs <- expect_error(
-    DataFrameConvert(ColSpec = .ColSpec, Expected = .DefaultOptions, Preview = TRUE),
+    DataFrameConvert(ColSpec = .ColSpec, Expected = .DefaultTestOptions, Preview = TRUE),
     "Internal.+data frame"
   )
   obs <- expect_error(
-    DataFrameConvert(Df = NULL, ColSpec = .ColSpec, Expected = .DefaultOptions, Preview = TRUE),
+    DataFrameConvert(Df = NULL, ColSpec = .ColSpec, Expected = .DefaultTestOptions, Preview = TRUE),
     "Internal.+data frame"
   )
   # check `ColSpec`
   obs <- expect_error(
-    DataFrameConvert(GetDataFromFile(), Expected = .DefaultOptions, Preview = TRUE),
+    DataFrameConvert(GetDataFromFile(), Expected = .DefaultTestOptions, Preview = TRUE),
     "Internal.+column specification"
   )
   obs <- expect_error(
-    DataFrameConvert(Df = GetDataFromFile(), ColSpec = NULL, Expected = .DefaultOptions, Preview = TRUE),
+    DataFrameConvert(Df = GetDataFromFile(), ColSpec = NULL, Expected = .DefaultTestOptions, Preview = TRUE),
     "Internal.+column specification"
   )
   # check `Expected`
@@ -66,7 +66,7 @@ test_that("Are preconditions checked correctly?", {
   ColSpec <- .ColSpec
   ColSpec[["NameInFile"]][[sample.int(length(ColSpec[["NameInFile"]]), 1)]] <- NA
   obs <- expect_error(
-    DataFrameConvert(GetDataFromFile(), ColSpec, .DefaultOptions, Preview = TRUE),
+    DataFrameConvert(GetDataFromFile(), ColSpec, .DefaultTestOptions, Preview = TRUE),
     "NameInFile"
   )
 
@@ -85,7 +85,7 @@ test_that("Preview, Complete data frame, new column names", {
 
   # TEST
   obs <- expect_silent(
-    DataFrameConvert(GetDataFromFile(), ColSpec, .DefaultOptions, Preview = TRUE)
+    DataFrameConvert(GetDataFromFile(), ColSpec, .DefaultTestOptions, Preview = TRUE)
   )
   expect_type(obs, "list") #  a data frame is a list
   expect_identical(ncol(obs), length(ColSpec$Name))
@@ -106,7 +106,7 @@ test_that("No Preview, Complete data frame, new column names", {
 
   # Date format given in: Expected
   # SETUP
-  Expected <- .DefaultOptions
+  Expected <- .DefaultTestOptions
 
   # TEST
   obs <- expect_silent(
@@ -133,12 +133,12 @@ test_that("No Preview, Complete data frame, new column names", {
   # Date format given in: ColSpec
   # SETUP
   ColSpec$Format <- list(NA, NA, NULL, "%d.%m.%Y", NA, vector())
-  Expected <- .DefaultOptions
+  Expected <- .DefaultTestOptions
   Expected$DateFormat <- "%Y/%m/%d"
 
   # TEST
   obs <- expect_silent( ###TODO: why use .DefaultOptions here???
-    DataFrameConvert(GetDataFromFile(), ColSpec, .DefaultOptions, Preview = FALSE)
+    DataFrameConvert(GetDataFromFile(), ColSpec, .DefaultTestOptions, Preview = FALSE)
   )
   expect_type(obs, "list") #  a data frame is a list
   expect_identical(ncol(obs), length(ColSpec$Name))
@@ -166,7 +166,7 @@ test_that("Preview, Partial data frame, new column names", {
 
   # TEST
   obs <- expect_silent(
-    DataFrameConvert(GetDataFromFile(), ColSpec, .DefaultOptions, Preview = FALSE)
+    DataFrameConvert(GetDataFromFile(), ColSpec, .DefaultTestOptions, Preview = FALSE)
   )
   expect_type(obs, "list") #  a data frame is a list
   expect_identical(ncol(obs), length(ColSpec$Name))
@@ -192,7 +192,7 @@ test_that("Preview, redundant data frame, new column names", {
 
   # TEST
   obs <- expect_silent(
-    DataFrameConvert(GetDataFromFile(), ColSpec, .DefaultOptions, Preview = FALSE)
+    DataFrameConvert(GetDataFromFile(), ColSpec, .DefaultTestOptions, Preview = FALSE)
   )
   expect_type(obs, "list") #  a data frame is a list
   expect_identical(ncol(obs), length(ExpectedNames))
@@ -223,7 +223,7 @@ test_that("Variables in different order", {
 
   # TEST
   obs <- expect_silent(
-    DataFrameConvert(Data, ColSpec, .DefaultOptions, Preview = FALSE)
+    DataFrameConvert(Data, ColSpec, .DefaultTestOptions, Preview = FALSE)
   )
   expect_identical(names(obs), c("LETTER", "Name", "Age", "Date", "Double", "T/F", "Time"))
 })
@@ -244,13 +244,13 @@ test_that("String as Factors: factors specified in ColSpec", {
 
   # TEST: PREVIEW with Expected$StringsAsFActors = FALSE, 2. column is <factor>
   obs <- expect_silent(
-    DataFrameConvert(GetDataFromFile(), ColSpec, .DefaultOptions, Preview = TRUE)
+    DataFrameConvert(GetDataFromFile(), ColSpec, .DefaultTestOptions, Preview = TRUE)
   )
   expect_identical(obs[1, 2], "<factor>")
 
   # TEST: Expected$StringsAsFActors = FALSE, 2. column is <factor>
   obs <- expect_silent(
-    DataFrameConvert(GetDataFromFile(), ColSpec, .DefaultOptions, Preview = FALSE)
+    DataFrameConvert(GetDataFromFile(), ColSpec, .DefaultTestOptions, Preview = FALSE)
   )
   expect_s3_class(obs[[2]], "factor")
 })
@@ -264,7 +264,7 @@ test_that("String as Factors: factors specified in Expected", {
     Type = list("character", "factor", "integer", "date", "number", "logical"),
     Format = list(NA, NA, "%d.%m.%Y", NA, NA, NA)
   )
-  Expected <- .DefaultOptions
+  Expected <- .DefaultTestOptions
   Expected$StringsAsFactors <- TRUE
 
   # TEST: PREVIEW with Expected$StringsAsFActors = FALSE, 2. column is <factor>
