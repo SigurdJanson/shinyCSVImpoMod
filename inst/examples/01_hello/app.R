@@ -8,7 +8,7 @@ shinyApp(
     tableOutput("AppOutputTest")
   ),
   function(input,output,session){
-    DataFile <- ModuleImportServer("ProjectDataFile", Options = list(UiLng = "en"))
+    DataFile <- ModuleImportServer("ProjectDataFile", Options = list(UILang = "en"))
 
     output$AppOutputTest <- renderTable({
       need(DataFile(), "No data available")

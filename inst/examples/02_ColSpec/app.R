@@ -9,7 +9,7 @@ shinyApp(
   ),
   function(input,output,session){
     DataFile <- ModuleImportServer("ProjectDataFile",
-                                   UiLng = "en",
+                                   UILang = "en",
                                    ColSpec = list(
                                      Name = list("Name", "Age", "Date", "Double", "T/F", "Time", "LETTER"),
                                      NameInFile = list(NA, NULL, "Datum", "GermanFloatingPoint", "Truth", "Time", "Column A"),

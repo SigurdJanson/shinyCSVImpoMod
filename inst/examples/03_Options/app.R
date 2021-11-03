@@ -9,7 +9,7 @@ shinyApp(
   ),
   function(input,output,session){
     DataFile <- ModuleImportServer("ProjectDataFile",
-                                   UiLng = "en",
+                                   UILang = "en",
                                    Expected = list(
                                      Header = TRUE,
                                      ColSep = ";",
