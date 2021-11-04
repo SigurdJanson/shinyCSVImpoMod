@@ -228,18 +228,16 @@ ModuleImportServer <- function(Id,
 
     #
     # SERVER -------------
-      LiveColSpec <- eventReactive(
-        input$inpImportData,
-        {
-          if (isTruthy(ColSpec))
-            return(ColSpec)
-          else {
-            # input$inpImportData$datapath
-            # df <- Read with vroom
-            # vroom::spec(df)
-            #
-          }
-        }, ignoreInit  = TRUE)
+      LiveColSpec <- reactive({
+        req(input$inpImportData)
+
+        if (isTruthy(ColSpec))
+          return(ColSpec)
+        else {
+          return(PeekIntoFile(input$inpImportData$datapath, GetSpec = TRUE))
+        }
+      })
+
 
 
       LiveOptions <- reactive({
@@ -261,16 +259,11 @@ ModuleImportServer <- function(Id,
       #' @returns Either a data frame or an error message
       RawDataFrame <- reactive({
         req(input$inpImportData)
+        req(LiveOptions())
+        req(length(LiveOptions()) > 0)
 
         Result <- NULL
         tryCatch(
-          # Result <- read.csv(input$inpImportData$datapath,
-          #                    header = LiveOptions()$Header,
-          #                    quote  = LiveOptions()$Quote,
-          #                    sep    = LiveOptions()$ColSep,
-          #                    stringsAsFactors = FALSE,
-          #                    colClasses = "character",
-          #                    encoding = "UTF-8"),
           Result <- PeekIntoFile(input$inpImportData$datapath,
                                   col_names = LiveOptions()$Header,
                                   quote  = LiveOptions()$Quote,
@@ -304,7 +297,7 @@ ModuleImportServer <- function(Id,
         )
 
         tryCatch(
-          df <- DataFrameConvert(RawDataFrame(), ColSpec, LiveOptions(), Preview = FALSE),
+          df <- DataFrameConvert(RawDataFrame(), LiveColSpec(), LiveOptions(), Preview = FALSE),
           error = function(e) shiny::validate(need(NULL, i18n$t(e$message)))
         )
         return(df)
@@ -329,7 +322,7 @@ ModuleImportServer <- function(Id,
         )
 
         tryCatch(
-          df <- DataFrameConvert(RawDataFrame(), ColSpec, LiveOptions(), Preview = TRUE),
+          df <- DataFrameConvert(RawDataFrame(), LiveColSpec(), LiveOptions(), Preview = TRUE),
           error = function(e) shiny::validate(need(NULL, i18n$t(e$message)))
         )
         df[1,] <- i18n$t(unlist(df[1,]))
