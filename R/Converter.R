@@ -32,13 +32,13 @@ GuessColumnTypes <- function(Data, Locale = "de-DE") {
 #' @param Locale A locale that can be used in case format is missing
 #' @details
 #' Valid converters: date, time, datetime, character, factor, logical, number,
-#' double, integer. Long and short names are allowed (see [`vroom::cols()`].
+#' double, integer. Long and short names are allowed (see [`vroom::cols()`]).
 #'
 #' `NULL` drops a column. Everything else will be  guessed by [`readr::parse_guess()`].
 #'
 #' The types date, time, and datetime **support** a `Format` specification.
 #' If none is available the `Locale` is used.
-#' @return a data frame with changed column data types
+#' @return A data frame with changed column data types
 ColumnConvert <- function(Data, Converter, Format, Locale) {
   if (!is.data.frame(Data))
     stop("Invalid type of 'Columns' data")
@@ -82,7 +82,7 @@ ColumnConvert <- function(Data, Converter, Format, Locale) {
   }
 
   # Remove skipped columns
-  if (length(Col2Drop) > 0)
+  if (length(Col2Drop) > 0L)
     for(i in length(Col2Drop):1) { # move backwards
       Data[[ Col2Drop[i] ]] <- NULL
     }
@@ -94,13 +94,13 @@ ColumnConvert <- function(Data, Converter, Format, Locale) {
 
 
 
-#' @title Do conversions on a data frame
+#' @title Change the type of data frame columns.
 #' @param Df A data frame
 #' @param Preview FALSE (default) returns a working data frame. If `Preview` is `TRUE` or
 #' numeric all columns are character. The number of rows can be changed with `Preview` being
 #' numeric.
 #' @inheritParams ModuleImportServer
-#' @return a data frame
+#' @return A data frame
 DataFrameConvert <- function(Df, ColSpec, Expected, Preview = FALSE) {
   if (missing(Df) || !isTruthy(Df))
     stop("Internal module error: data frame is missing")
@@ -124,7 +124,7 @@ DataFrameConvert <- function(Df, ColSpec, Expected, Preview = FALSE) {
     WantedNFound <- intersect(ColNames, ColSpec$NameInFile) # order of arguments counts!
     # Filter `Df` to remove un-requested columns
     Df <- Df[, ColNames %in% WantedNFound]
-    if (ncol(Df) == 0) stop("msgConfigurationYieldsEmpty")
+    if (ncol(Df) == 0L) stop("msgConfigurationYieldsEmpty")
 
     # Reorder the requested columns to match the imported CSV
     # - get positions and use na.omit because otherwise, NA would still be in there
@@ -163,7 +163,7 @@ DataFrameConvert <- function(Df, ColSpec, Expected, Preview = FALSE) {
     else
       CoerceToFactor <- logical()
 
-    if (length(CoerceToFactor) > 0)
+    if (length(CoerceToFactor) > 0L)
       for (i in 1:ncol(Df))
         if (CoerceToFactor[i]) Df[[i]] <- as.factor(Df[[i]])
 

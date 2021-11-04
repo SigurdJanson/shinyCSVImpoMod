@@ -1,3 +1,3 @@
 # CONSTANTS
 
-.ImportMaxCol = 999
+.ImportMaxCol = 999L

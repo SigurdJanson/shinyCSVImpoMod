@@ -1,6 +1,7 @@
 
-#' @title isTruthyInside tests the truthiness of positions of a vector (while `isTruthy`
-#' tests the vector as a whole)
+#' @title isTruthyInside
+#' @description `isTruthyInside` tests the truthiness of positions
+#' of a vector (while `isTruthy` tests the vector as a whole).
 #' @param x A vector or list
 #' @return A logical vector for each position indicating `TRUE`/`FALSE`.
 #' Returns `NULL` if operation was not successful.
@@ -20,8 +21,9 @@ isTruthyInside <- function(x) {
 
 
 
-#' @title Choose a value if it truthy. If not, choose it's replacement
-#' @param X The designated value
+#' @title PickTruthy
+#' @description Choose a value if it truthy. If not, choose it's replacement
+#' @param X A value of any type
 #' @param Replacement The replacement in case `X` is falsy
 #' @return `X` or `Replacement`
 #' @export
