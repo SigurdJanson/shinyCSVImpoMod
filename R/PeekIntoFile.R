@@ -18,8 +18,10 @@ PeekIntoFile <- function(File, GetSpec = FALSE, ...) {
   Data <- do.call(vroom::vroom, Args)
   Problems <- vroom::problems(Data)
 
-  if (nrow(Problems) > 0)
+  if (nrow(Problems) > 0) {
+    attr(Problems, "problems") <- TRUE
     return(Problems)
+  }
   else if (isTRUE(GetSpec))
     return(vroom::spec(Data))
   else

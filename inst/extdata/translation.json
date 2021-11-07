@@ -168,6 +168,14 @@
             "es": "Configuración devolvió un resultado vacío",
             "ko": "[Configuration yields empty result]"
         },
+        {
+            "key": "msgImportProblems",
+            "de": "Die Daten entsprechen nicht eindeutig dem gewünschten Format",
+            "en": "The data does not match the desired format",
+            "ru": "[The data does not match the desired format]",
+            "es": "[The data does not match the desired format]",
+            "ko": "[The data does not match the desired format]"
+        },
         { /*Converter.R*/
             "key": "Internal module error: data frame is missing",
             "de": "Interner Fehler im Modul: data frame fehlt",

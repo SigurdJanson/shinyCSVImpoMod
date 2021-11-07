@@ -33,19 +33,23 @@ ModuleImportUI <- function(Id) {
 #' @param Options Use `Options$UILang` for the language
 #' in the user interface (allowed values: "en", "de").
 #' @details
-#' `ColSpec` must be a named list with the vectors:
+#' `ColSpec` can have different formats. It can be a col_spec
+#' object (see [readr::cols_condense()]),
+#' a tibble or a named list with the following format:
 #' \describe{
 #'   \item{Name}{A list of variable (i.e. column) names
-#'   that shall replace the column heads in the file (character).}
+#'   that shall replace the column heads in the file (character
+#'   vector).}
 #'   \item{NameInFile}{A list of column heads in the CSV
-#'   file (character).}
-#'   \item{Type}{The data types of each variable (character).
+#'   file (character vector).}
+#'   \item{Type}{The data types of each variable (character vector).
 #'   If no value (i.e. falsy values) is given, it will be
 #'   guessed.}
-#'   \item{Format}{An additional format specification (character).
+#'   \item{Format}{An additional format specification (character vector).
 #'   That is supported by "datetime", "date", and "time". If none
 #'   is given the `Expected` options are used.}
 #' }
+#'
 #' `Expected` can have these fields:
 #' \describe{
 #'   \item{LangCode}{Language code (e.g. "de" or "en)}
@@ -264,19 +268,22 @@ ModuleImportServer <- function(Id,
 
         Result <- NULL
         tryCatch(
-          Result <- PeekIntoFile(input$inpImportData$datapath,
-                                  col_names = LiveOptions()$Header,
-                                  quote  = LiveOptions()$Quote,
-                                  delim  = LiveOptions()$ColSep,
-                                  col_types = paste0(rep("c", .ImportMaxCol))),
-          error = function(e) Result <<- e$message,
-          warning = function(w) Result <<- w$message
+          Result <- PeekIntoFile(
+            File = input$inpImportData$datapath,
+            # vroom arguments
+            col_names = LiveOptions()$Header,
+            quote  = LiveOptions()$Quote,
+            delim  = LiveOptions()$ColSep,
+            col_types = paste0(rep("c", .ImportMaxCol), collapse="")),
+          error = function(e) Result <<- e$message#,
+          #warning = function(w) WarningMsg <<- w$message
         )
+        #browser()
 
         # check if all requested variables are there
-        if (isTruthy(ColSpec$NameInFile) && length(ColSpec$NameInFile) > 0L) {
+        if (isTruthy(LiveColSpec())) {
           ColNames <- names(Result)
-          WantedNotFound <- setdiff(ColSpec$NameInFile, ColNames)
+          WantedNotFound <- setdiff(names(LiveColSpec()$cols), ColNames)
           # if (length(WantedNotFound) > 0)
           #   showNotification(i18n$t("Some requested columns have not been found"))
           #-UnWanted <- setdiff(ColNames, ColSpec$NameInFile) # CURRENTLY NOT USED
@@ -312,7 +319,8 @@ ModuleImportServer <- function(Id,
           need(RawDataFrame(),
                i18n$t("No data available for preview")),
           need(is.data.frame(RawDataFrame()),
-               ifelse(is.character(RawDataFrame()), RawDataFrame(), i18n$t("CSV cannot be parsed"))),
+               ifelse(is.character(RawDataFrame()), RawDataFrame(),
+                      i18n$t("CSV cannot be parsed"))),
           need(input$inpColSep,
                i18n$t("msgMissingColSep")),
           need(input$inpDecimalsSep != input$inpThousandsSep,
@@ -321,13 +329,20 @@ ModuleImportServer <- function(Id,
                i18n$t("Thousands separator is not valid"))
         )
 
-        tryCatch(
-          df <- DataFrameConvert(RawDataFrame(), LiveColSpec(), LiveOptions(), Preview = TRUE),
-          error = function(e) shiny::validate(need(NULL, i18n$t(e$message)))
-        )
-        df[1,] <- i18n$t(unlist(df[1,]))
+        # Check if import has caused problems
+        if(isTRUE(attr(RawDataFrame(), "problems"))) {
+          shiny::validate(i18n$t("msgImportProblems"))
+        } else {
+          browser
+          tryCatch(
+            df <- DataFrameConvert(RawDataFrame(), LiveColSpec(), LiveOptions(), Preview = TRUE),
+            error = function(e) shiny::validate(i18n$t(e$message))
+          )
+          df[1,] <- as.list(i18n$t(unlist(df[1,])))
 
-        return(df)
+          return(df)
+        }
+
       },
       sanitize.text.function = function(x) sapply(x, .HandleUTF8))
 
