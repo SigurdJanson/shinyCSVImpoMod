@@ -9,10 +9,10 @@
 A package providing a module with all functionality needed to import CSV files to a Shiny app. The module allows the user to make the required settings (like decimal and column separator character). The module returns a data frame.
 }
 \details{
-A package supporting interactive import of CSV (DSV)  files in a shiny app.
+A package supporting interactive import of CSV (DSV) files in a shiny app.
 The package provides a module with an UI and server implementation. Developers simply
 include the package. Users can change the locale settings and see the effect of various
-settings in a preview. That way, they can easily import CSV fiules from various sources.
+settings in a preview. That way, they can easily import CSV files from various sources.
 }
 \seealso{
 Useful links:

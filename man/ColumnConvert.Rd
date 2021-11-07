@@ -16,7 +16,7 @@ ColumnConvert(Data, Converter, Format, Locale)
 \item{Locale}{A locale that can be used in case format is missing}
 }
 \value{
-a data frame with changed column data types
+A data frame with changed column data types
 }
 \description{
 Convert columns of a data frame to their desired types. Columns in
@@ -24,7 +24,7 @@ source data frame are all of type \code{character}.
 }
 \details{
 Valid converters: date, time, datetime, character, factor, logical, number,
-double, integer. Long and short names are allowed (see \code{\link[vroom:cols]{vroom::cols()}}.
+double, integer. Long and short names are allowed (see \code{\link[vroom:cols]{vroom::cols()}}).
 
 \code{NULL} drops a column. Everything else will be  guessed by \code{\link[readr:parse_guess]{readr::parse_guess()}}.
 

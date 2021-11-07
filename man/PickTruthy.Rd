@@ -2,12 +2,12 @@
 % Please edit documentation in R/TruthyHelpers.R
 \name{PickTruthy}
 \alias{PickTruthy}
-\title{Choose a value if it truthy. If not, choose it's replacement}
+\title{PickTruthy}
 \usage{
 PickTruthy(X, Replacement)
 }
 \arguments{
-\item{X}{The designated value}
+\item{X}{A value of any type}
 
 \item{Replacement}{The replacement in case \code{X} is falsy}
 }

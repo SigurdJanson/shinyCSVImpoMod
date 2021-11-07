@@ -28,19 +28,23 @@ The server function of the CSV import module
 The user's data, parsed into a data frame.
 }
 \details{
-\code{ColSpec} must be a named list with the vectors:
+\code{ColSpec} can have different formats. It can be a col_spec
+object (see \code{\link[readr:spec]{readr::cols_condense()}}),
+a tibble or a named list with the following format:
 \describe{
 \item{Name}{A list of variable (i.e. column) names
-that shall replace the column heads in the file (character).}
+that shall replace the column heads in the file (character
+vector).}
 \item{NameInFile}{A list of column heads in the CSV
-file (character).}
-\item{Type}{The data types of each variable (character).
+file (character vector).}
+\item{Type}{The data types of each variable (character vector).
 If no value (i.e. falsy values) is given, it will be
 guessed.}
-\item{Format}{An additional format specification (character).
+\item{Format}{An additional format specification (character vector).
 That is supported by "datetime", "date", and "time". If none
 is given the \code{Expected} options are used.}
 }
+
 \code{Expected} can have these fields:
 \describe{
 \item{LangCode}{Language code (e.g. "de" or "en)}

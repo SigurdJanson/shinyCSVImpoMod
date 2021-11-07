@@ -2,7 +2,7 @@
 % Please edit documentation in R/Converter.R
 \name{DataFrameConvert}
 \alias{DataFrameConvert}
-\title{Do conversions on a data frame}
+\title{Change the type of data frame columns.}
 \usage{
 DataFrameConvert(Df, ColSpec, Expected, Preview = FALSE)
 }
@@ -19,8 +19,8 @@ numeric all columns are character. The number of rows can be changed with \code{
 numeric.}
 }
 \value{
-a data frame
+A data frame
 }
 \description{
-Do conversions on a data frame
+Change the type of data frame columns.
 }

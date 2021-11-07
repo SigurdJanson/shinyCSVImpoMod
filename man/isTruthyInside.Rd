@@ -2,8 +2,7 @@
 % Please edit documentation in R/TruthyHelpers.R
 \name{isTruthyInside}
 \alias{isTruthyInside}
-\title{isTruthyInside tests the truthiness of positions of a vector (while \code{isTruthy}
-tests the vector as a whole)}
+\title{isTruthyInside}
 \usage{
 isTruthyInside(x)
 }
@@ -15,8 +14,8 @@ A logical vector for each position indicating \code{TRUE}/\code{FALSE}.
 Returns \code{NULL} if operation was not successful.
 }
 \description{
-isTruthyInside tests the truthiness of positions of a vector (while \code{isTruthy}
-tests the vector as a whole)
+\code{isTruthyInside} tests the truthiness of positions
+of a vector (while \code{isTruthy} tests the vector as a whole).
 }
 \examples{
 isTruthyInside(1:5)
