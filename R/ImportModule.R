@@ -230,8 +230,12 @@ ModuleImportServer <- function(Id,
       })
 
 
-    #
-    # SERVER -------------
+      #
+      # SERVER -------------
+
+      # Column specification
+      # Returns: If given the `ColSpec` argument of the module;
+      # if not it returns the specification taken from a peek into the file
       LiveColSpec <- reactive({
         req(input$inpImportData)
 
@@ -243,7 +247,7 @@ ModuleImportServer <- function(Id,
       })
 
 
-
+      # Global options of CSV import
       LiveOptions <- reactive({
         Result <- Expected
         for (inp in c("Header", "ColSep", "ThousandsSep", "DecimalsSep",
@@ -257,10 +261,10 @@ ModuleImportServer <- function(Id,
       })
 
 
-      #' @title The user's data, parsed into a data frame.
-      #' @note The raw data frame has only columns of type `character` and must
-      #' be converted later.
-      #' @returns Either a data frame or an error message
+      # The user's data, parsed into a data frame.
+      # The raw data frame has only columns of type `character` and must
+      # be converted later.
+      # Returns: Either a data frame or an error message
       RawDataFrame <- reactive({
         req(input$inpImportData)
         req(LiveOptions())
@@ -292,23 +296,6 @@ ModuleImportServer <- function(Id,
         return(Result)
       })
 
-
-      # The data frame returned by the module to the calling app.
-      # Does all the required data type conversions.
-      DataFrame <- debounce(reactive({
-        req(
-          is.data.frame(RawDataFrame()),
-          input$inpColSep,
-          !identical(input$inpDecimalsSep, input$inpThousandsSep),
-          input$inpThousandsSep
-        )
-
-        tryCatch(
-          df <- DataFrameConvert(RawDataFrame(), LiveColSpec(), LiveOptions(), Preview = FALSE),
-          error = function(e) shiny::validate(need(NULL, i18n$t(e$message)))
-        )
-        return(df)
-      }), 2000L)
 
 
 
@@ -346,9 +333,31 @@ ModuleImportServer <- function(Id,
       },
       sanitize.text.function = function(x) sapply(x, .HandleUTF8))
 
+
+
+
+      # The data frame returned by the module to the calling app.
+      # Does all the required data type conversions.
+      DataFrame <- debounce(reactive({
+        req(
+          is.data.frame(RawDataFrame()),
+          input$inpColSep,
+          !identical(input$inpDecimalsSep, input$inpThousandsSep),
+          input$inpThousandsSep
+        )
+
+        tryCatch(
+          df <- DataFrameConvert(RawDataFrame(), LiveColSpec(), LiveOptions(), Preview = FALSE),
+          error = function(e) shiny::validate(need(NULL, i18n$t(e$message)))
+        )
+        return(df)
+      }), 2000L)
+
+
+
       # Return the reactive that yields the data frame
       return(DataFrame)
-    }
+    } # server function
   )
 }
 

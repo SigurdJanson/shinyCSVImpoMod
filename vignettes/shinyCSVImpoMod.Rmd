@@ -27,53 +27,52 @@ The CSV import module provides a standard user interface to read and convert a C
 
 Users can specify the general format of the CSV file:
 
- 1. Does the CSV file have a column header describing variable names? Yes/No
- 1. Which character separates the columns?
- 3. The decimal separator
- 4. Date format
- 5. time format
- 6. A character to qualify text
-
+1.  Does the CSV file have a column header describing variable names? Yes/No
+2.  Which character separates the columns?
+3.  The decimal separator
+4.  Date format
+5.  time format
+6.  A character to qualify text
 
 The package comes along with it's own translations. These languages are currently available:
 
- 1. English
- 2. German - Deutsch
- 3. Spanish - Español (draft - I would appreciate any help here)
- 4. Russian - Русский (draft - I would appreciate any help here)
- 5. Korean - 한국어 (rough draft - any help appreciated)
+1.  English
+2.  German - Deutsch
+3.  Spanish - Español (draft - I would appreciate any help here)
+4.  Russian - Русский (draft - I would appreciate any help here)
+5.  Korean - 한국어 (rough draft - any help appreciated)
 
 The Spanish and Russian translation most likely need some improvement but should be clear enough to use (no promises, though).
 
 
+
 ## Available Settings
 
-When calling the module an application can provide many options as arguments. 
+When calling the module an application can provide many options as arguments.
 
-* UI language (`UiLng`): use international language codes to set the desired language. 
-* A set of defaults for the user-defined values needed to read the data.
-* A detailed column specification:
-  * Designated **column name** that the app expects.
-  * The according column **name in the file**. The module will identify each column and rename them to the required specification.
-  * A **data type** for each column. If no data type is given the module will guess it.
-  * A **format** string that shall be used when converting the data. Format strings are required for date or time variables. If no such format is given the module will use the general format given by the user.
-
+-   UI language (`UiLng`): use international language codes to set the desired language.
+-   A set of defaults for the user-defined values needed to read the data.
+-   A detailed column specification:
+    -   Designated **column name** that the app expects.
+    -   The according column **name in the file**. The module will identify each column and rename them to the required specification.
+    -   A **data type** for each column. If no data type is given the module will guess it.
+    -   A **format** string that shall be used when converting the data. Format strings are required for date or time variables. If no such format is given the module will use the general format given by the user.
 
 Available data types are based on the capabilities of the [readr package](https://rdrr.io/cran/readr/):
 
-* `character`. An arbitrary character string.
-* `number`. An arbitrary number (R type `numeric`). Correct interpretation may depend on the thousands and decimal separator.
-* `integer`. Integer value. Correct interpretation may depend on the thousands separator.
-* `factor`. an `R` factor.
-* `logical`. a boolean/logical value.
-* `date`, `time`, and `datetime`.  Correct interpretation depends on a format string (see [`strptime`](https://rdrr.io/r/base/strptime.html)).
+-   `character`. An arbitrary character string.
+-   `number`. An arbitrary number (R type `numeric`). Correct interpretation may depend on the thousands and decimal separator.
+-   `integer`. Integer value. Correct interpretation may depend on the thousands separator.
+-   `factor`. an `R` factor.
+-   `logical`. a boolean/logical value.
+-   `date`, `time`, and `datetime`. Correct interpretation depends on a format string (see [`strptime`](https://rdrr.io/r/base/strptime.html)).
 
 The type `double` is available but impractical to use when importing from CSV. The module will only be able to parse these numbers when they do not have a thousands separator. It is safer to use `number`.
 
 Two further data types have been defined that search for certain patterns in the data and return a logical value depending on the result of the search:
 
-* `find`. Finds the text given in the format string.
-* `regexfind`. Get a pattern match based on a given regular expression. The module uses Perl-compatible regular expressions because they are more commonly known compared to the `R` syntax.
+-   `find`. Finds the text given in the format string.
+-   `regexfind`. Get a pattern match based on a given regular expression. The module uses Perl-compatible regular expressions because they are more commonly known compared to the `R` syntax.
 
 
 
@@ -85,12 +84,13 @@ The call is simple and (consistent with Shiny) you can choose any module `Id`.
 ModuleImportUI("ProjectDataFile")
 ```
 
-
 ```{r ModuleImportServer, eval=FALSE, include=TRUE}
 ModuleImportServer("ProjectDataFile")
 ```
 
-![User Interface of the Shiny CSV Module](img/csvmodule_ui.png){ width=75% }
+![User Interface of the Shiny CSV Module](img/csvmodule_ui.png){width="75%"}
+
+
 
 ## Specify Date & Time Format
 
@@ -126,6 +126,8 @@ knitr::kable(
 )
 ```
 
+
+
 A few examples:
 
 ```{r echo=TRUE}
@@ -146,5 +148,7 @@ A few examples:
 ```
 
 <center>
-![](img/logo_csvmodule.svg){ width=25% }
+
+![](img/logo_csvmodule.svg){width="25%"}
+
 </center>

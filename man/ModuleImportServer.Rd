@@ -19,13 +19,9 @@ in the user interface (allowed values: "en", "de").}
 }
 \value{
 a data frame containing the uploaded CSV file
-
-Either a data frame or an error message
 }
 \description{
 The server function of the CSV import module
-
-The user's data, parsed into a data frame.
 }
 \details{
 \code{ColSpec} can have different formats. It can be a col_spec
@@ -65,8 +61,4 @@ see \code{\link[utils:read.table]{utils::read.csv()}} argument \code{quote}}
 \item{StringsAsFactors}{Convert all strings to factors (\code{TRUE}/\code{FALSE} is default;
 see \code{\link[utils:read.table]{utils::read.csv()}} argument \code{stringsAsFactors}).}
 }
-}
-\note{
-The raw data frame has only columns of type \code{character} and must
-be converted later.
 }
