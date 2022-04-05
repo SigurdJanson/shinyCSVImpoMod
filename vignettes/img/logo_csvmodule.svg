@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <svg
-   xmlns:dc="http://purl.org/dc/elements/1.1/"
-   xmlns:cc="http://creativecommons.org/ns#"
-   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-   xmlns:svg="http://www.w3.org/2000/svg"
-   xmlns="http://www.w3.org/2000/svg"
-   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
-   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    width="512"
    height="512"
    viewBox="0 0 512 512"
    version="1.1"
    id="svg8"
-   inkscape:version="1.0.2-2 (e86c870879, 2021-01-15)"
-   sodipodi:docname="logo_csvmodule.svg">
+   inkscape:version="1.1.1 (3bf5ae0d25, 2021-09-20)"
+   sodipodi:docname="logo_csvmodule.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:dc="http://purl.org/dc/elements/1.1/">
   <defs
      id="defs2">
     <inkscape:perspective
@@ -31,11 +31,11 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="2.8284271"
-     inkscape:cx="367.726"
-     inkscape:cy="270.25447"
+     inkscape:zoom="1.4142136"
+     inkscape:cx="204.70741"
+     inkscape:cy="256.3262"
      inkscape:document-units="px"
-     inkscape:current-layer="layer4"
+     inkscape:current-layer="layer1"
      inkscape:document-rotation="0"
      showgrid="false"
      units="px"
@@ -47,7 +47,15 @@
      inkscape:window-maximized="1"
      inkscape:pagecheckerboard="true"
      showguides="true"
-     inkscape:guide-bbox="true" />
+     inkscape:guide-bbox="true">
+    <sodipodi:guide
+       position="34,384"
+       orientation="-1,0"
+       id="guide2349"
+       inkscape:label=""
+       inkscape:locked="false"
+       inkscape:color="rgb(0,0,255)" />
+  </sodipodi:namedview>
   <metadata
      id="metadata5">
     <rdf:RDF>
@@ -56,7 +64,6 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -64,11 +71,10 @@
      inkscape:label="Hintergrund"
      inkscape:groupmode="layer"
      id="layer1"
-     style="display:inline;mix-blend-mode:normal"
-     sodipodi:insensitive="true">
+     style="display:inline;mix-blend-mode:normal">
     <path
        sodipodi:type="star"
-       style="fill:#2e6ea5;fill-opacity:1;stroke:#488dc7;stroke-width:15.996;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;paint-order:fill markers stroke;stop-color:#000000"
+       style="fill:#2ea0a5;fill-opacity:1;stroke:#1f4c78;stroke-width:15.996;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;paint-order:fill markers stroke;stop-color:#000000"
        id="path861"
        sodipodi:sides="6"
        sodipodi:cx="256"
@@ -87,8 +93,7 @@
      inkscape:groupmode="layer"
      id="layer2"
      inkscape:label="Grid"
-     style="display:inline;mix-blend-mode:soft-light"
-     sodipodi:insensitive="true">
+     style="display:inline;mix-blend-mode:soft-light">
     <g
        id="g913">
       <g
@@ -178,39 +183,38 @@
      inkscape:label="NewText"
      style="display:inline">
     <path
-       style="fill:none;stroke:#c0ffff;stroke-width:8;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-       d="m 365.625,224.375 -55.83129,-32.23421 -55.52185,32.05556 55.54237,32.0674 -55.35063,31.9567 -55.44131,-32.00905"
+       style="fill:none;stroke:#ffffff;stroke-width:12;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="m 420.07222,192.55519 -55.83129,-32.23421 -55.52185,32.05556 55.54237,32.0674 -55.35063,31.9567 -55.44131,-32.00905"
        id="path857" />
     <path
-       style="font-variation-settings:normal;opacity:1;vector-effect:none;fill:none;fill-opacity:1;stroke:#c0ffff;stroke-width:8;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;stop-color:#000000;stop-opacity:1"
+       style="font-variation-settings:normal;opacity:1;fill:none;fill-opacity:1;stroke:#ffffff;stroke-width:12;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;stop-color:#000000;stop-opacity:1"
        d="M 255.5,159.625 200.28534,127.7468 89.067514,191.95844 144.64965,224.04881"
        id="path859" />
     <path
        id="rect1226"
-       style="font-variation-settings:normal;display:inline;opacity:1;vector-effect:none;fill:none;fill-opacity:1;stroke:#c0ffff;stroke-width:8;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:fill markers stroke;stop-color:#000000;stop-opacity:1"
-       d="m 457.64791,300.14085 -34.68701,19.99492 -110.97269,0.0432 110.52781,-63.7379"
+       style="font-variation-settings:normal;display:inline;opacity:1;fill:none;fill-opacity:1;stroke:#ffffff;stroke-width:12;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:fill markers stroke;stop-color:#000000;stop-opacity:1"
+       d="m 422.3649,320.21066 -52.43701,31.74492 -110.97269,0.0432 110.52781,-63.7379"
        sodipodi:nodetypes="cccc" />
     <text
        xml:space="preserve"
-       style="font-style:normal;font-variant:normal;font-weight:300;font-stretch:normal;font-size:45.9328px;line-height:1.25;font-family:'Leelawadee UI';-inkscape-font-specification:'Leelawadee UI, Light';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;letter-spacing:0px;word-spacing:0px;display:inline;fill:#ffffff;fill-opacity:0.98324;stroke:none;stroke-width:1"
-       x="179.93611"
-       y="231.6058"
+       style="font-style:normal;font-variant:normal;font-weight:300;font-stretch:normal;font-size:46.5438px;line-height:1.25;font-family:'Leelawadee UI';-inkscape-font-specification:'Leelawadee UI, Light';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;letter-spacing:0px;word-spacing:0px;display:inline;fill:#ffffff;fill-opacity:0.98324;stroke:none;stroke-width:1.01182;stroke-miterlimit:4;stroke-dasharray:none"
+       x="235.77063"
+       y="299.22867"
        id="text1246-5"
-       transform="matrix(1.2247449,0.68172278,-0.70710677,0.42290374,0,0)"
-       inkscape:transform-center-x="-121.79778"
-       inkscape:transform-center-y="15.936913"><tspan
+       transform="matrix(1.1885733,0.68172278,-0.72954569,0.42290374,0,0)"
+       inkscape:transform-center-x="-122.38199"
+       inkscape:transform-center-y="16.125262"><tspan
          sodipodi:role="line"
          id="tspan1244-3"
-         x="179.93611"
-         y="231.6058"
-         style="font-style:normal;font-variant:normal;font-weight:300;font-stretch:normal;font-size:45.9328px;font-family:'Leelawadee UI';-inkscape-font-specification:'Leelawadee UI, Light';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#ffffff;fill-opacity:0.98324;stroke-width:1">IMPORTER</tspan></text>
+         x="235.77063"
+         y="299.22867"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:46.5438px;font-family:'Leelawadee UI';-inkscape-font-specification:'Leelawadee UI Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#ffffff;fill-opacity:0.98324;stroke-width:1.01182;stroke-miterlimit:4;stroke-dasharray:none">Importer</tspan></text>
   </g>
   <g
      inkscape:groupmode="layer"
      id="layer5"
      inkscape:label="built on Shiny"
-     style="display:inline"
-     sodipodi:insensitive="true">
+     style="display:inline">
     <text
        xml:space="preserve"
        style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:32px;line-height:1.25;font-family:'Leelawadee UI';-inkscape-font-specification:'Leelawadee UI, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;letter-spacing:0px;word-spacing:0px;display:inline;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:1"
@@ -244,15 +248,14 @@
      inkscape:groupmode="layer"
      id="layer3"
      inkscape:label="Shine"
-     style="display:inline"
-     sodipodi:insensitive="true">
+     style="display:inline">
     <rect
-       style="font-variation-settings:normal;opacity:1;vector-effect:none;fill:#fffede;fill-opacity:0.0642458;stroke:none;stroke-width:16.0888;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:fill markers stroke;stop-color:#000000;stop-opacity:1"
+       style="font-variation-settings:normal;opacity:1;vector-effect:none;fill:#ffffff;fill-opacity:0.24;stroke:none;stroke-width:16.0458;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:fill markers stroke;stop-color:#000000;stop-opacity:1"
        id="rect879"
-       width="256.94501"
-       height="256.94501"
-       x="-108.72949"
-       y="148.21552"
-       transform="matrix(0.86440027,-0.50280431,0.86440027,0.50280431,0,0)" />
+       width="256.25766"
+       height="256.25766"
+       x="-108.50551"
+       y="147.75217"
+       transform="matrix(0.86631548,-0.49949724,0.86631548,0.49949724,0,0)" />
   </g>
 </svg>
