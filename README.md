@@ -189,3 +189,6 @@ See also `citation()` for citing R itself.
 -   Wickham, Hadley and Hester, Jim (2020).
     [readr](https://CRAN.R-project.org/package=readr): Read Rectangular
     Text Data. R package. *accessed 2021-03-01*
+
+[![Twitter
+URL](https://img.shields.io/twitter/url/https/twitter.com/usernaut.svg?style=social&label=Follow%20%40usernaut)](https://twitter.com/usernaut)

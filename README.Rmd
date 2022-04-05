@@ -160,3 +160,6 @@ See also `citation()` for citing R itself.
 * Shafranovich, Y. (2005). [RFC 4180](https://tools.ietf.org/html/rfc4180) Common Format and MIME Type for Comma-Separated Values (CSV) Files. Memo of the Network Working Group at SolidMatrix Technologies, Inc. *accessed 2021-03-07*
 * Wickham, Hadley and Hester, Jim (2020). [readr](https://CRAN.R-project.org/package=readr): Read Rectangular Text Data. R package. *accessed 2021-03-01*
 
+
+[![Twitter URL](https://img.shields.io/twitter/url/https/twitter.com/usernaut.svg?style=social&label=Follow%20%40usernaut)](https://twitter.com/usernaut)
+
