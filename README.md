@@ -32,8 +32,7 @@ The module has three modes: **as-is**, **desired**, and
 **user-defined**.
 
 -   **as-is**: the module reads the data as it is given in the CSV file.
-    The GUI is merely a preview. The users cannot merely de-/select
-    columns it.
+    The GUI is merely a preview.
 -   **desired**: the format is defined by the application that calls the
     module. The GUI shows a preview to the users. If the CSV format does
     not fit the required specification users can change the settings to
