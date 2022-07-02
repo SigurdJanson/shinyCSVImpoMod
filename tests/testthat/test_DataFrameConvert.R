@@ -35,20 +35,20 @@ test_that("Are preconditions checked correctly?", {
   # TEST
   # check `Df`
   obs <- expect_error(
-    DataFrameConvert(ColSpec = .ColSpec, Expected = .DefaultTestOptions, Preview = TRUE),
+    DataFrameConvert(ColSpec = .ColSpec, FileSpec = .DefaultTestOptions, Preview = TRUE),
     "Internal.+data frame"
   )
   obs <- expect_error(
-    DataFrameConvert(Df = NULL, ColSpec = .ColSpec, Expected = .DefaultTestOptions, Preview = TRUE),
+    DataFrameConvert(Df = NULL, ColSpec = .ColSpec, FileSpec = .DefaultTestOptions, Preview = TRUE),
     "Internal.+data frame"
   )
   # check `ColSpec`
   obs <- expect_error(
-    DataFrameConvert(GetDataFromFile(), Expected = .DefaultTestOptions, Preview = TRUE),
+    DataFrameConvert(GetDataFromFile(), FileSpec = .DefaultTestOptions, Preview = TRUE),
     "Internal.+column specification"
   )
   obs <- expect_error(
-    DataFrameConvert(Df = GetDataFromFile(), ColSpec = NULL, Expected = .DefaultTestOptions, Preview = TRUE),
+    DataFrameConvert(Df = GetDataFromFile(), ColSpec = NULL, FileSpec = .DefaultTestOptions, Preview = TRUE),
     "Internal.+column specification"
   )
   # check `Expected`
@@ -57,7 +57,7 @@ test_that("Are preconditions checked correctly?", {
     "Internal.+options"
   )
   obs <- expect_error(
-    DataFrameConvert(Df = GetDataFromFile(), ColSpec = .ColSpec, Expected = NULL, Preview = TRUE),
+    DataFrameConvert(Df = GetDataFromFile(), ColSpec = .ColSpec, FileSpec = NULL, Preview = TRUE),
     "Internal.+options"
   )
 

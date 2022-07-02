@@ -13,7 +13,7 @@ library(readr)
 GuessColumnTypes <- function(Data, Locale = "de-DE") {
   if (!is.data.frame(Data)) stop("Invalid type of data")
 
-  if (class(Locale) != "locale")
+  if (!inherits(Locale, "locale"))
     if (is.character(Locale))
       Locale <- FindLocale(Locale)
 
@@ -101,12 +101,12 @@ ColumnConvert <- function(Data, Converter, Format, Locale) {
 #' numeric.
 #' @inheritParams ModuleImportServer
 #' @return A data frame
-DataFrameConvert <- function(Df, ColSpec, Expected, Preview = FALSE) {
+DataFrameConvert <- function(Df, ColSpec, FileSpec, Preview = FALSE) {
   if (missing(Df) || !isTruthy(Df))
     stop("Internal module error: data frame is missing")
   if (missing(ColSpec) || !isTruthy(ColSpec))
     stop("Internal module error: column specification is missing")
-  if (missing(Expected) || !isTruthy(Expected))
+  if (missing(FileSpec) || !isTruthy(FileSpec))
     stop("Internal module error: Locale options are missing")
   if (isTruthy(ColSpec$NameInFile) && !all(isTruthyInside(ColSpec$NameInFile)))
     stop("Internal module error: 'NameInFile' must be specified")
@@ -140,11 +140,11 @@ DataFrameConvert <- function(Df, ColSpec, Expected, Preview = FALSE) {
   }
 
   # Get column types
-  Locale <- locale(date_names    = PickTruthy(Expected$LangCode, "en"),
-                   date_format   = PickTruthy(Expected$DateFormat, "%AD"),
-                   time_format   = PickTruthy(Expected$TimeFormat, "%AT"),
-                   decimal_mark  = PickTruthy(Expected$DecimalsSep, "."),
-                   grouping_mark = PickTruthy(Expected$ThousandsSep, ","),
+  Locale <- locale(date_names    = PickTruthy(FileSpec$LangCode, "en"),
+                   date_format   = PickTruthy(FileSpec$DateFormat, "%AD"),
+                   time_format   = PickTruthy(FileSpec$TimeFormat, "%AT"),
+                   decimal_mark  = PickTruthy(FileSpec$DecimalsSep, "."),
+                   grouping_mark = PickTruthy(FileSpec$ThousandsSep, ","),
                    tz = "UTC", encoding = "UTF-8", asciify = FALSE)
   ColTypes <- GuessColumnTypes(Df, Locale)
   # Pre-specified types take precedence over guessed type
@@ -156,7 +156,7 @@ DataFrameConvert <- function(Df, ColSpec, Expected, Preview = FALSE) {
   if (isFALSE(Preview) && !is.numeric(Preview)) {
     Df <- ColumnConvert(Df, as.list(ColTypes), ColSpec$Format, Locale)
 
-    if (Expected$StringsAsFactors)
+    if (FileSpec$StringsAsFactors)
       CoerceToFactor <- sapply(Df, is.character)
     else if (isTruthy(ColSpec) && all(isTruthyInside(ColSpec)))
       CoerceToFactor <- ColSpec$Type == "factor"
@@ -169,7 +169,7 @@ DataFrameConvert <- function(Df, ColSpec, Expected, Preview = FALSE) {
 
   } else { # Preview
     # Create preview data frame
-    if (isTRUE(Expected$StringsAsFactors)) {
+    if (isTRUE(FileSpec$StringsAsFactors)) {
       ColTypes <- sapply(ColTypes, USE.NAMES = FALSE,
                          FUN = function(x) ifelse(x == "character", "factor", x))
     }

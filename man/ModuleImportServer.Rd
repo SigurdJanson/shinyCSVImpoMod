@@ -4,14 +4,24 @@
 \alias{ModuleImportServer}
 \title{The server function of the CSV import module}
 \usage{
-ModuleImportServer(Id, ColSpec = NULL, Expected = NULL, Options = NULL)
+ModuleImportServer(
+  Id,
+  Mode = c("AsIs", "Desired", "UserDefined"),
+  ColSpec = NULL,
+  FileSpec = NULL,
+  Options = NULL
+)
 }
 \arguments{
 \item{Id}{Module name space}
 
+\item{Mode}{Interaction mode of the module. What possibilities shall the
+user have to modify the way the file is to be imported? One of three options:
+"AsIs", "Desired", "UserDefined".}
+
 \item{ColSpec}{A list specifying the columns to import.}
 
-\item{Expected}{A list describing the expected CSV format.
+\item{FileSpec}{A list describing the expected CSV format.
 (see details).}
 
 \item{Options}{Use \code{Options$UILang} for the language
@@ -41,7 +51,7 @@ That is supported by "datetime", "date", and "time". If none
 is given the \code{Expected} options are used.}
 }
 
-\code{Expected} can have these fields:
+\code{FileSpec} can have these fields:
 \describe{
 \item{LangCode}{Language code (e.g. "de" or "en)}
 \item{Header}{Does the CSV file have a header? (\code{TRUE} (default)/\code{FALSE};

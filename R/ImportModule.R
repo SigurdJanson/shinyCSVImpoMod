@@ -2,12 +2,11 @@ library(shiny)
 library(shiny.i18n)
 library(shinyjs)
 library(vroom)
-library(readr)
 
 
 
 #' @title The UI function of the CSV import module
-#' @param Id Module namespace to be set by by caller
+#' @param Id Module namespace to be set by caller
 #'
 #' @export
 #' @import shiny
@@ -27,8 +26,11 @@ ModuleImportUI <- function(Id) {
 
 #' @title The server function of the CSV import module
 #' @param Id Module name space
+#' @param Mode Interaction mode of the module. What possibilities shall the
+#' user have to modify the way the file is to be imported? One of three options:
+#' "AsIs", "Desired", "UserDefined".
 #' @param ColSpec A list specifying the columns to import.
-#' @param Expected A list describing the expected CSV format.
+#' @param FileSpec A list describing the expected CSV format.
 #' (see details).
 #' @param Options Use `Options$UILang` for the language
 #' in the user interface (allowed values: "en", "de").
@@ -50,7 +52,7 @@ ModuleImportUI <- function(Id) {
 #'   is given the `Expected` options are used.}
 #' }
 #'
-#' `Expected` can have these fields:
+#' `FileSpec` can have these fields:
 #' \describe{
 #'   \item{LangCode}{Language code (e.g. "de" or "en)}
 #'   \item{Header}{Does the CSV file have a header? (`TRUE` (default)/`FALSE`;
@@ -76,8 +78,10 @@ ModuleImportUI <- function(Id) {
 #' @importFrom shinyjs disabled
 #' @importFrom utils head read.csv
 #' @importFrom readr default_locale locale
-ModuleImportServer <- function(Id,
-                               ColSpec = NULL, Expected = NULL, Options = NULL) {
+ModuleImportServer <- function(Id, Mode = c("AsIs", "Desired", "UserDefined"),
+                               ColSpec = NULL, FileSpec = NULL, Options = NULL) {
+  #
+  Mode <- match.arg(Mode) # `several_ok` = FALSE
 
   # COLUMNS SPECIFICATION
   tryCatch(
@@ -88,7 +92,7 @@ ModuleImportServer <- function(Id,
 
   # EXPECTED DEFAULTS (column separator, date/time and number formats)
   tryCatch(
-    Expected <- VerifyExpectedFormat(Expected),
+    FileSpec <- VerifyExpectedFormat(FileSpec),
     error = function(e) e,
     warning = function(w) w
   )
@@ -164,27 +168,27 @@ ModuleImportServer <- function(Id,
             column(
               if (!is.null(ColSpec))
                 disabled(checkboxInput(ns("inpHeader"), i18n$t("lblHasHeader"),
-                                       value = Expected$Header))
+                                       value = FileSpec$Header))
               else
                 checkboxInput(ns("inpHeader"), i18n$t("lblHasHeader"),
-                              value = Expected$Header),
+                              value = FileSpec$Header),
               width = 6L
             )),
           fluidRow(
             column(
               textInput(ns("inpColSep"), i18n$t("lblColumnSeparator"),
-                        Expected$ColSep),
+                        FileSpec$ColSep),
               width = 3L
             ),
             column(
               textInput(ns("inpThousandsSep"), i18n$t("lblThousandsSep"),
-                        Expected$ThousandsSep),
+                        FileSpec$ThousandsSep),
               width = 3L
             ),
             column(
               selectInput(ns("inpDecimalsSep"),  i18n$t("lblDecimalsSep"),
                           choices = ChoicesDecimalsSep,
-                          selected = Expected$DecimalsSep),
+                          selected = FileSpec$DecimalsSep),
               width = 3L
             ),
             column(
@@ -192,7 +196,7 @@ ModuleImportServer <- function(Id,
                 title=i18n$t("inpDateFormat.Tooltip"),
                 selectizeInput(ns("inpDateFormat"), i18n$t("lblDateFormat"),
                                choices = ChoicesDate,
-                               selected = Expected$DateFormat,
+                               selected = FileSpec$DateFormat,
                                options = list(create = TRUE))
               ),
               width = 3L
@@ -200,14 +204,14 @@ ModuleImportServer <- function(Id,
             column(
               selectizeInput(ns("inpTimeFormat"), i18n$t("lblTimeFormat"),
                              choices = ChoicesTime,
-                             selected = Expected$TimeFormat,
+                             selected = FileSpec$TimeFormat,
                              options = list(create = TRUE)),
               width = 3L
             ),
             column(
               selectizeInput(ns("inpQuote"), i18n$t("lblQuote"),
                           choices = ChoicesQuote,
-                          selected = Expected$Quote,
+                          selected = FileSpec$Quote,
                           options = list(allowEmptyOption = TRUE)),
               width = 3L
             )
@@ -249,7 +253,7 @@ ModuleImportServer <- function(Id,
 
       # Global options of CSV import
       LiveOptions <- reactive({
-        Result <- Expected
+        Result <- FileSpec
         for (inp in c("Header", "ColSep", "ThousandsSep", "DecimalsSep",
                     "DateFormat", "TimeFormat", "Quote")) {
           if (isTruthy(input[[paste0("inp", inp)]])) {

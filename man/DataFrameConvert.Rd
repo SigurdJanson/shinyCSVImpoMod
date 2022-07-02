@@ -4,14 +4,14 @@
 \alias{DataFrameConvert}
 \title{Change the type of data frame columns.}
 \usage{
-DataFrameConvert(Df, ColSpec, Expected, Preview = FALSE)
+DataFrameConvert(Df, ColSpec, FileSpec, Preview = FALSE)
 }
 \arguments{
 \item{Df}{A data frame}
 
 \item{ColSpec}{A list specifying the columns to import.}
 
-\item{Expected}{A list describing the expected CSV format.
+\item{FileSpec}{A list describing the expected CSV format.
 (see details).}
 
 \item{Preview}{FALSE (default) returns a working data frame. If \code{Preview} is \code{TRUE} or
