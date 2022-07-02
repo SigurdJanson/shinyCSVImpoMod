@@ -1,0 +1,38 @@
+---
+title: "Code Documentation"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Code Documentation - Shiny CSV Import Module}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+## Introduction
+
+The import module for CSV files is a Shiny module and is to be used as such in a Shiny app.
+
+There are two parameters to describe the expected format of the CSV file.
+
+1.  The basic CSV file specification, like column separators, the thousands separator, etc. These characteristics must be the same in the whole CSV file (`FileSpec`).
+2.  The specification of each individual column, like column name, data type, etc. (`ColSpec`).
+
+It has three modes.
+
+1.  **As-Is**. Read the data as it comes. A preview will show to the user how the data is interpreted. Users can also change the basic CSV specification (such as column separating character etc.) but they cannot edit it otherwise.
+2.  **Desired**. The application that calls the module defines the expected format of the data. The user has to make that the CSV file is formatted according to specs.
+3.  **User-Defined**. The user can determine the format.
+
+The modes determine in what ways users can change the expected format and, thus, change the format of the imported data frame.
+
+| Mode         | `FileSpec`  |  `ColSpec`  |
+|:-------------|:-----------:|:-----------:|
+| As-Is        |  editable   | -read-only- |
+| Desired      | -read-only- | -read-only- |
+| User-Defined |  editable   |  editable   |
