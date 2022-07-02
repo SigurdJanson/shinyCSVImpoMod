@@ -80,8 +80,12 @@ ModuleImportUI <- function(Id) {
 #' @importFrom readr default_locale locale
 ModuleImportServer <- function(Id, Mode = c("AsIs", "Desired", "UserDefined"),
                                ColSpec = NULL, FileSpec = NULL, Options = NULL) {
-  #
-  Mode <- match.arg(Mode) # `several_ok` = FALSE
+  # MODE OF USER INTERACTIVITY
+  tryCatch(
+    Mode <- VerifyMode(Mode),
+    error = function(e) e,
+    warning = function(w) w
+  )
 
   # COLUMNS SPECIFICATION
   tryCatch(
@@ -90,7 +94,7 @@ ModuleImportServer <- function(Id, Mode = c("AsIs", "Desired", "UserDefined"),
     warning = function(w) w
   )
 
-  # EXPECTED DEFAULTS (column separator, date/time and number formats)
+  # EXPECTED FILE SPEC DEFAULTS (column separator, date/time and number formats)
   tryCatch(
     FileSpec <- VerifyExpectedFormat(FileSpec),
     error = function(e) e,

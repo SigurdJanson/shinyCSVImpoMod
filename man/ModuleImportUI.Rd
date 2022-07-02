@@ -7,7 +7,7 @@
 ModuleImportUI(Id)
 }
 \arguments{
-\item{Id}{Module namespace to be set by by caller}
+\item{Id}{Module namespace to be set by caller}
 }
 \description{
 The UI function of the CSV import module
