@@ -22,6 +22,14 @@ test_that("VerifyFileSpecFormat: NA returns Default", {
 })
 
 
+test_that("VerifyFileSpecFormat: !is.list returns error", {
+  # Arrange
+  # Act
+  # Assert
+  expect_error({
+    observed <- VerifyFileSpecFormat(1:3)
+  }, "^Expected must be a list")
+})
 
 
 
