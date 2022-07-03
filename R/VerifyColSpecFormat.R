@@ -1,8 +1,4 @@
 
-ColumnSpecificationListNames <- c(Name = "Name",
-                                  NameInFile = "NameInFile",
-                                  Type = "Type",
-                                  Format = "Format")
 
 lengthAllEqual <- function(x)
   sum(duplicated.default(sapply(x, length))) == (length(x)-1L)
@@ -43,10 +39,10 @@ VerifyColSpecFormat.tbl_df <- function(ColSpec) {
 #' It converts the information from the list into a valid `col_spec` object.
 VerifyColSpecFormat.list <- function(ColSpec) {
 
-  Names <- match(ColumnSpecificationListNames, names(ColSpec))
+  Names <- match(.ColumnSpecificationListNames, names(ColSpec))
   if (anyNA(Names)) {
-    MisMatch <- ColumnSpecificationListNames[which(is.na(Names))]
-    if (MisMatch != ColumnSpecificationListNames["Format"])
+    MisMatch <- .ColumnSpecificationListNames[which(is.na(Names))]
+    if (MisMatch != .ColumnSpecificationListNames["Format"])
       stop("Wrong format of column specification")
     else
       ColSpec[["Format"]] <- rep("", length(ColSpec[["Name"]]))
