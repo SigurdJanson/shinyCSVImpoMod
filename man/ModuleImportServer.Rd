@@ -6,7 +6,7 @@
 \usage{
 ModuleImportServer(
   Id,
-  Mode = c("AsIs", "Desired", "UserDefined"),
+  Mode = .ImpModes,
   ColSpec = NULL,
   FileSpec = NULL,
   Options = NULL

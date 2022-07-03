@@ -78,7 +78,7 @@ ModuleImportUI <- function(Id) {
 #' @importFrom shinyjs disabled
 #' @importFrom utils head read.csv
 #' @importFrom readr default_locale locale
-ModuleImportServer <- function(Id, Mode = c("AsIs", "Desired", "UserDefined"),
+ModuleImportServer <- function(Id, Mode = .ImpModes,
                                ColSpec = NULL, FileSpec = NULL, Options = NULL) {
   # MODE OF USER INTERACTIVITY
   tryCatch(
@@ -256,7 +256,7 @@ ModuleImportServer <- function(Id, Mode = c("AsIs", "Desired", "UserDefined"),
 
 
       # Global options of CSV import
-      LiveOptions <- reactive({
+      LiveFileSpec <- reactive({
         Result <- FileSpec
         for (inp in c("Header", "ColSep", "ThousandsSep", "DecimalsSep",
                     "DateFormat", "TimeFormat", "Quote")) {
@@ -275,17 +275,17 @@ ModuleImportServer <- function(Id, Mode = c("AsIs", "Desired", "UserDefined"),
       # Returns: Either a data frame or an error message
       RawDataFrame <- reactive({
         req(input$inpImportData)
-        req(LiveOptions())
-        req(length(LiveOptions()) > 0)
+        req(LiveFileSpec())
+        req(length(LiveFileSpec()) > 0)
 
         Result <- NULL
         tryCatch(
           Result <- PeekIntoFile(
             File = input$inpImportData$datapath,
             # vroom arguments
-            col_names = LiveOptions()$Header,
-            quote  = LiveOptions()$Quote,
-            delim  = LiveOptions()$ColSep,
+            col_names = LiveFileSpec()$Header,
+            quote  = LiveFileSpec()$Quote,
+            delim  = LiveFileSpec()$ColSep,
             col_types = paste0(rep("c", .ImportMaxCol), collapse="")),
           error = function(e) Result <<- e$message#,
           #warning = function(w) WarningMsg <<- w$message
@@ -330,7 +330,7 @@ ModuleImportServer <- function(Id, Mode = c("AsIs", "Desired", "UserDefined"),
         } else {
           browser
           tryCatch(
-            df <- DataFrameConvert(RawDataFrame(), LiveColSpec(), LiveOptions(), Preview = TRUE),
+            df <- DataFrameConvert(RawDataFrame(), LiveColSpec(), LiveFileSpec(), Preview = TRUE),
             error = function(e) shiny::validate(i18n$t(e$message))
           )
           df[1,] <- as.list(i18n$t(unlist(df[1,])))
@@ -355,7 +355,7 @@ ModuleImportServer <- function(Id, Mode = c("AsIs", "Desired", "UserDefined"),
         )
 
         tryCatch(
-          df <- DataFrameConvert(RawDataFrame(), LiveColSpec(), LiveOptions(), Preview = FALSE),
+          df <- DataFrameConvert(RawDataFrame(), LiveColSpec(), LiveFileSpec(), Preview = FALSE),
           error = function(e) shiny::validate(need(NULL, i18n$t(e$message)))
         )
         return(df)
