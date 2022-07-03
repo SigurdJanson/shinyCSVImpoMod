@@ -16,7 +16,7 @@ ModuleImportUI <- function(Id) {
   tagList(
     useShinyjs(),
     uiOutput(ns("uiFileInput")),
-    uiOutput(ns("uiGlobalSettings")),
+    uiOutput(ns("uiFileSpec")),
     uiOutput(ns("uiPreview"))
   )
 }
@@ -147,7 +147,7 @@ ModuleImportServer <- function(Id, Mode = .ImpModes,
       })
 
 
-      output$uiGlobalSettings <- renderUI({
+      output$uiFileSpec <- renderUI({
         # Setup selection choices
         ChoicesDecimalsSep <- list(",", ".")
         names(ChoicesDecimalsSep) <- c(paste(i18n$t("Comma"), "(,)"), paste(i18n$t("Period"), "(.)") )

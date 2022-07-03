@@ -13,8 +13,8 @@
 )
 
 
-VerifyExpectedFormat <- function(Expected) {
-  if (is.null(Expected))
+VerifyFileSpecFormat <- function(Expected) {
+  if (!isTruthy(Expected))
     return(.ExpectedDefault)
 
   if (!is.list(Expected))

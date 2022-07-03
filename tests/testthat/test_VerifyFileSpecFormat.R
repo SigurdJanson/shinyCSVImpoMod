@@ -2,22 +2,30 @@
 ##
 ##
 
-test_that("VerifyExpectedFormat: NULL returns Default", {
+test_that("VerifyFileSpecFormat: NULL returns Default", {
   # Arrange
   # Act
-  observed <- VerifyExpectedFormat(NULL)
+  observed <- VerifyFileSpecFormat(NULL)
   # Assert
   expect_type(observed, "list")
-  # expect_equal(names(observed), c("LangCode", "Header", "ColSep",
-  #                                 "ThousandsSep", "DecimalsSep",
-  #                                 "DateFormat", "TimeFormat",
-  #                                 "Quote", "StringsAsFactors"))
+  expect_identical(observed, .ExpectedDefault)
+})
+
+
+test_that("VerifyFileSpecFormat: NA returns Default", {
+  # Arrange
+  # Act
+  observed <- VerifyFileSpecFormat(NA)
+  # Assert
+  expect_type(observed, "list")
   expect_identical(observed, .ExpectedDefault)
 })
 
 
 
-test_that("VerifyExpectedFormat: Unknown field yields error", {
+
+
+test_that("VerifyFileSpecFormat: Unknown field yields error", {
   # Arrange
   Input <- list("en", TRUE, ";", ",", ".", "dd", "__EXTRA__", "mm:ss", "'", FALSE)
   names(Input) <- c("LangCode", "Header", "ColSep", "ThousandsSep",
@@ -26,14 +34,15 @@ test_that("VerifyExpectedFormat: Unknown field yields error", {
   Input <- Input[sample.int(length(Input))]
 
   # Act
-  observed <- VerifyExpectedFormat(Input)
+  observed <- VerifyFileSpecFormat(Input)
 
   # Assert
   expect_length(observed, length(.ExpectedDefault))
 })
 
 
-test_that("VerifyExpectedFormat: Missing field yields error", {
+
+test_that("VerifyFileSpecFormat: Missing field yields error", {
   # Arrange
   Input <- list("en", TRUE, ";", ",", ".", "dd", "mm:ss", "'", FALSE)
   names(Input) <- c("LangCode", "Header", "ColSep", "ThousandsSep",
@@ -43,7 +52,7 @@ test_that("VerifyExpectedFormat: Missing field yields error", {
   Input[sample.int(length(Input), 1L)] <- NULL
 
   # Act
-  observed <- VerifyExpectedFormat(Input)
+  observed <- VerifyFileSpecFormat(Input)
 
   # Assert
   expect_length(observed, length(Input) + 1L )
