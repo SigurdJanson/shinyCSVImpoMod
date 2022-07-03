@@ -2,7 +2,7 @@
 
 #' PeekIntoFile
 #' Investigates the format of a delimiter separated file.
-#' @param File A file to investigate
+#' @param File The name of the file to investigate
 #' @param GetSpec Shall the function return a `col_spec` object or
 #' the data?
 #' @param ... Additional arguments handed over to [`vroom::vroom`].
@@ -11,7 +11,7 @@
 #' data frame (as returned from [vroom]).
 PeekIntoFile <- function(File, GetSpec = FALSE, ...) {
   if (!isTruthy(File))
-    stop("Cannot peek into invalid file")
+    stop("Invalid file name given. Cannot peek into invalid file.")
 
   Args <- c(file=File, list(...), show_col_types = FALSE)
 

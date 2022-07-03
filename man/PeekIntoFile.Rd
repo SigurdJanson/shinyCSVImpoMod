@@ -8,7 +8,7 @@ Investigates the format of a delimiter separated file.}
 PeekIntoFile(File, GetSpec = FALSE, ...)
 }
 \arguments{
-\item{File}{A file to investigate}
+\item{File}{The name of the file to investigate}
 
 \item{GetSpec}{Shall the function return a \code{col_spec} object or
 the data?}
