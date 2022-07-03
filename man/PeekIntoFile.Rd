@@ -16,8 +16,9 @@ the data?}
 \item{...}{Additional arguments handed over to \code{\link[vroom:vroom]{vroom::vroom}}.}
 }
 \value{
-Depending on \code{GetSpec} the column specification or the
-data frame (as returned from \link{vroom}).
+Depending on \code{GetSpec} the column specification (which is an extended
+object of class \code{col_spec} with additional fields),
+the data frame (as returned from \link{vroom}).
 }
 \description{
 PeekIntoFile

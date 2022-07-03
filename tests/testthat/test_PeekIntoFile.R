@@ -77,3 +77,55 @@ test_that("Non-truthy file name throws an error", {
     }, "^Invalid file name.*")
   }
 })
+
+
+
+
+
+## HasFileHeader() #####
+
+test_that("Module test file: HasFileHeader==TRUE", {
+  # Arrange
+  TestFile <- system.file("extdata", package = "shiny.CSVImport")
+  TestFile <- file.path(TestFile, "table.csv")
+
+  Data1 <- vroom::vroom(TestFile, show_col_types = FALSE)
+  Spec1 <- vroom::spec(Data1)
+
+  # Act
+  Result <- HasFileHeader(Spec1, TestFile)
+
+  # Assert
+  expect_true(Result)
+})
+
+
+test_that("mtcars: HasFileHeader==TRUE", {
+  # Arrange
+  TestFile <- vroom::vroom_example("mtcars.csv")
+
+  Data1 <- vroom::vroom(TestFile, show_col_types = FALSE)
+  Spec1 <- vroom::spec(Data1)
+
+  # Act
+  Result <- HasFileHeader(Spec1, TestFile)
+
+  # Assert
+  expect_true(Result)
+})
+
+
+test_that("Module test file: HasFileHeader==FALSE", {
+  # Arrange
+  TestFile <- system.file("extdata", package = "shiny.CSVImport")
+  TestFile <- file.path(TestFile, "headerlesstable.csv")
+
+  Data1 <- vroom::vroom(TestFile, show_col_types = FALSE)
+  Spec1 <- vroom::spec(Data1)
+
+  # Act
+  Result <- HasFileHeader(Spec1, TestFile)
+
+  # Assert
+  expect_false(Result)
+})
