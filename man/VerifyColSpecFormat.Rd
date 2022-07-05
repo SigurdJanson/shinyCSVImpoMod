@@ -8,7 +8,7 @@
 \alias{VerifyColSpecFormat.list}
 \title{VerifyColSpecFormat}
 \usage{
-VerifyColSpecFormat(ColSpec)
+VerifyColSpecFormat(ColSpec, Required = FALSE)
 
 \method{VerifyColSpecFormat}{default}(ColSpec)
 
@@ -20,6 +20,9 @@ VerifyColSpecFormat(ColSpec)
 }
 \arguments{
 \item{ColSpec}{A column specification.}
+
+\item{Required}{Causes an error if the column specification
+is required but not valid (TRUE/FALSE).}
 }
 \value{
 A valid column specification in the format of a \code{col_spec}

@@ -7,10 +7,15 @@ lengthAllEqual <- function(x)
 #' VerifyColSpecFormat
 #'
 #' @param ColSpec A column specification.
+#' @param Required Causes an error if the column specification
+#' is required but not valid (TRUE/FALSE).
 #' @return A valid column specification in the format of a `col_spec`
 #' class that the import module can handle.
 #' @seealso [readr::cols_condense()]
-VerifyColSpecFormat <- function(ColSpec) {
+VerifyColSpecFormat <- function(ColSpec, Required = FALSE) {
+  if (!isTruthy(ColSpec) && isTRUE(Required))
+    stop("Column specification is required but missing or invalid")
+
   UseMethod("VerifyColSpecFormat", ColSpec)
 }
 

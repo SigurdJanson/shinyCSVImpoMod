@@ -5,7 +5,7 @@
 .ImportMaxCol = 999L
 
 # Supported import modes (set by the calling app)
-.ImpModes <- c(AsIs = "AsIs", Desired = "Desired", User = "UserDefined")
+.ImpModes <- c(Desired = "Desired", AsIs = "AsIs", User = "UserDefined")
 
 # The expected names of the list containing the column specification
 .ColumnSpecificationListNames <- c(Name = "Name",

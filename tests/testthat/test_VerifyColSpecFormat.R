@@ -132,3 +132,26 @@ test_that("Unknown class returns error", {
     VerifyColSpecFormat(mtcars)
   )
 })
+
+
+##
+## FALSY ########
+##
+test_that("FALSY but not required", {
+  # Arrange
+  # Act
+  # Assert
+  expect_error(
+    VerifyColSpecFormat(NA, Required = FALSE)
+  )
+})
+
+test_that("FALSY and REQUIRED: error", {
+  # Arrange
+  # Act
+  # Assert
+  expect_error(
+    VerifyColSpecFormat(NA, Required = TRUE),
+    "Column specification is required but missing or invalid"
+  )
+})
