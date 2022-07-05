@@ -1,6 +1,6 @@
 
 
-.ExpectedDefault <- list(
+.FileSpecDefault <- list(
   LangCode = "en",
   Header = TRUE,
   ColSep = " ",
@@ -13,12 +13,16 @@
 )
 
 
-VerifyFileSpecFormat <- function(Expected) {
-  if (!isTruthy(Expected))
-    return(.ExpectedDefault)
+VerifyFileSpecFormat <- function(FileSpec, Required = FALSE) {
+  if (!isTruthy(FileSpec)) {
+    if (Required)
+      stop("File specification is required but missing or invalid")
+    else
+      return(.FileSpecDefault)
+  }
 
-  if (!is.list(Expected))
+  if (!is.list(FileSpec))
     stop("Expected must be a list")
 
-  return(FixupList(Expected, .ExpectedDefault))
+  return(FixupList(FileSpec, .FileSpecDefault))
 }

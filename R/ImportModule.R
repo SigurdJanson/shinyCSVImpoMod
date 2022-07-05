@@ -67,12 +67,12 @@ ModuleImportUI <- function(Id) {
 #'         (format specification by [base::strptime()]).}
 #'   \item{TimeFormat}{Format used for temporal data in the file
 #'         (format specification by [base::strptime()]).}
-#'   \item{Quote}{Character to identify text
+#'   \item{Quote}{Character to identify text,
 #'         see [utils::read.csv()] argument `quote`}
 #'   \item{StringsAsFactors}{Convert all strings to factors (`TRUE`/`FALSE` is default;
 #'         see [utils::read.csv()] argument `stringsAsFactors`).}
 #' }
-#' @return a data frame containing the uploaded CSV file
+#' @return A data frame containing the uploaded CSV file
 #' @export
 #' @import shiny
 #' @importFrom shinyjs disabled
@@ -86,17 +86,21 @@ ModuleImportServer <- function(Id, Mode = .ImpModes,
     error = function(e) e,
     warning = function(w) w
   )
+  if (Mode == .ImpModes["User"])
+    stop("'User-Defined' import has not been implemented, yet.")
+  if (Mode == .ImpModes["Desired"])
+    stop("'Desired' import has not been implemented, yet.")
 
   # COLUMNS SPECIFICATION
   tryCatch(
-    ColSpec <- VerifyColSpecFormat(ColSpec),
+    ColSpec <- VerifyColSpecFormat(ColSpec, Required = (Mode==.ImpModes["Desired"])),
     error = function(e) e,
     warning = function(w) w
   )
 
   # EXPECTED FILE SPEC DEFAULTS (column separator, date/time and number formats)
   tryCatch(
-    FileSpec <- VerifyExpectedFormat(FileSpec),
+    FileSpec <- VerifyFileSpecFormat(FileSpec, Required = (Mode==.ImpModes["Desired"])),
     error = function(e) e,
     warning = function(w) w
   )
@@ -257,14 +261,24 @@ ModuleImportServer <- function(Id, Mode = .ImpModes,
 
       # Global options of CSV import
       LiveFileSpec <- reactive({
-        Result <- FileSpec
+        Result <- NULL
+
+        if (isTruthy(FileSpec)) {
+          Result <- FileSpec
+        } else {
+          Spec <- PeekIntoFile(input$inpImportData$datapath, GetSpec = TRUE)
+          Result <- list(Header = Spec$HasHeader, ColSep = Spec$delim)
+          VerifyFileSpecFormat(FileSpec)
+        }
+
+        # Update the input fields for the file spec
         for (inp in c("Header", "ColSep", "ThousandsSep", "DecimalsSep",
-                    "DateFormat", "TimeFormat", "Quote")) {
+                      "DateFormat", "TimeFormat", "Quote")) { # "StringsAsFactors" not used at the moment
           if (isTruthy(input[[paste0("inp", inp)]])) {
             Result[[inp]] <- input[[paste0("inp", inp)]]
           }
         }
-        #Result[["StringsAsFactors"]] # Not used at the moment setting
+
         return(Result)
       })
 

@@ -2,14 +2,26 @@
 ##
 ##
 
-test_that("VerifyFileSpecFormat: NULL returns Default", {
+test_that("VerifyFileSpecFormat: NULL && !Required returns Default", {
   # Arrange
   # Act
   observed <- VerifyFileSpecFormat(NULL)
   # Assert
   expect_type(observed, "list")
-  expect_identical(observed, .ExpectedDefault)
+  expect_identical(observed, .FileSpecDefault)
 })
+
+
+test_that("VerifyFileSpecFormat: NULL but Required causes error", {
+  # Arrange
+  # Act
+  # Assert
+  expect_error(
+    observed <- VerifyFileSpecFormat(NULL, Required = TRUE),
+    "File specification is required but missing or invalid"
+  )
+})
+
 
 
 test_that("VerifyFileSpecFormat: NA returns Default", {
@@ -18,7 +30,7 @@ test_that("VerifyFileSpecFormat: NA returns Default", {
   observed <- VerifyFileSpecFormat(NA)
   # Assert
   expect_type(observed, "list")
-  expect_identical(observed, .ExpectedDefault)
+  expect_identical(observed, .FileSpecDefault)
 })
 
 
@@ -45,7 +57,7 @@ test_that("VerifyFileSpecFormat: Unknown field yields error", {
   observed <- VerifyFileSpecFormat(Input)
 
   # Assert
-  expect_length(observed, length(.ExpectedDefault))
+  expect_length(observed, length(.FileSpecDefault))
 })
 
 

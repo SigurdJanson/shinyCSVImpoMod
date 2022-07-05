@@ -28,7 +28,7 @@ user have to modify the way the file is to be imported? One of three options:
 in the user interface (allowed values: "en", "de").}
 }
 \value{
-a data frame containing the uploaded CSV file
+A data frame containing the uploaded CSV file
 }
 \description{
 The server function of the CSV import module
@@ -66,7 +66,7 @@ see \code{\link[utils:read.table]{utils::read.csv()}} argument \code{sep})}
 (format specification by \code{\link[base:strptime]{base::strptime()}}).}
 \item{TimeFormat}{Format used for temporal data in the file
 (format specification by \code{\link[base:strptime]{base::strptime()}}).}
-\item{Quote}{Character to identify text
+\item{Quote}{Character to identify text,
 see \code{\link[utils:read.table]{utils::read.csv()}} argument \code{quote}}
 \item{StringsAsFactors}{Convert all strings to factors (\code{TRUE}/\code{FALSE} is default;
 see \code{\link[utils:read.table]{utils::read.csv()}} argument \code{stringsAsFactors}).}
