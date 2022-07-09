@@ -25,14 +25,75 @@ There are two parameters to describe the expected format of the CSV file.
 
 It has three modes.
 
+1.  **Desired**. The application that calls the module defines the expected format of the data. The user has to make that the CSV file is formatted according to specs and can use the module to check whether the file meets the specs.
 1.  **As-Is**. Read the data as it comes. A preview will show to the user how the data is interpreted. Users can also change the basic CSV specification (such as column separating character etc.) but they cannot edit it otherwise.
-2.  **Desired**. The application that calls the module defines the expected format of the data. The user has to make that the CSV file is formatted according to specs.
-3.  **User-Defined**. The user can determine the format.
+1.  **User-Defined**. The user can determine the format.
 
 The modes determine in what ways users can change the expected format and, thus, change the format of the imported data frame.
 
+
+
+## Import Modes
+
+
 | Mode         | `FileSpec`  |  `ColSpec`  |
 |:-------------|:-----------:|:-----------:|
-| As-Is        |  editable   | -read-only- |
 | Desired      | -read-only- | -read-only- |
-| User-Defined |  editable   |  editable   |
+| As-Is        | editable    | -read-only- |
+| User-Defined | editable    |  editable   |
+
+
+
+### Desired
+
+The purpose of the module in this case: users have a means to check if an import would be successful.
+
+* The calling application **must** supply valid arguments for a file and column specification.
+* The module tests whether the specification can be applied to the file and if there are any problems. If yes, the users are informed accordingly.
+
+I tried this code to disable all inputs in a section.
+
+```{r eval=FALSE, include=TRUE}
+if (Mode == .ImpModes["AsIs"])
+  shinyjs::disable(selector = paste(ns("uiFileSpec"), "input"))
+```
+
+
+### As Is
+
+The purpose of the module in this case: The data can be imported as it is. However, users get the chance to modify the file specification to make sure that columns are identified properly.
+
+* File specification
+  * The app **can** supply a file specification. If not the default will be used.
+  * Users can change the file spec.
+* Column specification 
+  * ... will be deduced from the file using the given file spec.
+  * If the calling app supplies a column specification it will be ignored.
+* The module will supply the data frame as best as it interprets it.
+
+
+
+### User-Defined
+
+* The app **can** supply a file specification. If not the default will be used.
+* The file and column specification will serve as suggestion. Users can change it.
+
+
+
+
+## Basic Principles
+
+* Try to keep as much logic out of the module and into a function to ease testing with unit tests.
+
+
+
+## Dependency Tree
+
+```{r}
+library(foodwebr, shiny.CSVImport)
+fw <- foodweb(FUN = shiny.CSVImport::ModuleImportServer, filter = TRUE)
+DiagrammeR::grViz(fw$graphviz_spec, width = 800, height = 400)
+```
+
+
+
