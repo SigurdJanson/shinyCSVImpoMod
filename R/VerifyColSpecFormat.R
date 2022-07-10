@@ -22,18 +22,21 @@ VerifyColSpecFormat <- function(ColSpec, Required = FALSE) {
 
 #' @describeIn VerifyColSpecFormat Default method throws an error
 #' to ignore unspecified data types.
+#' @exportS3Method
 VerifyColSpecFormat.default <- function(ColSpec)
   stop("Unknown format of column specification")
 
 
 #' @describeIn VerifyColSpecFormat Handle `col_spec` objects and simply returns
 #' the object itself.
+#' @exportS3Method
 VerifyColSpecFormat.col_spec <- function(ColSpec) {
   return(ColSpec)
 }
 
 
 #' @describeIn VerifyColSpecFormat Specific method to handle `tibble` objects.
+#' @exportS3Method
 VerifyColSpecFormat.tbl_df <- function(ColSpec) {
   ColSpec <- vroom::spec(ColSpec)
   return(ColSpec)
@@ -42,6 +45,7 @@ VerifyColSpecFormat.tbl_df <- function(ColSpec) {
 
 #' @describeIn VerifyColSpecFormat Specific method to handle `list`s.
 #' It converts the information from the list into a valid `col_spec` object.
+#' @exportS3Method
 VerifyColSpecFormat.list <- function(ColSpec) {
 
   Names <- match(.ColumnSpecificationListNames, names(ColSpec))
