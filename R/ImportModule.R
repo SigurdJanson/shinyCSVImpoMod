@@ -308,8 +308,11 @@ ModuleImportServer <- function(Id, Mode = .ImpModes,
 
         # check if all requested variables are there
         if (isTruthy(LiveColSpec())) {
+          # verify that the data frame contains all requried columns
+          ## If (Mode == InpModes[["Desired]]
           ColNames <- names(Result)
           WantedNotFound <- setdiff(names(LiveColSpec()$cols), ColNames)
+
           # if (length(WantedNotFound) > 0)
           #   showNotification(i18n$t("Some requested columns have not been found"))
           #-UnWanted <- setdiff(ColNames, ColSpec$NameInFile) # CURRENTLY NOT USED
@@ -342,7 +345,7 @@ ModuleImportServer <- function(Id, Mode = .ImpModes,
         if(isTRUE(attr(RawDataFrame(), "problems"))) {
           shiny::validate(i18n$t("msgImportProblems"))
         } else {
-          browser
+          #-browser
           tryCatch(
             df <- DataFrameConvert(RawDataFrame(), LiveColSpec(), LiveFileSpec(), Preview = TRUE),
             error = function(e) shiny::validate(i18n$t(e$message))

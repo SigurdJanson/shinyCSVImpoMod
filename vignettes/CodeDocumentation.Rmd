@@ -89,11 +89,8 @@ The purpose of the module in this case: The data can be imported as it is. Howev
 
 ## Dependency Tree
 
-```{r}
+```{r echo=FALSE}
 library(foodwebr, shiny.CSVImport)
-fw <- foodweb(FUN = shiny.CSVImport::ModuleImportServer, filter = TRUE)
+fw <- foodweb(FUN = shiny.CSVImport::ModuleImportServer, filter = FALSE)
 DiagrammeR::grViz(fw$graphviz_spec, width = 800, height = 400)
 ```
-
-
-
