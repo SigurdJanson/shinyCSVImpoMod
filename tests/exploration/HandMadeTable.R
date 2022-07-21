@@ -31,7 +31,9 @@ shinyApp(
     title = "CSV Import Sample App",
     h3("Exploration App to Create a Specific Rendering for a Table"),
     fluidRow(
-      column(3, checkboxInput("chbIncludeVisible", "Visible"), checkboxInput("chbIncludeEnabled", "Enabled"))
+      column(3, "Edit", checkboxInput("chbEditVisible", "Visible"), checkboxInput("chbEditEnabled", "Enabled")),
+      column(3, "Include", checkboxInput("chbIncludeVisible", "Visible"), checkboxInput("chbIncludeEnabled", "Enabled")),
+      column(3, "Type", checkboxInput("chbTypeVisible", "Visible"), checkboxInput("chbTypeEnabled", "Enabled"))
     ), hr(),
     uiOutput("AppOutputTest")
   ),
@@ -108,10 +110,13 @@ shinyApp(
     renderDataPreview <- function(Data, NameEdit=.Setting, Types=.Setting, Include=.Setting) {
       df <- head(DataFile)
 
-      Content <- HTML(base::apply(df, 1, renderTableRow))
-      Types <- HTML(
-        paste0("<tr>", paste0("<td>", "&lt;", rep("TYPE", ncol(df)), "&gt;", "</td>", collapse = ""), "</tr>"))
-      HtmlNameEdit <- HTML(as.character(renderRowTextInput(colnames(df))))
+      if (NameEdit["Visible"]){
+        Rendered <- renderRowTextInput(colnames(df)) # TODO: Enabled
+        HtmlNameEdit <- tags$tbody(HTML(as.character(Rendered)))
+      }
+      else
+        HtmlNameEdit <- HTML("")
+
 
       if (Include["Visible"]) {
         Rendered <- renderRowCheckBox(colnames(df), "Include", Enabled = Include["Enabled"])
@@ -120,6 +125,20 @@ shinyApp(
       else
         HtmlInclude <- HTML("")
 
+
+      if (Types["Visible"]) {
+        Rendered <- HTML(
+          paste0("<tr>", paste0("<td>", "&lt;", rep("TYPE", ncol(df)), "&gt;", "</td>", collapse = ""), "</tr>"))
+
+        #Rendered <- renderRowCheckBox(colnames(df), "Include", Enabled = Include["Enabled"])
+        HtmlTypes <- tags$tbody(HTML(as.character(Rendered)))
+      }
+      else
+        HtmlTypes <- HTML("")
+
+
+      Content <- HTML(base::apply(df, 1, renderTableRow))
+
       Tbl <- withTags(
         div(
           tags$table(
@@ -127,9 +146,9 @@ shinyApp(
             thead(
               HTML(paste0("<tr>", paste0("<th>", names(df), "</th>", collapse = ""), "</tr>"))
             ),
-            tbody(HtmlNameEdit),
+            HtmlNameEdit,
             HtmlInclude,
-            tbody(Types),
+            HtmlTypes,
             tbody(Content)
           )
         )
@@ -143,7 +162,12 @@ shinyApp(
       need(DataFile, "No data available")
 
       Result <- renderDataPreview(DataFile,
-                                  Include=c(Visible=input$chbIncludeVisible, Enabled=input$chbIncludeEnabled))
+                                  NameEdit=c(Visible=input$chbEditVisible,
+                                            Enabled=input$chbEditEnabled),
+                                  Types=c(Visible=input$chbTypeVisible,
+                                            Enabled=input$chbTypeEnabled),
+                                  Include=c(Visible=input$chbIncludeVisible,
+                                            Enabled=input$chbIncludeEnabled))
 
       return(Result)
     })
