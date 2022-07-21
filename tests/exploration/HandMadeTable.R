@@ -1,15 +1,46 @@
 library(shiny)
 
+
+# Constant to represent table settings
+.Setting <- c(Visible = TRUE, Enabled = TRUE)
+
+
+
+
+if_else <- function (condition, true, false, missing = NULL)
+{
+  if (!is.logical(condition)) {
+    msg <- glue("`condition` must be a logical vector, not {friendly_type_of(condition)}.")
+    abort(msg)
+  }
+  out <- true[rep(NA_integer_, length(condition))]
+  out <- replace_with(out, condition, true, "`true`", "length of `condition`")
+  out <- replace_with(out, !condition, false, "`false`", "length of `condition`")
+  out <- replace_with(out, is.na(condition), missing, "`missing`",
+                      "length of `condition`")
+  out
+}
+
+
+
+
 shinyApp(
+
+
   fluidPage(
     title = "CSV Import Sample App",
-    h3("Exploration App"),
+    h3("Exploration App to Create a Specific Rendering for a Table"),
+    fluidRow(
+      column(3, checkboxInput("chbIncludeVisible", "Visible"), checkboxInput("chbIncludeEnabled", "Enabled"))
+    ), hr(),
     uiOutput("AppOutputTest")
   ),
+
+
+
   function(input,output,session){
     print(getwd())
-
-    DataFile <- vroom::vroom("../../inst/extdata/table.csv", delim=";", progress=FALSE)
+    DataFile <- vroom::vroom("../../inst/extdata/table.csv", delim=";", show_col_types=FALSE)
 
     renderTableRow <- function(Row) {
       paste0("<tr>", paste0("<td>", Row, "</td>", collapse = ""), "</tr>")
@@ -49,76 +80,72 @@ shinyApp(
     #'
     #' @param ColNames
     #' @param Values
+    #' @param Enabled (not vectorised)
     #'
     #' @return
     #' @export
     #'
     #' @examples
-    renderRowCheckBox <- function(ColNames, Label=NULL, Values=NULL) {
-      .render <- function(.colname, .label, .val)
+    renderRowCheckBox <- function(ColNames, Label=NULL, Values=NULL, Enabled=TRUE) {
+      .render <- function(.colname, .label, .val, .enable)
         div(
           class="shiny-input-container-inline",
           div(class="checkbox",
               tags$label(
-                tags$input(id=.colname, type="checkbox", value=.val),
+                tags$input(id=.colname, type="checkbox", value=.val, disabled=!.enable),
                 span(.label)
               )
           )
         )
 
-      Result <- lapply(paste("ColName", ColNames), .render, .val=TRUE, .label=Label) # TODO: use `Values`
+      Result <- lapply(paste("ColName", ColNames), .render, .val=TRUE, .label=Label, .enable=Enabled) # TODO: use `Values`
       Result <- lapply(Result, function(x) paste0("<td>", x, "</td>"))
       paste("<tr>", paste(Result, collapse = ""), "</tr>")
     }
 
 
-    output$AppOutputTest <- renderUI({
-      need(DataFile, "No data available")
 
+    renderDataPreview <- function(Data, NameEdit=.Setting, Types=.Setting, Include=.Setting) {
       df <- head(DataFile)
 
-      # Tbl <- HTML(
-      #   "<div>",
-      #   "<table class=\"table shiny-table table- spacing-s\">",
-      #   "<thead>",
-      #   paste0("<tr>", paste0("<th>", names(df), "</th>", collapse = ""), "</tr>"),
-      #   "</thead>",
-      #   "<tbody>",
-      #   paste0("<tr>", paste0("<td>", df[1,], "</td>", collapse = ""), "</tr>"),
-      #   "</tbody>",
-      #   "</table>",
-      #   "</div>"
-      # )
       Content <- HTML(base::apply(df, 1, renderTableRow))
       Types <- HTML(
         paste0("<tr>", paste0("<td>", "&lt;", rep("TYPE", ncol(df)), "&gt;", "</td>", collapse = ""), "</tr>"))
-      ColNameEdit <- HTML(as.character(renderRowTextInput(colnames(df))))
-      Include <- HTML(as.character(renderRowCheckBox(colnames(df), "Include")))
+      HtmlNameEdit <- HTML(as.character(renderRowTextInput(colnames(df))))
+
+      if (Include["Visible"]) {
+        Rendered <- renderRowCheckBox(colnames(df), "Include", Enabled = Include["Enabled"])
+        HtmlInclude <- tags$tbody(HTML(as.character(Rendered)))
+      }
+      else
+        HtmlInclude <- HTML("")
 
       Tbl <- withTags(
         div(
-          tags$table(class="table shiny-table table- spacing-s",
+          tags$table(
+            class="table shiny-table table- spacing-s",
             thead(
               HTML(paste0("<tr>", paste0("<th>", names(df), "</th>", collapse = ""), "</tr>"))
             ),
-            tbody(
-              ColNameEdit
-            ),
-            tbody(
-              Include
-            ),
-            tbody(
-              Types
-            ),
-            tbody(
-              Content
-            )
+            tbody(HtmlNameEdit),
+            HtmlInclude,
+            tbody(Types),
+            tbody(Content)
           )
         )
       )
-
       return(Tbl)
-      #return(DataFile)
+    }
+
+
+
+    output$AppOutputTest <- renderUI({
+      need(DataFile, "No data available")
+
+      Result <- renderDataPreview(DataFile,
+                                  Include=c(Visible=input$chbIncludeVisible, Enabled=input$chbIncludeEnabled))
+
+      return(Result)
     })
   }
 )
