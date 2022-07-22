@@ -12,6 +12,66 @@
 }
 
 
+#' HtmlAttrStr
+#' Convert the arguments into strings to be used as attributes in HTML.
+#' @param ... Named or unnamed arguments.
+#' @param collapse_
+#' @details
+#' @return A vector of strings.
+#'
+#' * Named arguments are converted in the form of `attribute="Value"`.
+#' * Unnamed arguments are converted as Boolean HTML attributes
+#' (like `disabled` or `required`).
+#'
+#' The characters ".#:" and spaces
+#'
+#' @examples
+#' cat(HtmlAttrStr(id="my id", A="A", "B", C=NULL, D=NA, E=Inf, F=NaN, NA, H=x, Y="Fa\"il", `Zor>ro`="Z"))
+#' #> id="my id" A="A" B  D="NA" NA H="2" Y="Fa_il" Zor_ro="Z"
+#' @references
+#' https://html.spec.whatwg.org/multipage/syntax.html#attributes-2
+HtmlAttrStr <- function(..., collapse_ = "") {
+  .cpaste <- function(a, b, sep = "=")
+    paste0(
+      ifelse(isTruthy(a), a, ""),
+      ifelse(isTruthy(a) && isTruthy(b), paste0(sep, "\"", b, "\""), ""),
+      ifelse(!isTruthy(a) && isTruthy(b), b, "")
+    )
+  .is.invalid <- function(x) is.infinite(x) || is.nan(x)
+
+  nonChar  <- "\UFDD0-\UFDEF\UFFFE\UFFFF\U1FFFE\U1FFFF\U2FFFE\U2FFFF\U3FFFE\U3FFFF\U4FFFE\U4FFFF\U5FFFE\U5FFFF\U6FFFE\U6FFFF\U7FFFE\U7FFFF\U8FFFE\U8FFFF\U9FFFE\U9FFFF\UAFFFE\UAFFFF\UBFFFE\UBFFFF\UCFFFE\UCFFFF\UDFFFE\UDFFFF\UEFFFE\UEFFFF\UFFFFE\UFFFFF\U10FFFE\U10FFFF"
+  ctrlChar <- "\U0001-\U001F\U007F-\U009F"
+  noNameChar <- r"{[:blank:].#:"'>/=}"
+  CleanNameRegex <- paste0("[", nonChar, ctrlChar, noNameChar, "]")
+
+
+  attrvalues <- list(...)
+  if (length(attrvalues) == 0) return(NULL)
+
+  # Drop invalid args
+  attrvalues <- attrvalues[!sapply(attrvalues, .is.invalid)]
+  if (length(attrvalues) == 0) {
+    return(NULL)
+  }
+
+  # Necessary to make factors show up as level names, not numbers
+  attrvalues[] <- lapply(attrvalues, paste, collapse = " ")
+
+  # Replace forbidden characters with '_'
+  # Forbidden are control characters, SPACE, "'>/=, and non-characters
+  attrnames  <- gsub(CleanNameRegex, "_", names(attrvalues) )
+  # Replace " with _ because it is forbidden
+  attrvalues <- gsub(r"["]", "_", attrvalues )
+
+  Result <- mapply(function(n, x) .cpaste(n, x),
+                   attrnames,
+                   attrvalues,
+                   SIMPLIFY = TRUE, USE.NAMES = TRUE)
+  # strip attributes and return
+  return(`attributes<-`(Result, NULL))
+}
+
+
 
 #' FixupList
 #' @description Checks a list for falsy or missing values and replaces them by
