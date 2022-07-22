@@ -7,38 +7,38 @@ source("../../R/PreviewRenderHelper.R")
 .Setting <- c(Visible = TRUE, Enabled = TRUE)
 
 
-replace_with <- function(x, i, val, name, reason = NULL, error_call = caller_env()) {
-  if (is.null(val)) {
-    return(x)
-  }
-
-  check_length(val, x, name, reason, error_call = error_call)
-  check_type(val, x, name, error_call = error_call)
-  check_class(val, x, name, error_call = error_call)
-
-  i[is.na(i)] <- FALSE
-
-  if (length(val) == 1L) {
-    x[i] <- val
-  } else {
-    x[i] <- val[i]
-  }
-
-  x
-}
-
-if_else <- function (condition, true, false, missing = NULL)
-{
-  if (!is.logical(condition)) {
-    abort("`condition` must be a logical vector")
-  }
-  out <- true[rep(NA_integer_, length(condition))]
-  out <- replace_with(out, condition, true, "`true`", "length of `condition`")
-  out <- replace_with(out, !condition, false, "`false`", "length of `condition`")
-  out <- replace_with(out, is.na(condition), missing, "`missing`",
-                      "length of `condition`")
-  out
-}
+# replace_with <- function(x, i, val, name, reason = NULL, error_call = caller_env()) {
+#   if (is.null(val)) {
+#     return(x)
+#   }
+#
+#   check_length(val, x, name, reason, error_call = error_call)
+#   check_type(val, x, name, error_call = error_call)
+#   check_class(val, x, name, error_call = error_call)
+#
+#   i[is.na(i)] <- FALSE
+#
+#   if (length(val) == 1L) {
+#     x[i] <- val
+#   } else {
+#     x[i] <- val[i]
+#   }
+#
+#   x
+# }
+#
+# if_else <- function (condition, true, false, missing = NULL)
+# {
+#   if (!is.logical(condition)) {
+#     abort("`condition` must be a logical vector")
+#   }
+#   out <- true[rep(NA_integer_, length(condition))]
+#   out <- replace_with(out, condition, true, "`true`", "length of `condition`")
+#   out <- replace_with(out, !condition, false, "`false`", "length of `condition`")
+#   out <- replace_with(out, is.na(condition), missing, "`missing`",
+#                       "length of `condition`")
+#   out
+# }
 
 
 
