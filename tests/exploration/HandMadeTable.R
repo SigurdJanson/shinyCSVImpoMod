@@ -40,7 +40,7 @@ source("../../R/PreviewRenderHelper.R")
 #   out
 # }
 
-
+.datasets <- c("table", "mtcars", "iris", "ToothGrowth", "PlantGrowth", "USArrests")
 
 
 shinyApp(
@@ -49,6 +49,9 @@ shinyApp(
   fluidPage(
     title = "CSV Import Sample App",
     h3("Exploration App to Create a Specific Rendering for a Table"),
+    fluidRow(
+      selectInput("inpDataset", label = "Data Set", choices=.datasets)
+    ),
     fluidRow(
       column(3, "Edit", checkboxInput("chbEditVisible", "Visible"), checkboxInput("chbEditEnabled", "Enabled")),
       column(3, "Include", checkboxInput("chbIncludeVisible", "Visible"), checkboxInput("chbIncludeEnabled", "Enabled")),
@@ -60,8 +63,19 @@ shinyApp(
 
 
   function(input,output,session) {
-    print(getwd())
-    DataFile <- vroom::vroom("../../inst/extdata/table.csv", delim=";", show_col_types=FALSE)
+    #-print(getwd())
+
+    LiveColSpec <- reactiveVal() # not used, yet
+
+    DataFile <- reactive({
+      if (input$inpDataset == .datasets[1])
+        return(vroom::vroom("../../inst/extdata/table.csv", delim=";", show_col_types=FALSE))
+      else {
+        x <- get(input$inpDataset)
+        return(x)
+      }
+
+    })
 
 
 
@@ -105,7 +119,7 @@ shinyApp(
     #'
     renderDataPreview <- function(Data, ColSpec,
                                   NameEdit=.Setting, Types=.Setting, Include=.Setting) {
-      df <- head(DataFile)
+      df <- head(Data)
 
       if (NameEdit["Visible"]){
         Rendered <- renderRowTextInput(colnames(df), paste("Edit new name", 1:ncol(df)), LETTERS[1:ncol(df)], Enabled = NameEdit["Enabled"])
@@ -156,9 +170,9 @@ shinyApp(
 #htmlEscape
 
     output$AppOutputTest <- renderUI({
-      need(DataFile, "No data available")
+      need(DataFile(), "No data available")
 
-      Result <- renderDataPreview(DataFile,
+      Result <- renderDataPreview(DataFile(),
                                   NameEdit=c(Visible=input$chbEditVisible,
                                              Enabled=input$chbEditEnabled),
                                   Types=c(Visible=input$chbTypeVisible,
