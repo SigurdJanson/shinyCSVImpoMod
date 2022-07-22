@@ -59,7 +59,7 @@ shinyApp(
 
 
 
-  function(input,output,session){
+  function(input,output,session) {
     print(getwd())
     DataFile <- vroom::vroom("../../inst/extdata/table.csv", delim=";", show_col_types=FALSE)
 
@@ -72,10 +72,9 @@ shinyApp(
     #' In this case we 1. skip the label, 2. remove the class "form-group" because it
     #' just adds a bottom padding, 3.
     renderRowTextInput <- function(ColNames, Label=NULL, Values=NULL, Enabled=TRUE) {
-      #TODO: user `Label` argument
-      Result <- lapply(ColNames, .renderTextInput, .val="", .label=Label, .enable=Enabled)
-      # TODO: use `Values`
-
+      Result <- mapply(FUN = .renderTextInput,
+                       .colname=ColNames, .label=Label, .val=Values, .enable=Enabled,
+                       SIMPLIFY = FALSE)
       .renderTableRow(Result)
     }
 
@@ -93,9 +92,9 @@ shinyApp(
     #'
     #' @examples
     renderRowCheckBox <- function(ColNames, Label=NULL, Values=NULL, Enabled=TRUE) {
-      Result <- lapply(ColNames, .renderCheckBox, .val=TRUE, .label=Label, .enable=Enabled)
-      # TODO: use `Values`
-
+      Result <- mapply(FUN = .renderCheckBox,
+                       .colname=ColNames, .label=Label, .val=Values, .enable=Enabled,
+                       SIMPLIFY = FALSE)
       .renderTableRow(Result)
     }
 
@@ -109,7 +108,7 @@ shinyApp(
       df <- head(DataFile)
 
       if (NameEdit["Visible"]){
-        Rendered <- renderRowTextInput(colnames(df), "Edit", Enabled = NameEdit["Enabled"])
+        Rendered <- renderRowTextInput(colnames(df), paste("Edit new name", 1:ncol(df)), LETTERS[1:ncol(df)], Enabled = NameEdit["Enabled"])
         HtmlNameEdit <- tags$tbody(HTML(as.character(Rendered)))
       }
       else
@@ -117,7 +116,7 @@ shinyApp(
 
 
       if (Include["Visible"]) {
-        Rendered <- renderRowCheckBox(colnames(df), "Include", Enabled = Include["Enabled"])
+        Rendered <- renderRowCheckBox(colnames(df), "Include", Values=TRUE, Enabled = Include["Enabled"])
         HtmlInclude <- tags$tbody(HTML(as.character(Rendered)))
       }
       else

@@ -32,6 +32,8 @@
 #' </div>
 #' ```
 .renderTextInput <- function(.colname, .label, .val, .enable) {
+  # TODO: use `Values`
+
   result <-
     div(
       class=paste(.ContainerClass, ifelse(!.enable, .DisabledClass, "")),
