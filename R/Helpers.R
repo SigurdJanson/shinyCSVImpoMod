@@ -30,19 +30,21 @@
 #' @references
 #' https://html.spec.whatwg.org/multipage/syntax.html#attributes-2
 HtmlAttrStr <- function(...) {
-  .cpaste <- function(a, b, sep = "=")
-    paste0(
-      ifelse(isTruthy(a), a, ""),
-      ifelse(isTruthy(a) && isTruthy(b), paste0(sep, "\"", b, "\""), ""),
-      ifelse(!isTruthy(a) && isTruthy(b), b, "")
-    )
-  .is.invalid <- function(x) is.infinite(x) || is.nan(x)
+  .cpaste <- function(a, b, sep = "=") {
+    if (isTruthy(a))
+      paste0(a, ifelse(isTruthy(b), paste0(sep, "\"", b, "\""), ""))
+    else if (isTruthy(b))
+      paste0(b)
+    else
+      NULL
+  }
+
+  .is.invalid <- function(x) isTRUE(is.infinite(x) || is.nan(x))
 
   nonChar  <- "\UFDD0-\UFDEF\UFFFE\UFFFF\U1FFFE\U1FFFF\U2FFFE\U2FFFF\U3FFFE\U3FFFF\U4FFFE\U4FFFF\U5FFFE\U5FFFF\U6FFFE\U6FFFF\U7FFFE\U7FFFF\U8FFFE\U8FFFF\U9FFFE\U9FFFF\UAFFFE\UAFFFF\UBFFFE\UBFFFF\UCFFFE\UCFFFF\UDFFFE\UDFFFF\UEFFFE\UEFFFF\UFFFFE\UFFFFF\U10FFFE\U10FFFF"
   ctrlChar <- "\U0001-\U001F\U007F-\U009F"
   noNameChar <- r"{[:blank:].#:"'>/=}"
   CleanNameRegex <- paste0("[", nonChar, ctrlChar, noNameChar, "]")
-
 
   attrvalues <- list(...)
   if (length(attrvalues) == 0) return(NULL)
@@ -53,21 +55,22 @@ HtmlAttrStr <- function(...) {
     return(NULL)
   }
 
-  # Necessary to make factors show up as level names, not numbers
-  attrvalues[] <- lapply(attrvalues, paste, collapse = " ")
-
   # Replace forbidden characters with '_'
   # Forbidden are control characters, SPACE, "'>/=, and non-characters
   attrnames  <- gsub(CleanNameRegex, "_", names(attrvalues) )
-  # Replace " with _ because it is forbidden
-  attrvalues <- gsub(r"["]", "_", attrvalues )
+
+  # Necessary to make factors show up as level names, not numbers
+  attrvalues <- lapply(attrvalues, as.character)
+
+  # Replace " with _ because it is forbidden in values
+  attrvalues <- lapply(attrvalues, chartr, old="\"", new="_")
 
   Result <- mapply(function(n, x) .cpaste(n, x),
                    attrnames,
                    attrvalues,
                    SIMPLIFY = TRUE, USE.NAMES = TRUE)
   # strip attributes and return
-  return(`attributes<-`(Result, NULL))
+  return(unlist(`attributes<-`(Result, NULL)))
 }
 
 
