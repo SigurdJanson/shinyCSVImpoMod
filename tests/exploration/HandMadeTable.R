@@ -40,7 +40,7 @@ source("../../R/PreviewRenderHelper.R")
 #   out
 # }
 
-.datasets <- c("table", "mtcars", "iris", "ToothGrowth", "PlantGrowth", "USArrests")
+.datasets <- c("GermanFormat", "MPLs Stops", "mtcars", "iris", "ToothGrowth", "PlantGrowth", "USArrests")
 
 
 shinyApp(
@@ -69,12 +69,14 @@ shinyApp(
 
     DataFile <- reactive({
       if (input$inpDataset == .datasets[1])
-        return(vroom::vroom("../../inst/extdata/table.csv", delim=";", show_col_types=FALSE))
-      else {
-        x <- get(input$inpDataset)
-        return(x)
+        result <- vroom::vroom("../../inst/extdata/table.csv", delim=";", show_col_types=FALSE)
+      else if (input$inpDataset == .datasets[2]) {
+        result <- vroom::vroom("https://vincentarelbundock.github.io/Rdatasets/csv/carData/MplsStops.csv", show_col_types=FALSE)
       }
-
+      else {
+        result <- get(input$inpDataset)
+      }
+      return(result)
     })
 
 
