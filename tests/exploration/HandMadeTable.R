@@ -50,7 +50,8 @@ shinyApp(
     title = "CSV Import Sample App",
     h3("Exploration App to Create a Specific Rendering for a Table"),
     fluidRow(
-      selectInput("inpDataset", label = "Data Set", choices=.datasets)
+      column(3, selectInput("inpDataset", label = "Data Set", choices=.datasets)),
+      column(3, numericInput("inpPreviewLength", label = "Preview Length", 5, min = 1, max=99))
     ),
     fluidRow(
       column(3, "Edit", checkboxInput("chbEditVisible", "Visible"), checkboxInput("chbEditEnabled", "Enabled")),
@@ -62,19 +63,23 @@ shinyApp(
 
 
 
-  function(input,output,session) {
+  function(input, output, session) {
     #-print(getwd())
 
     LiveColSpec <- reactiveVal() # not used, yet
 
     DataFile <- reactive({
-      if (input$inpDataset == .datasets[1])
+      if (input$inpDataset == .datasets[1]) {
         result <- vroom::vroom("../../inst/extdata/table.csv", delim=";", show_col_types=FALSE)
+        LiveColSpec(vroom::spec(result))
+      }
       else if (input$inpDataset == .datasets[2]) {
         result <- vroom::vroom("https://vincentarelbundock.github.io/Rdatasets/csv/carData/MplsStops.csv", show_col_types=FALSE)
+        LiveColSpec(vroom::spec(result))
       }
       else {
         result <- get(input$inpDataset)
+        LiveColSpec(NULL)
       }
       return(result)
     })
@@ -119,12 +124,16 @@ shinyApp(
     #' renderDataPreview
     #'
     #'
-    renderDataPreview <- function(Data, ColSpec,
+    renderDataPreview <- function(Data, ColSpec, ViewLen,
                                   NameEdit=.Setting, Types=.Setting, Include=.Setting) {
-      df <- head(Data)
+      df <- head(Data, n = ifelse(missing(ViewLen), 5L, ViewLen))
+      if (isTruthy(ColSpec))
+        HeadNames <- names(ColSpec$cols)
+      else
+        HeadNames <- colnames(Data)
 
       if (NameEdit["Visible"]){
-        Rendered <- renderRowTextInput(colnames(df), paste("Edit new name", 1:ncol(df)), LETTERS[1:ncol(df)], Enabled = NameEdit["Enabled"])
+        Rendered <- renderRowTextInput(colnames(df), "Edit new name", HeadNames, Enabled = NameEdit["Enabled"])
         HtmlNameEdit <- tags$tbody(HTML(as.character(Rendered)))
       }
       else
@@ -174,7 +183,7 @@ shinyApp(
     output$AppOutputTest <- renderUI({
       need(DataFile(), "No data available")
 
-      Result <- renderDataPreview(DataFile(),
+      Result <- renderDataPreview(DataFile(), ColSpec = LiveColSpec(), ViewLen = input$inpPreviewLength,
                                   NameEdit=c(Visible=input$chbEditVisible,
                                              Enabled=input$chbEditEnabled),
                                   Types=c(Visible=input$chbTypeVisible,
