@@ -15,8 +15,7 @@
 #' HtmlAttrStr
 #' Convert the arguments into strings to be used as attributes in HTML.
 #' @param ... Named or unnamed arguments.
-#' @param collapse_
-#' @details
+#' @details See examples (should be self-explanatory)
 #' @return A vector of strings.
 #'
 #' * Named arguments are converted in the form of `attribute="Value"`.
@@ -30,7 +29,7 @@
 #' #> id="my id" A="A" B  D="NA" NA H="2" Y="Fa_il" Zor_ro="Z"
 #' @references
 #' https://html.spec.whatwg.org/multipage/syntax.html#attributes-2
-HtmlAttrStr <- function(..., collapse_ = "") {
+HtmlAttrStr <- function(...) {
   .cpaste <- function(a, b, sep = "=")
     paste0(
       ifelse(isTruthy(a), a, ""),

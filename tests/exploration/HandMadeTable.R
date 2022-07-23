@@ -87,46 +87,13 @@ shinyApp(
 
 
 
-    #' renderRow-Functions
-    #'
-
-    #' In this case we 1. skip the label, 2. remove the class "form-group" because it
-    #' just adds a bottom padding, 3.
-    renderRowTextInput <- function(ColNames, Label=NULL, Values=NULL, Enabled=TRUE) {
-      Result <- mapply(FUN = .renderTextInput,
-                       .colname=ColNames, .label=Label, .val=Values, .enable=Enabled,
-                       SIMPLIFY = FALSE)
-      .renderTableRow(Result)
-    }
-
-
-
-
-    #' renderRow-Functions
-    #'
-    #' @param ColNames
-    #' @param Values
-    #' @param Enabled (not vectorised)
-    #'
-    #' @return
-    #' @export
-    #'
-    #' @examples
-    renderRowCheckBox <- function(ColNames, Label=NULL, Values=NULL, Enabled=TRUE) {
-      Result <- mapply(FUN = .renderCheckBox,
-                       .colname=ColNames, .label=Label, .val=Values, .enable=Enabled,
-                       SIMPLIFY = FALSE)
-      .renderTableRow(Result)
-    }
-
-
-
     #' renderDataPreview
     #'
     #'
     renderDataPreview <- function(Data, ColSpec, ViewLen,
                                   NameEdit=.Setting, Types=.Setting, Include=.Setting) {
       df <- head(Data, n = ifelse(missing(ViewLen), 5L, ViewLen))
+
       if (isTruthy(ColSpec))
         HeadNames <- names(ColSpec$cols)
       else
@@ -178,7 +145,7 @@ shinyApp(
       return(Tbl)
     }
 
-#htmlEscape
+
 
     output$AppOutputTest <- renderUI({
       need(DataFile(), "No data available")
