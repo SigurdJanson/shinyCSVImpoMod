@@ -4,11 +4,14 @@
 \alias{renderRowFunctions}
 \alias{renderRowTextInput}
 \alias{renderRowCheckBox}
+\alias{renderRowSelect}
 \title{renderRow...-Functions}
 \usage{
 renderRowTextInput(ColNames, Label = NULL, Values = NULL, Enabled = TRUE)
 
 renderRowCheckBox(ColNames, Label = NULL, Values = NULL, Enabled = TRUE)
+
+renderRowSelect(ColNames, Label = NULL, Values = NULL, Enabled = TRUE)
 }
 \arguments{
 \item{ColNames}{The names of the columns are required to generate input-ids
@@ -36,6 +39,12 @@ cell.
 
 \code{renderRowCheckBox} creates a tag list of a table row with a check box in each
 cell.
+
+\code{renderRowSelect} creates a tag list of a table row with a select widget
+in each cell.
+}
+\note{
+The package does NOT export these functions.
 }
 \seealso{
 About Shiny HTML tag lists refer to \link[htmltools:builder]{htmltools::builder}.

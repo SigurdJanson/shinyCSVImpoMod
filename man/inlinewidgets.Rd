@@ -4,11 +4,14 @@
 \alias{inlinewidgets}
 \alias{.renderTextInput}
 \alias{.renderCheckBox}
+\alias{.renderSelect}
 \title{Inline Widgets}
 \usage{
 .renderTextInput(.colname, .label, .val, .enable)
 
 .renderCheckBox(.colname, .label, .val, .enable)
+
+.renderSelect(.colname, .label, .val, .enable)
 }
 \value{
 A \code{list()} with a \code{shiny.tag} class.
@@ -33,6 +36,20 @@ In this case we 1. skip the label, 2. remove the class "form-group" because it
 just adds a bottom padding, 3.
 
 \code{.renderCheckBox} renders a single check box to be used inline.
+
+\code{.renderSelect} renders a select input to be used inline.
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{# The original Shiny code in 1.7.1 will be modified for inline use
+<div class="form-group shiny-input-container">
+  <label class="control-label" id="id-label" for="id">label</label>
+  <div>
+    <select id="id">
+       <option value="A" selected>A</option>
+     </select>
+     <script type="application/json" data-for="id" data-nonempty="">\{"plugins":["selectize-plugin-a11y"]\}</script>
+   </div>
+ </div>
+}\if{html}{\out{</div>}}
 }
 \seealso{
 These are helper functions for the \link{renderRowFunctions}.

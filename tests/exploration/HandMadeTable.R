@@ -50,7 +50,7 @@ shinyApp(
     title = "CSV Import Sample App",
     h3("Exploration App to Create a Specific Rendering for a Table"),
     fluidRow(
-      column(3, selectInput("inpDataset", label = "Data Set", choices=.datasets)),
+      column(3, selectInput("inpDataset", label = "Data Set", choices=.datasets, selectize = FALSE)),
       column(3, numericInput("inpPreviewLength", label = "Preview Length", 5, min = 1, max=99))
     ),
     fluidRow(
@@ -116,10 +116,10 @@ shinyApp(
 
 
       if (Types["Visible"]) {
-        Rendered <- HTML(
-          paste0("<tr>", paste0("<td>", "&lt;", rep("TYPE", ncol(df)), "&gt;", "</td>", collapse = ""), "</tr>"))
+        #Rendered <- HTML(
+        #  paste0("<tr>", paste0("<td>", "&lt;", rep("TYPE", ncol(df)), "&gt;", "</td>", collapse = ""), "</tr>"))
 
-        #Rendered <- renderRowCheckBox(colnames(df), "Include", Enabled = Include["Enabled"])
+        Rendered <- renderRowSelect(colnames(df), c("Numeric", "Character"), c(".numeric", ".character"), Enabled = Types["Enabled"])
         HtmlTypes <- tags$tbody(HTML(as.character(Rendered)))
       }
       else

@@ -18,6 +18,8 @@
 #' These functions render an **interactive row** of the preview table used
 #' to import CSV files in the module.
 #'
+#' @note The package does NOT export these functions.
+#'
 #' @param ColNames The names of the columns are required to generate input-ids
 #' for the widgets.
 #' @param Label An optional label for the input widget in each column.
@@ -62,6 +64,19 @@ renderRowCheckBox <- function(ColNames, Label=NULL, Values=NULL, Enabled=TRUE) {
   .renderTableRow(Result)
 }
 
+
+#' @details
+#' `renderRowSelect` creates a tag list of a table row with a select widget
+#' in each cell.
+#'
+#' @rdname renderRowFunctions
+renderRowSelect <- function(ColNames, Label=NULL, Values=NULL, Enabled=TRUE) {
+  Result <- mapply(FUN = .renderSelect,
+                   .colname=ColNames, .enable=Enabled,
+                   MoreArgs = list(.label=Label, .val=Values),
+                   SIMPLIFY = FALSE)
+  .renderTableRow(Result)
+}
 
 
 
@@ -115,8 +130,6 @@ NULL
 #' @seealso These are helper functions for the [renderRowFunctions].
 #' @rdname inlinewidgets
 .renderTextInput <- function(.colname, .label, .val, .enable) {
-  # TODO: use `Values`
-
   result <-
     div(
       class=paste(.ContainerClass, ifelse(!.enable, .DisabledClass, "")),
@@ -159,4 +172,41 @@ NULL
 }
 
 
+#' @details
+#' `.renderSelect` renders a select input to be used inline.
+#' ```
+#' # The original Shiny code in 1.7.1 will be modified for inline use
+#' <div class="form-group shiny-input-container">
+#'   <label class="control-label" id="id-label" for="id">label</label>
+#'   <div>
+#'     <select id="id">
+#'        <option value="A" selected>A</option>
+#         <option value="B">B</option>
+#         <option value="C">C</option>
+#'      </select>
+#'      <script type="application/json" data-for="id" data-nonempty="">{"plugins":["selectize-plugin-a11y"]}</script>
+#'    </div>
+#'  </div>
+#' ```
+#' @rdname inlinewidgets
+.renderSelect <- function(.colname, .label, .val, .enable) {
+  options <- mapply(tags$option,
+                    .label,
+                    value=.val,
+                    SIMPLIFY = FALSE)
+  result <-
+    div(
+      class=paste(.ContainerClass, ifelse(!.enable, .DisabledClass, "")),
+      div(
+        tags$select(
+          id=paste0(.colname, .InclSuffix),
+          options
+        )
+      )
+    )
+  if (!.enable)
+    result <- tagAppendAttributes(result, .cssSelector="select", disabled=NA)
+
+  return(result)
+}
 
