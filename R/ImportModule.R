@@ -2,6 +2,7 @@ library(shiny)
 library(shiny.i18n)
 library(shinyjs)
 library(vroom)
+#library(readr) # see FindLocale.R
 
 
 
@@ -75,6 +76,7 @@ ModuleImportUI <- function(Id) {
 #' @return A data frame containing the uploaded CSV file
 #' @export
 #' @import shiny
+#' @import vroom
 #' @importFrom shinyjs disabled
 #' @importFrom utils head read.csv
 #' @importFrom readr default_locale locale
@@ -357,6 +359,7 @@ ModuleImportServer <- function(Id, Mode = .ImpModes,
 
       },
       sanitize.text.function = function(x) sapply(x, .HandleUTF8))
+
 
 
 

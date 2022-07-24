@@ -2,7 +2,7 @@ library(readr) # takes care of l10n issues
 
 #'
 .Locales <- list(
-  `de-DE` = locale(date_names = "de",
+  `de-DE` = readr::locale(date_names = "de",
                  # dd.MM.yyyy; also allowed dd.MM.yy and yyyy.MM.dd
                  date_format   = c("%d.%m.%Y"), #, "%d.%m.%Y", "%Y-%m-%d"),
                  time_format   = c("%R"), #, "%T"), # "%H:%M", "%H:%M:%S"
@@ -10,15 +10,15 @@ library(readr) # takes care of l10n issues
                  grouping_mark = ".",
                  encoding = "UTF-8",
                  asciify = FALSE),
-  `de-CH` = locale(date_names = "de",
+  `de-CH` = readr::locale(date_names = "de",
                  date_format   = c("%d.%m.%y"), #, "%d.%m.%Y", "%Y-%m-%d"),
                  time_format   = c("%R"), #, "%T"), # "%H:%M", "%H:%M:%S"
                  decimal_mark  = ".",
                  grouping_mark = "'",
                  encoding = "UTF-8",
                  asciify = FALSE),
-  ko = locale("ko"),
-  en = locale("en")
+  ko = readr::locale("ko"),
+  en = readr::locale("en")
 )
 
 
