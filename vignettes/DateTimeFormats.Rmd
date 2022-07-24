@@ -2,7 +2,7 @@
 title: "DateTime Formats"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{DateTimeFormats}
+  %\VignetteIndexEntry{DateTime Formats}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
