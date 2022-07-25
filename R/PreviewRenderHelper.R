@@ -65,15 +65,18 @@ renderRowCheckBox <- function(ColNames, Label=NULL, Values=NULL, Enabled=TRUE) {
 }
 
 
+#' @param Choices List of values to select from.  If elements of the
+#' list are named, then that name — rather than the value — is displayed
+#' to the user (@seealso [shiny::selectInput]).
 #' @details
 #' `renderRowSelect` creates a tag list of a table row with a select widget
 #' in each cell.
 #'
 #' @rdname renderRowFunctions
-renderRowSelect <- function(ColNames, Label=NULL, Values=NULL, Enabled=TRUE) {
+renderRowSelect <- function(ColNames, Label=NULL, Values=NULL, Choices=NULL, Enabled=TRUE) {
   Result <- mapply(FUN = .renderSelect,
-                   .colname=ColNames, .enable=Enabled,
-                   MoreArgs = list(.label=Label, .val=Values),
+                   .colname=ColNames, .enable=Enabled, .val = Values,
+                   MoreArgs = list(.label=Label, .chc=Choices),
                    SIMPLIFY = FALSE)
   .renderTableRow(Result)
 }
@@ -189,24 +192,147 @@ NULL
 #'  </div>
 #' ```
 #' @rdname inlinewidgets
-.renderSelect <- function(.colname, .label, .val, .enable) {
-  options <- mapply(tags$option,
-                    .label,
-                    value=.val,
-                    SIMPLIFY = FALSE)
-  result <-
-    div(
-      class=paste(.ContainerClass, ifelse(!.enable, .DisabledClass, "")),
-      div(
-        tags$select(
-          id=paste0(.colname, .InclSuffix),
-          options
-        )
-      )
-    )
-  if (!.enable)
-    result <- tagAppendAttributes(result, .cssSelector="select", disabled=NA)
+#' @importFrom htmltools css htmlEscape
+.renderSelect <- function(.colname, .label, .val, .chc, .enable) {
+  inputId <- .colname
+  label <- .label
+  multiple <- FALSE
+  selectize <- FALSE
+  width <- NULL
+  size <- NULL
 
-  return(result)
+  selected <- restoreInput(id = inputId, default = .val)
+  choices <- choicesWithNames(.chc)
+  if (is.null(selected)) {
+    if (!multiple)
+      selected <- firstChoice(choices)
+  }
+  else selected <- as.character(selected)
+  if (!is.null(size) && selectize) {
+    stop("'size' argument is incompatible with 'selectize=TRUE'.")
+  }
+  selectTag <- tags$select(id = inputId, class = if (!selectize)
+    "form-control", size = size, selectOptions(choices, selected, inputId, selectize))
+  if (multiple)
+    selectTag$attribs$multiple <- "multiple"
+  res <- div(class = .ContainerClass,
+             style = htmltools::css(width = validateCssUnit(width)),
+             #shiny:::shinyInputLabel(inputId, label),
+             div(selectTag))
+  #if (!selectize) # always
+    return(res)
+  #selectizeIt(inputId, res, NULL, nonempty = !multiple && !("" %in% choices)) # never
+
+  # .chc <- shiny:::choicesWithNames(.chc)
+  # options <- mapply(tags$option,
+  #                   names(.chc),
+  #                   value=.chc,
+  #                   SIMPLIFY = FALSE)
+  # if (isTruthy(.val))
+  #   htmltools::tagQuery(options)$find(paste0("option[value]=", .val))$addAttrs(selected=NA)
+  #   #result <- tagAppendAttributes(result, .cssSelector=paste0("option[value]=", .val), selected=NA)
+  #
+  # # TODO: add selected boolean attribute to the .val argument
+  # result <-
+  #   div(
+  #     class=paste(.ContainerClass, ifelse(!.enable, .DisabledClass, "")),
+  #     div(
+  #       tags$select(
+  #         id=paste0(.colname, .InclSuffix),
+  #         options
+  #       )
+  #     )
+  #   )
+  # if (!.enable)
+  #   result <- tagAppendAttributes(result, .cssSelector="select", disabled=NA)
+  # return(result)
 }
 
+
+# HELPERS =====
+
+# taken from shiny:::choicesWithNames
+choicesWithNames <- function (choices) {
+  if (hasGroups(choices)) {
+    processGroupedChoices(choices)
+  }
+  else {
+    processFlatChoices(choices)
+  }
+}
+
+# taken from shiny:::processFlatChoices
+processFlatChoices <- function (choices) {
+  #choices <- setDefaultNames(asCharacter(choices))
+  choices <- choices |>
+    as.character() |>
+    stats::setNames(names(choices)) |>
+    setDefaultNames()
+
+  as.list(choices)
+}
+
+
+# taken from shiny:::setDefaultNames && shiny:::asNamed
+setDefaultNames <- function (x) {
+  if (is.null(names(x))) {
+    names(x) <- character(length(x))
+  }
+  emptyNames <- names(x) == "" #!isTruthy(names(x)) # changed line
+  names(x)[emptyNames] <- as.character(x)[emptyNames]
+  x
+}
+
+# taken from shiny:::hasGroups
+hasGroups <- function (choices) {
+  is.list(choices) && any(vapply(choices, isGroup, logical(1)))
+}
+
+# taken from shiny:::processGroupedChoices
+processGroupedChoices <- function (choices)
+{
+  stopifnot(is.list(choices))
+  choices <- asNamed(choices)
+  choices <- mapply(function(name, choice) {
+    choiceIsGroup <- isGroup(choice)
+    if (choiceIsGroup && name == "") {
+      stop("All sub-lists in \"choices\" must be named.")
+    }
+    else if (choiceIsGroup) {
+      processFlatChoices(choice)
+    }
+    else {
+      as.character(choice)
+    }
+  }, names(choices), choices, SIMPLIFY = FALSE)
+  setDefaultNames(choices)
+}
+
+
+# taken from shiny:::selectOptions
+selectOptions <- function (choices, selected = NULL, inputId, perfWarning = FALSE)
+{
+  if (length(choices) >= 1000) {
+    warning("The select input \"", inputId, "\" contains a large number of ",
+            "options; consider using server-side selectize for massively improved ",
+            "performance. See the Details section of the ?selectizeInput help topic.",
+            call. = FALSE)
+  }
+  html <- mapply(choices, names(choices), FUN = \(choice,label) {
+    if (is.list(choice)) {
+      sprintf("<optgroup label=\"%s\">\n%s\n</optgroup>",
+              htmltools::htmlEscape(label, TRUE),
+              selectOptions(choice, selected, inputId, perfWarning))
+    }
+    else {
+      sprintf("<option value=\"%s\"%s>%s</option>",
+              htmltools::htmlEscape(choice, TRUE),
+              if (choice %in% selected)
+                " selected"
+              else
+                "",
+              htmltools::htmlEscape(label))
+    }
+  })
+  HTML(paste(html, collapse = "\n"))
+}

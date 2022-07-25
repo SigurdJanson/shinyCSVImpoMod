@@ -2,6 +2,8 @@ library(shiny)
 library(shinyjs)
 
 source("../../R/PreviewRenderHelper.R")
+source("../../R/Constants.R")
+source("../../R/DataTypes.R")
 
 # Constant to represent table settings
 .Setting <- c(Visible = TRUE, Enabled = TRUE)
@@ -99,7 +101,7 @@ shinyApp(
       else
         HeadNames <- colnames(Data)
 
-      if (NameEdit["Visible"]){
+      if (NameEdit["Visible"]){ # TODO: l10n
         Rendered <- renderRowTextInput(colnames(df), "Edit new name", HeadNames, Enabled = NameEdit["Enabled"])
         HtmlNameEdit <- tags$tbody(HTML(as.character(Rendered)))
       }
@@ -107,7 +109,7 @@ shinyApp(
         HtmlNameEdit <- HTML("")
 
 
-      if (Include["Visible"]) {
+      if (Include["Visible"]) { # TODO: l10n
         Rendered <- renderRowCheckBox(colnames(df), "Include", Values=TRUE, Enabled = Include["Enabled"])
         HtmlInclude <- tags$tbody(HTML(as.character(Rendered)))
       }
@@ -116,10 +118,14 @@ shinyApp(
 
 
       if (Types["Visible"]) {
-        #Rendered <- HTML(
-        #  paste0("<tr>", paste0("<td>", "&lt;", rep("TYPE", ncol(df)), "&gt;", "</td>", collapse = ""), "</tr>"))
-
-        Rendered <- renderRowSelect(colnames(df), c("Numeric", "Character"), c(".numeric", ".character"), Enabled = Types["Enabled"])
+        #SelectedValues <- ifelse(isTruthy(ColSpec), ColSpec$cols, NULL)# TODO: verify this line
+        SelectedValues <- ColSpec2ShortType(ColSpec)
+        FriendlyNames <- sapply(strsplit(names(.ColumnDataTypes), "_"), `[[`, 2) # TODO: l10n
+        Rendered <- renderRowSelect(colnames(df),
+                                    Label   = FriendlyNames,
+                                    Values  = SelectedValues,
+                                    Choices = .ColumnDataTypes,
+                                    Enabled = Types["Enabled"])
         HtmlTypes <- tags$tbody(HTML(as.character(Rendered)))
       }
       else
