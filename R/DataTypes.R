@@ -1,4 +1,23 @@
 
+ColSpec2ShortType <- function(colspec) {
+  if (!isTruthy(colspec)) return(NULL)
+
+  .stopWord <- "collector"
+
+  TypeStr <- sapply(s$cols, \(x) class(x)[class(x) != .stopWord])
+  if (length(TypeStr) != length(s$cols)) stop("Unexpected format")
+  TypeStr <- TypeStr |>
+    strsplit("_") |>
+    unlist() |>
+    unname()
+  TypeStr <- TypeStr[TypeStr != .stopWord]
+
+  .ColumnDataTypesLong[TypeStr]
+}
+
+
+
+
 
 #' hasFormat
 #'
