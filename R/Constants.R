@@ -14,7 +14,10 @@
                                    Format = "Format")
 
 
-# SUPPORTED DATA TYPES
+#
+# SUPPORTED DATA TYPES =======
+#
+
 .ColumnDataTypes <- c(
   col_character = "c",
   col_factor    = "f",
@@ -59,3 +62,24 @@
   `NA` = "guess",
   .ColumnDataTypesLong
 )
+
+# DATA TYPE FORMATS
+
+.DateFormats <- list(
+  `yyyy-MM-dd` = "%Y-%m-%d",
+  `dd-MM-yyyy` = "%d-%m-%Y",
+  `dd.MM.yy` = "%d.%m.%y",
+  `dd.MM.yyyy` = "%d.%m.%Y",
+  `d.M.yyyy` = "%d.%M.%Y",
+  `dd/MM/yy` = "%d/%m/%y",
+  `dd/MM/yyyy` = "%d/%m/%Y",
+  `d/M/yyyy` = "%d/%M/%Y")
+
+.TimeFormats <-
+  list(
+    `HH:MM:SS` = "%H:%M:%S",
+    `HH:MM` = "%R",
+    `HH:MM:SS am/pm` = "%I:%M:%S %p",
+    `HH:MM am/pm` = "%I:%M %p")
+
+

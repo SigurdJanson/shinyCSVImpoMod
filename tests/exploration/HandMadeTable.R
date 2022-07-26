@@ -93,7 +93,10 @@ shinyApp(
     #'
     #'
     renderDataPreview <- function(Data, ColSpec, ViewLen,
-                                  NameEdit=.Setting, Types=.Setting, Include=.Setting) {
+                                  NameEdit=.Setting,
+                                  Types=.Setting,
+                                  Format=.Setting,
+                                  Include=.Setting) {
       df <- head(Data, n = ifelse(missing(ViewLen), 5L, ViewLen))
 
       if (isTruthy(ColSpec))
@@ -118,7 +121,6 @@ shinyApp(
 
 
       if (Types["Visible"]) {
-        #SelectedValues <- ifelse(isTruthy(ColSpec), ColSpec$cols, NULL)# TODO: verify this line
         SelectedValues <- ColSpec2ShortType(ColSpec)
         FriendlyNames <- sapply(strsplit(names(.ColumnDataTypes), "_"), `[[`, 2) # TODO: l10n
         Rendered <- renderRowSelect(colnames(df),
@@ -132,6 +134,18 @@ shinyApp(
         HtmlTypes <- HTML("")
 
 
+      if (Format["Visible"]) {
+        Rendered <- renderRowSelect(colnames(df),
+                                    Label   = FriendlyNames,
+                                    Values  = SelectedValues,
+                                    Choices = .ColumnDataTypes,
+                                    Enabled = Types["Enabled"])
+        HtmlFormat <- tags$tbody(HTML(as.character(Rendered)))
+      }
+      else
+        HtmlFormat <- HTML("")
+
+
       Content <- HTML(base::apply(df, 1, .renderTableRow))
 
       Tbl <- withTags(
@@ -142,8 +156,9 @@ shinyApp(
               HTML(paste0("<tr>", paste0("<th>", names(df), "</th>", collapse = ""), "</tr>"))
             ),
             HtmlNameEdit,
-            HtmlInclude,
             HtmlTypes,
+            HtmlFormat,
+            HtmlInclude,
             tbody(Content)
           )
         )

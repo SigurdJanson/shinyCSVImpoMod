@@ -159,19 +159,8 @@ ModuleImportServer <- function(Id, Mode = .ImpModes,
         names(ChoicesDecimalsSep) <- c(paste(i18n$t("Comma"), "(,)"), paste(i18n$t("Period"), "(.)") )
         ChoicesQuote <- list("", "\"", "'")
         names(ChoicesQuote) <- i18n$t(c("None", "Double quote", "Single quote"))
-        ChoicesDate <- list(`yyyy-MM-dd` = "%Y-%m-%d",
-                            `dd-MM-yyyy` = "%d-%m-%Y",
-                            `dd.MM.yy` = "%d.%m.%y",
-                            `dd.MM.yyyy` = "%d.%m.%Y",
-                            `d.M.yyyy` = "%d.%M.%Y",
-                            `dd/MM/yy` = "%d/%m/%y",
-                            `dd/MM/yyyy` = "%d/%m/%Y",
-                            `d/M/yyyy` = "%d/%M/%Y")
-        ChoicesTime <- list(list(`HH:MM:SS` = "%H:%M:%S",
-                                 `HH:MM` = "%R"),
-                            list(`HH:MM:SS am/pm` = "%I:%M:%S %p",
-                                 `HH:MM am/pm` = "%I:%M %p"))
-        names(ChoicesTime) <- paste(c(12, 24), i18n$t("hours"))
+        ChoicesDate <- .DateFormats
+        ChoicesTime <- .TimeFormats
 
         tagList(
           fluidRow(
