@@ -4,8 +4,8 @@ ColSpec2ShortType <- function(colspec) {
 
   .stopWord <- "collector"
 
-  TypeStr <- sapply(s$cols, \(x) class(x)[class(x) != .stopWord])
-  if (length(TypeStr) != length(s$cols)) stop("Unexpected format")
+  TypeStr <- sapply(colspec$cols, \(x) class(x)[class(x) != .stopWord])
+  if (length(TypeStr) != length(colspec$cols)) stop("Unexpected format")
   TypeStr <- TypeStr |>
     strsplit("_") |>
     unlist() |>
