@@ -215,10 +215,14 @@ NULL
     "form-control", size = size, selectOptions(choices, selected, inputId, selectize))
   if (multiple)
     selectTag$attribs$multiple <- "multiple"
-  res <- div(class = .ContainerClass,
+  res <- div(class = paste(.ContainerClass, ifelse(!.enable, .DisabledClass, "")),
              style = htmltools::css(width = validateCssUnit(width)),
              #shiny:::shinyInputLabel(inputId, label),
              div(selectTag))
+
+  if (!.enable) # Added to original Shiny code
+    res <- tagAppendAttributes(res, .cssSelector="select", disabled=NA)
+
   #if (!selectize) # always
     return(res)
   #selectizeIt(inputId, res, NULL, nonempty = !multiple && !("" %in% choices)) # never
@@ -243,8 +247,6 @@ NULL
   #       )
   #     )
   #   )
-  # if (!.enable)
-  #   result <- tagAppendAttributes(result, .cssSelector="select", disabled=NA)
   # return(result)
 }
 
