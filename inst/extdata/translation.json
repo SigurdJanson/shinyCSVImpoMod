@@ -208,6 +208,7 @@
             "es": "[Internal module error: 'NameInFile' must be specified]",
             "ko": "[Internal module error: 'NameInFile' must be specified]"
         },
+
         { /* General */
             "key": "Comma",
             "de": "Komma",
@@ -248,6 +249,7 @@
             "es": "Ninguna",
             "ko": "[None]"
         },
+
         {
             "key": "<character>",
             "de": "<TEXT>",
@@ -327,6 +329,103 @@
             "ru": "<REGEX>",
             "es": "<REGEX>",
             "ko": "<REGEX>"
+        },
+
+        {
+            "key": "col_logical",
+            "de": "Logik",
+            "en": "Logical",
+            "ru": "",
+            "es": "",
+            "ko": ""
+        },
+        {
+            "key": "col_integer",
+            "de": "Ganzzahl",
+            "en": "Integer",
+            "ru": "",
+            "es": "",
+            "ko": ""
+        },
+        {
+            "key": "col_big_integer",
+            "de": "Ganzzahl, groß",
+            "en": "Big integer",
+            "ru": "",
+            "es": "",
+            "ko": ""
+        },
+        {
+            "key": "col_double",
+            "de": "Kommazahl",
+            "en": "Decimal",
+            "ru": "",
+            "es": "",
+            "ko": ""
+        },
+        {
+            "key": "col_character",
+            "de": "Zeichenkette",
+            "en": "Character",
+            "ru": "",
+            "es": "",
+            "ko": ""
+        },
+        {
+            "key": "col_factor",
+            "de": "Faktor",
+            "en": "Factor",
+            "ru": "",
+            "es": "",
+            "ko": ""
+        },
+        {
+            "key": "col_date",
+            "de": "Datum",
+            "en": "Date",
+            "ru": "",
+            "es": "",
+            "ko": ""
+        },
+        {
+            "key": "col_time",
+            "de": "Zeit",
+            "en": "Time",
+            "ru": "",
+            "es": "",
+            "ko": ""
+        },
+        {
+            "key": "col_datetime",
+            "de": "Datum & Zeit",
+            "en": "Date & Time",
+            "ru": "",
+            "es": "",
+            "ko": ""
+        },
+        {
+            "key": "col_number",
+            "de": "Zahl",
+            "en": "Number",
+            "ru": "",
+            "es": "",
+            "ko": ""
+        },
+        {
+            "key": "col_skip",
+            "de": "Ignorieren",
+            "en": "Skip",
+            "ru": "",
+            "es": "",
+            "ko": ""
+        },
+        {
+            "key": "col_guess",
+            "de": "Auto",
+            "en": "Guess",
+            "ru": "",
+            "es": "",
+            "ko": ""
         }
     ],
     "languages": [
