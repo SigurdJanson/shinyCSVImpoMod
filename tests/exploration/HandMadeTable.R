@@ -94,7 +94,20 @@ shinyApp(
 
     #' renderDataPreview
     #'
+    #' Creates the HTML for a table preview.
     #'
+    #' @param Data The data to look at
+    #' @param ColSpec A column specification of class `col_spec`
+    #' (see [vroom::cols()]).
+    #' @param ViewLen The number of rows to display
+    #' @param NameEdit The settings of column name input fields
+    #' (default is `c(Visible = TRUE, Enabled = TRUE)`).
+    #' @param Types The settings type drop downs
+    #' (default is `c(Visible = TRUE, Enabled = TRUE)`).
+    #' @param Format The settings for the format inputs
+    #' (default is `c(Visible = TRUE, Enabled = TRUE)`).
+    #' @param Include The settings for the include check boxes
+    #' (default is `c(Visible = TRUE, Enabled = TRUE)`).
     renderDataPreview <- function(Data, ColSpec, ViewLen,
                                   NameEdit = .Setting,
                                   Types    = .Setting,
