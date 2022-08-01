@@ -4,6 +4,7 @@ library(shinyjs)
 source("../../R/PreviewRenderHelper.R")
 source("../../R/Constants.R")
 source("../../R/DataTypes.R")
+source("../../R/TruthyHelpers.R")
 
 # Constant to represent table settings
 .Setting <- c(Visible = TRUE, Enabled = TRUE)
@@ -69,7 +70,7 @@ shinyApp(
   function(input, output, session) {
     #-print(getwd())
 
-    LiveColSpec <- reactiveVal() # not used, yet
+    LiveColSpec <- reactiveVal() # mimic the reactive value of the module
 
     DataFile <- reactive({
       if (input$inpDataset == .datasets[1]) {
@@ -82,7 +83,8 @@ shinyApp(
       }
       else {
         result <- get(input$inpDataset)
-        LiveColSpec(NULL)
+        colspec <- vroom::spec(vroom::vroom(vroom::vroom_format(result)))
+        LiveColSpec(colspec)
       }
       return(result)
     })
@@ -139,15 +141,14 @@ shinyApp(
 
       if (Format["Visible"]) {
         FriendlyNames <- "abc"
-        Values <- ifelse(hasFormat(ColSpec),
-                         sapply(ColSpec$cols, \(x) `[[`(x, "format")),
-                         "---")
-        Values[!isTruthy(Values)] <- "Default" #TODO: use FileSpec here
-        Enabled <- Format["Enabled"] && hasFormat(ColSpec)
+        Values <- sapply(ColSpec$cols, \(x) `[[`(x, "format"))
+        Values[Values == ""] <- "Default"  #TODO: use FileSpec here as default
+        Values[!isTruthyInside(Values)] <- "---"
+        Enabled <- Format["Enabled"] & unlist(hasFormat(ColSpec))
         Rendered <- renderRowTextInput(colnames(df),
                                        Label   = FriendlyNames,
                                        Values  = Values,
-                                       Enabled = Format["Enabled"])
+                                       Enabled = Enabled)
         HtmlFormat <- tags$tbody(HTML(as.character(Rendered)))
       }
       else
