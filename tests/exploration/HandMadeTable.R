@@ -58,7 +58,8 @@ shinyApp(
     fluidRow(
       column(3, "Edit", checkboxInput("chbEditVisible", "Visible"), checkboxInput("chbEditEnabled", "Enabled")),
       column(3, "Include", checkboxInput("chbIncludeVisible", "Visible"), checkboxInput("chbIncludeEnabled", "Enabled")),
-      column(3, "Type", checkboxInput("chbTypeVisible", "Visible"), checkboxInput("chbTypeEnabled", "Enabled"))
+      column(3, "Type", checkboxInput("chbTypeVisible", "Visible"), checkboxInput("chbTypeEnabled", "Enabled")),
+      column(3, "Format", checkboxInput("chbFormatVisible", "Visible"), checkboxInput("chbFormatEnabled", "Enabled"))
     ), hr(),
     uiOutput("AppOutputTest")
   ),
@@ -93,16 +94,18 @@ shinyApp(
     #'
     #'
     renderDataPreview <- function(Data, ColSpec, ViewLen,
-                                  NameEdit=.Setting,
-                                  Types=.Setting,
-                                  Format=.Setting,
-                                  Include=.Setting) {
+                                  NameEdit = .Setting,
+                                  Types    = .Setting,
+                                  Format   = .Setting,
+                                  Include  = .Setting) {
+
+      if (!isTruthy(ColSpec) || !isa(ColSpec, .ColSpecClass))
+        stop("Preview needs a valid column specification")
+
       df <- head(Data, n = ifelse(missing(ViewLen), 5L, ViewLen))
 
-      if (isTruthy(ColSpec))
-        HeadNames <- names(ColSpec$cols)
-      else
-        HeadNames <- colnames(Data)
+      HeadNames <- names(ColSpec$cols)
+
 
       if (NameEdit["Visible"]){ # TODO: l10n
         Rendered <- renderRowTextInput(colnames(df), "Edit new name", HeadNames, Enabled = NameEdit["Enabled"])
@@ -135,11 +138,16 @@ shinyApp(
 
 
       if (Format["Visible"]) {
-        Rendered <- renderRowSelect(colnames(df),
-                                    Label   = FriendlyNames,
-                                    Values  = SelectedValues,
-                                    Choices = .ColumnDataTypes,
-                                    Enabled = Types["Enabled"])
+        FriendlyNames <- "abc"
+        Values <- ifelse(hasFormat(ColSpec),
+                         sapply(ColSpec$cols, \(x) `[[`(x, "format")),
+                         "---")
+        Values[!isTruthy(Values)] <- "Default" #TODO: use FileSpec here
+        Enabled <- Format["Enabled"] && hasFormat(ColSpec)
+        Rendered <- renderRowTextInput(colnames(df),
+                                       Label   = FriendlyNames,
+                                       Values  = Values,
+                                       Enabled = Format["Enabled"])
         HtmlFormat <- tags$tbody(HTML(as.character(Rendered)))
       }
       else
@@ -171,13 +179,16 @@ shinyApp(
     output$AppOutputTest <- renderUI({
       need(DataFile(), "No data available")
 
-      Result <- renderDataPreview(DataFile(), ColSpec = LiveColSpec(), ViewLen = input$inpPreviewLength,
+      Result <- renderDataPreview(DataFile(), ColSpec = LiveColSpec(),
+                                  ViewLen = input$inpPreviewLength,
                                   NameEdit=c(Visible=input$chbEditVisible,
                                              Enabled=input$chbEditEnabled),
                                   Types=c(Visible=input$chbTypeVisible,
                                           Enabled=input$chbTypeEnabled),
                                   Include=c(Visible=input$chbIncludeVisible,
-                                            Enabled=input$chbIncludeEnabled))
+                                            Enabled=input$chbIncludeEnabled),
+                                  Format=c(Visible=input$chbFormatVisible,
+                                            Enabled=input$chbFormatEnabled))
 
       return(Result)
     })

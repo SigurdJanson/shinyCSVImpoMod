@@ -13,6 +13,7 @@
                                    Type = "Type",
                                    Format = "Format")
 
+.ColSpecClass <- "col_spec" # as defined by vroom
 
 #
 # SUPPORTED DATA TYPES =======
