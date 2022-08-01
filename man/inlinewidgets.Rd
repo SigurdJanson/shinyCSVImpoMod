@@ -11,7 +11,7 @@
 
 .renderCheckBox(.colname, .label, .val, .enable)
 
-.renderSelect(.colname, .label, .val, .enable)
+.renderSelect(.colname, .label, .val, .chc, .enable)
 }
 \value{
 A \code{list()} with a \code{shiny.tag} class.

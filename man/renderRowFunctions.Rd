@@ -11,7 +11,13 @@ renderRowTextInput(ColNames, Label = NULL, Values = NULL, Enabled = TRUE)
 
 renderRowCheckBox(ColNames, Label = NULL, Values = NULL, Enabled = TRUE)
 
-renderRowSelect(ColNames, Label = NULL, Values = NULL, Enabled = TRUE)
+renderRowSelect(
+  ColNames,
+  Label = NULL,
+  Values = NULL,
+  Choices = NULL,
+  Enabled = TRUE
+)
 }
 \arguments{
 \item{ColNames}{The names of the columns are required to generate input-ids
@@ -24,6 +30,10 @@ Not supported for all interactive row types.}
 
 \item{Enabled}{Is the row interactive or does it only show the current
 state (not vectorised).}
+
+\item{Choices}{List of values to select from.  If elements of the
+list are named, then that name — rather than the value — is displayed
+to the user (@seealso \link[shiny:selectInput]{shiny::selectInput}).}
 }
 \value{
 A \code{list()} with a \code{shiny.tag} class that can be converted into an HTML
