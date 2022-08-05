@@ -31,3 +31,39 @@ test_that("Mother of falsy", {
   obs <- isTruthyInside(integer())
   expect_null(obs)
 })
+
+
+
+test_that("list(NA) yields FALSE", {
+  # Act
+  result <- isTruthyInside(list(NA))
+  #> FALSE
+
+  # Assert
+  expect_identical(result, FALSE)
+})
+
+
+
+test_that("data.frame(NA) yields FALSE", {
+  # Act
+  result <- isTruthyInside(data.frame(NA))
+
+  # Assert
+  expect_identical(result, FALSE)
+})
+
+
+test_that("data.frame with any NA yields TRUE because it is not recursive", {
+  # Act
+  result <- isTruthyInside(
+    data.frame(
+      A = 1:20,
+      B = LETTERS[1:20],
+      c = c(1, 2, 3, NA, 5:20)
+      )
+    )
+
+  # Assert
+  expect_identical(result, c(TRUE, TRUE, TRUE))
+})
