@@ -1,4 +1,19 @@
 
+
+
+#' ColSpec2ShortType
+#'
+#' Converts a [vroom::cols] specification and turns it into standard abbreviations.
+#'
+#' @param colspec A [vroom::cols] specification
+#'
+#' @return a character vector with single characters
+#' @export
+#'
+#' @examples
+#' ColSpec2ShortType(vroom::cols(a = "i", b = "d", c = "T"))
+#' #> integer  double datetime
+#' #>     "i"     "d"      "T"
 ColSpec2ShortType <- function(colspec) {
   if (!isTruthy(colspec)) return(NULL)
 
