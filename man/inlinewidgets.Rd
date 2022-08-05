@@ -13,6 +13,17 @@
 
 .renderSelect(.colname, .label, .val, .chc, .enable)
 }
+\arguments{
+\item{.colname}{The name of the column in which the widget is placed}
+
+\item{.label}{A label identifying the expected input to the user}
+
+\item{.val}{A value to set}
+
+\item{.enable}{logical for enabled=TRUE or disabled=FALSE}
+
+\item{.chc}{A list of choices (select widgets, only; see \code{\link[shiny:selectInput]{shiny::selectInput}}).}
+}
 \value{
 A \code{list()} with a \code{shiny.tag} class.
 }

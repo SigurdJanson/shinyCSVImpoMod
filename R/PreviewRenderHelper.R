@@ -113,6 +113,11 @@ renderRowSelect <- function(ColNames, Label=NULL, Values=NULL, Choices=NULL, Ena
 #' a dependency to the current Shiny version this package was created for).
 #'
 #' @name inlinewidgets
+#' @param .colname The name of the column in which the widget is placed
+#' @param .label A label identifying the expected input to the user
+#' @param .val A value to set
+#' @param .enable logical for enabled=TRUE or disabled=FALSE
+#' @param .chc A list of choices (select widgets, only; see [`shiny::selectInput`]).
 NULL
 
 
