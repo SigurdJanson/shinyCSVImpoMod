@@ -11,11 +11,14 @@ isTruthyInside(x)
 }
 \value{
 A logical vector for each position indicating \code{TRUE}/\code{FALSE}.
-Returns \code{NULL} if operation was not successful.
+Returns \code{NULL} if the object \code{x} itself is not truthy or missing.
 }
 \description{
-\code{isTruthyInside} tests the truthiness of positions
-of a vector (while \code{isTruthy} tests the vector as a whole).
+\code{isTruthyInside} tests the "truthiness" of positions
+of a vector or list (while \code{isTruthy} tests the vector as a whole).
+}
+\details{
+\code{isTruthyInside}
 }
 \examples{
 isTruthyInside(1:5)

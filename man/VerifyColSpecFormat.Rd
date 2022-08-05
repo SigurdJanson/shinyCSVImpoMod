@@ -33,18 +33,18 @@ VerifyColSpecFormat
 }
 \section{Methods (by class)}{
 \itemize{
-\item \code{default}: Default method throws an error
+\item \code{VerifyColSpecFormat(default)}: Default method throws an error
 to ignore unspecified data types.
 
-\item \code{col_spec}: Handle \code{col_spec} objects and simply returns
+\item \code{VerifyColSpecFormat(col_spec)}: Handle \code{col_spec} objects and simply returns
 the object itself.
 
-\item \code{tbl_df}: Specific method to handle \code{tibble} objects.
+\item \code{VerifyColSpecFormat(tbl_df)}: Specific method to handle \code{tibble} objects.
 
-\item \code{list}: Specific method to handle \code{list}s.
+\item \code{VerifyColSpecFormat(list)}: Specific method to handle \code{list}s.
 It converts the information from the list into a valid \code{col_spec} object.
-}}
 
+}}
 \seealso{
 \code{\link[readr:spec]{readr::cols_condense()}}
 }

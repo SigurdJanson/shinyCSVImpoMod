@@ -2,15 +2,12 @@
 % Please edit documentation in R/DataTypes.R
 \name{hasFormat}
 \alias{hasFormat}
-\alias{hasFormat.character}
 \alias{hasFormat.collector}
 \alias{hasFormat.col_spec}
 \alias{hasFormat.function}
 \title{hasFormat}
 \usage{
 hasFormat(...)
-
-\method{hasFormat}{character}(...)
 
 \method{hasFormat}{collector}(...)
 
@@ -24,7 +21,7 @@ have the same type.}
 }
 \value{
 A list of logicals. If the input contains vectors with length > 1 or
-lists ther returned list is nested.
+lists the returned list is nested.
 }
 \description{
 hasFormat
@@ -32,25 +29,18 @@ hasFormat
 \details{
 Basic \code{lists} are not supported, i.e.
 \verb{hasFormat(c(col_time(), col_double())} will not work.
-
-\code{hasFormat.character} accepts different string formats; but the must be consistent
-to be interpreted properly (i.e. do not mix them as in \code{c("col_double", "d")}).
-also see \link[vroom:cols]{vroom::cols}.
 }
 \section{Methods (by class)}{
 \itemize{
-\item \code{character}: Accepts character arguments: abbreviated (l = logical, i = integer, ...),
-long format ("datetime", ...), or collector names ("col_double", "col_time", ...);
+\item \code{hasFormat(collector)}: Accepts lists of S3 class \code{collector} as generated
+by \link[vroom:cols]{vroom::col*_()}.
 
-\item \code{collector}: Accepts lists of S3 class \code{collector} as generated
-by \code{\link[vroom::cols]{vroom::col*_()}}.
+\item \code{hasFormat(col_spec)}: Accepts column specification objects
 
-\item \code{col_spec}: Accepts column specification objects
-
-\item \code{function}: Accepts \code{\link[vroom::cols]{vroom::col*_()}} functions.
+\item \code{hasFormat(`function`)}: Accepts \link[vroom:cols]{vroom::col*_()} functions.
 No nesting allowed (because it would create a list).
-}}
 
+}}
 \examples{
 hasFormat("t", "d", "i", "T")
 hasFormat(c("t", "d", "i", "T"))

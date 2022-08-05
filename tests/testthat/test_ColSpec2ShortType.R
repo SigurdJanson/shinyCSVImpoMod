@@ -1,7 +1,8 @@
 
 test_that("German", {
   #
-  cs <- vroom::vroom("../../inst/extdata/table.csv", delim=";", show_col_types=FALSE)
+  path <- system.file("extdata", "table.csv", package = "shiny.CSVImport")
+  cs <- vroom::vroom(path, delim=";", show_col_types=FALSE)
 
   #Act
   result <- ColSpec2ShortType(vroom::spec(cs))

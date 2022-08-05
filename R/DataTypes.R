@@ -26,7 +26,7 @@ ColSpec2ShortType <- function(colspec) {
 #' @details Basic `lists` are not supported, i.e.
 #' `hasFormat(c(col_time(), col_double())` will not work.
 #' @return A list of logicals. If the input contains vectors with length > 1 or
-#' lists ther returned list is nested.
+#' lists the returned list is nested.
 #' @export
 #'
 #' @examples
@@ -39,7 +39,7 @@ hasFormat <- function(...) {
 
 
 
-#' @describeIn hasFormat Accepts character arguments: abbreviated (l = logical, i = integer, ...),
+#' @describeIn `hasFormat` Accepts character arguments: abbreviated (l = logical, i = integer, ...),
 #' long format ("datetime", ...), or collector names ("col_double", "col_time", ...);
 #' @details `hasFormat.character` accepts different string formats; but the must be consistent
 #' to be interpreted properly (i.e. do not mix them as in `c("col_double", "d")`).
@@ -78,7 +78,7 @@ hasFormat.character <- function(...) {
 
 
 #' @describeIn hasFormat Accepts lists of S3 class `collector` as generated
-#' by \code{\link[vroom::cols]{vroom::col*_()}}.
+#' by \link[vroom:cols]{vroom::col*_()}.
 #' @export
 hasFormat.collector <- function(...) {
   lapply(list(...), function(x) any(names(x) == "format"))
@@ -95,7 +95,7 @@ hasFormat.col_spec <- function(...) {
 
 
 
-#' @describeIn hasFormat Accepts \code{\link[vroom::cols]{vroom::col*_()}} functions.
+#' @describeIn hasFormat Accepts \link[vroom:cols]{vroom::col*_()} functions.
 #' No nesting allowed (because it would create a list).
 #'
 #' @export
